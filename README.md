@@ -1,22 +1,17 @@
 # 企划设计BG平台（三合一）
 
-公开开发源码快照，以 `7b4898b42e58921b58b5fe6d31303dfe677208ef` 为代码基础，包含企划、AI 网关、体验工作台及统一入口。Codex 的报告契约与接口草案来自 `3f4614e`，仍是待确认方案。
+纯净源码交付，业务代码基于 `7b4898b`。`modules/` 为三个模块，`portal/` 为公共入口，`config/` 为依赖锁和无密钥配置示例，`scripts/` 为集成、构建及隔离启动所需源码。
 
-本仓库使用全新提交历史。原本机仓库、真实账号、数据库、密钥、用户文件、旧截图、内部归档及构建结果不随附。必要结构资源、依赖锁和基础测试保留。
+保留界面图片、维度模板、初始化规则、数据库迁移和运行时 Skill；不包含真实数据库、凭证、用户文件、依赖目录、构建结果、独立测试目录、开发规则或方案报告。开发资料保存在本地开发仓库。
 
-## 开发运行
+开发环境：macOS arm64、Python 3.12、Node.js 22.18；使用公开 Codex CLI 和公共依赖缓存。安装、构建及启动：
 
-使用 [隔离开发流程](docs/dev-001-operations.md) 安装依赖、构建 `modules/` 并启动。该流程只建立全新合成测试数据，Provider 为 Mock，不读取已有登录资料，也不调用真实模型。
+```sh
+python3.12 scripts/dev_environment.py install --node "$dev_node" --codex "$dev_codex" --wheelhouse "$dev_wheelhouse" --npm-cache "$dev_npm_cache"
+python3.12 scripts/dev_environment.py build --deps "$dev_dependency_dir"
+python3.12 scripts/dev_environment.py start --build "$dev_build_dir" --open
+```
 
-目前验证范围为 macOS arm64、Python 3.12、Node.js 22.18。首次准备公共依赖需要网络；其他平台未验证。
+将两次输出中的 dependency_dir、build_dir 分别用于后续命令。ZIP 解压使用时先在解压目录执行 `git init` 和 `git add .`；构建按 Git 纳管路径读取源码。
 
-本快照是开发源码交付，不是生产安装包。原 `scripts/start-local.*` / `platform_local.py` 仍是原平台实现，依赖未发布的本机身份模块和原包；不要用它们作为本仓库的首次启动入口。含本机绝对路径的旧取证辅助脚本和原桌面启动快捷文件已从公开包排除。
-
-## 协作与状态
-
-- Codex 负责后端、集成和必要基础测试；Cursor 负责前端和必要基础测试；最终业务验收由用户人工完成。
-- 日常不自动生成批量截图或独立验收报告。数据库、日志、依赖、构建和私有配置不入 Git。
-- [Git 操作](VERSION_CONTROL.md) · [路由契约](docs/route-contract.md) · [未解决风险](docs/RISKS.md)
-- [正式成果与报告契约](docs/be-002-report-contract.md) · [S1 接口草案](docs/be-002-s1-interface-draft.md) · [风险关闭条件](docs/be-002-risk-appendix.md)
-
-基础检查和构建成功不代表业务验收通过；正式报告读取链、历史兼容、完整字节一致性和真实 AI 执行仍有未关闭事项。
+启动建立全新合成数据并使用 Mock，不接入现用数据或真实模型。生产账号初始化、正式报告兼容和完整构建字节一致性仍待处理；最终业务验收由用户人工完成。当前交付范围为开发源码。
