@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/platform/logo.png">
+  <title>企划设计BG平台</title>
+  <link rel="stylesheet" href="/platform/style.css">
+  <script defer src="/platform/app.js"></script>
+</head>
+<body>
+  <main id="signin" class="signin" hidden>
+    <form id="login-form" class="login-card">
+      <img class="login-logo" src="/platform/logo.png" alt="">
+      <h1>企划设计BG平台</h1>
+      <p>登录统一工作空间</p>
+      <label for="login">账号</label>
+      <input id="login" name="login" autocomplete="username" maxlength="64" required>
+      <label for="password">密码</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" maxlength="128" required>
+      <label class="remember"><input name="remember" type="checkbox"> 保持登录 7 天</label>
+      <button class="primary" type="submit">登录</button>
+      <div id="login-error" role="alert"></div>
+    </form>
+  </main>
+  <div id="workspace" class="workspace" hidden>
+    <header class="toolbar">
+      <a class="brand" href="/" aria-label="企划设计BG平台"><img class="brand-logo" src="/platform/logo.png" alt=""><strong id="platform-name">企划设计BG平台</strong></a>
+      <nav id="modules" aria-label="公共导航"></nav>
+      <span id="active-module" class="current" hidden></span>
+      <div class="account"><span id="account-name"></span><button id="signout" type="button">退出</button></div>
+    </header>
+    <main id="views" class="views">
+      <div class="empty" id="empty" hidden><h1>暂无可访问模块</h1><p>请联系本机平台管理员分配权限。</p></div>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<svg viewBox="0 0 96 96" width="96" height="96" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="18" y1="14" x2="80" y2="84" gradientUnits="userSpaceOnUse"><stop stop-color="#34D399"/><stop offset="1" stop-color="#0D9488"/></linearGradient>
+    <linearGradient id="shell" x1="34" y1="24" x2="64" y2="74" gradientUnits="userSpaceOnUse"><stop stop-color="#ECFEFF" stop-opacity=".94"/><stop offset="1" stop-color="#99F6E4" stop-opacity=".66"/></linearGradient>
+    <linearGradient id="visor" x1="30" y1="43" x2="66" y2="43" gradientUnits="userSpaceOnUse"><stop stop-color="#042F2E"/><stop offset=".5" stop-color="#134E4A"/><stop offset="1" stop-color="#042F2E"/></linearGradient>
+  </defs>
+  <circle cx="48" cy="48" r="46" fill="url(#bg)"/>
+  <path d="M11 70C22 80 34 85 48 85C62 85 74 80 85 70C78 84 65 92 48 94C31 92 18 84 11 70Z" fill="#064E3B" opacity=".42"/>
+  <path d="M24 80C26 69 34 63 42 62H54C62 63 70 69 72 80V86H24Z" fill="#052E2B" opacity=".9"/>
+  <rect x="41" y="57" width="14" height="13" rx="5" fill="#5EEAD4" opacity=".78"/>
+  <rect x="27" y="23" width="42" height="40" rx="17" fill="url(#shell)" stroke="#CCFBF1" stroke-opacity=".72"/>
+  <path d="M34 29C41 24 53 23 61 29" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity=".36"/>
+  <rect x="30" y="38" width="36" height="14" rx="6" fill="url(#visor)" stroke="#CCFBF1" stroke-width="2" stroke-opacity=".9"/>
+  <rect x="35" y="42" width="9" height="5" rx="2.5" fill="#5EEAD4"/><rect x="52" y="42" width="9" height="5" rx="2.5" fill="#5EEAD4"/>
+  <path d="M27 42H23M69 42H73" fill="none" stroke="#ECFEFF" stroke-width="2" stroke-linecap="round" opacity=".8"/>
+  <rect x="43" y="56" width="10" height="2.5" rx="1.25" fill="#0F766E" opacity=".8"/>
+</svg>

@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DIM-06 性能稳｜八字段 WPS 式高效编辑 V5.0</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:#20334b;background:#f4f7fb;--line:#dce5ee;--line2:#e8edf4;--navy:#1e3854;--blue:#2569b5;--soft:#e9f2fe;--muted:#7b899b;--panel:#fff;--danger:#c34245}
+*{box-sizing:border-box}html,body{margin:0;max-width:100%;overflow-x:clip}body{font-size:13px}button,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.4;cursor:not-allowed}[hidden]{display:none!important}button:focus-visible,textarea:focus-visible,.sheet td:focus-visible{outline:2px solid #478bdb;outline-offset:-2px}
+.page{width:100%;max-width:1940px;margin:0 auto;padding:24px clamp(10px,2vw,34px) 42px}.page-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}.eyebrow{font-size:10px;font-weight:800;color:#6688a9;letter-spacing:1.5px;margin-bottom:7px}.heading{display:flex;gap:12px;align-items:center}.brand{width:45px;height:45px;display:grid;place-items:center;background:#204a78;color:white;font-size:15px;font-weight:800;border-radius:12px;flex:none}.heading h1{font-size:25px;color:#193a5a;line-height:1.2;margin:0;letter-spacing:-.5px}.subtitle{font-size:12px;color:#74879b;margin:7px 0 0}.tag{background:#f0f4f8;border:1px solid #e1e7f0;color:#71849b;padding:6px 10px;font-size:11px;border-radius:6px;white-space:nowrap}
+.mode{display:inline-flex;align-items:center;gap:3px;background:#eaf0f6;padding:4px;border-radius:9px}.mode button{background:transparent;border:0;padding:9px 19px;color:#6d7d8e;border-radius:7px;font-weight:750}.mode button.active{background:white;color:#2266ae;box-shadow:0 2px 7px #1e37551c}
+.bar{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:13px}.bar-left,.bar-right{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.bar-title{font-size:13px;font-weight:800;color:#31516f;white-space:nowrap;margin-right:7px}.btn{border:1px solid #d7e2ed;background:#fff;color:#3c617f;padding:8px 11px;border-radius:7px;font-size:12px;font-weight:650;white-space:nowrap;min-height:34px}.btn:hover:not(:disabled){background:#f1f6fc;border-color:#b3cce6}.btn.primary{background:#2c72bd;border-color:#2c72bd;color:#fff}.btn.primary:hover:not(:disabled){background:#205e9d}.btn.ghost{border-color:transparent;background:transparent}.btn.danger{color:#b94a4b}.ico{font-size:14px;margin-right:4px;font-weight:800}.vline{height:21px;border-left:1px solid #dee5ec;margin:0 3px}.toolbar-status{font-size:11px;color:#71869b;margin-left:5px}.toolbar-status.dirty{color:#ae7425}.menu-host{position:relative}.drop{position:absolute;top:40px;right:0;width:160px;padding:5px;background:white;border:1px solid var(--line);border-radius:8px;z-index:60;box-shadow:0 14px 32px #1a365323}.drop button{display:block;width:100%;text-align:left;padding:9px 10px;border:0;background:transparent;border-radius:5px;color:#35526f}.drop button:hover{background:#edf5fd}.help{display:flex;gap:9px;align-items:center;flex-wrap:wrap;font-size:11px;color:#74869a;margin:0 0 12px;padding:0 2px}.key{border:1px solid #d9e3ed;background:white;padding:1px 6px;border-radius:4px;color:#667d97;font-size:11px}.help .small-dot{color:#bbc8d5}.sheet-panel{background:white;border:1px solid var(--line);border-radius:11px;overflow:hidden;box-shadow:0 7px 26px #203a5810}.sheet-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:15px 17px;background:#fff;border-bottom:1px solid var(--line2)}.sheet-title{font-size:16px;font-weight:800;color:#214462}.sheet-meta{display:flex;gap:13px;flex-wrap:wrap;font-size:11px;color:#778aa0}.sheet-meta b{color:#245b91;font-size:14px;margin-right:3px}.sheet-foot{padding:12px 16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line2);font-size:11px;color:#73869b}.sheet-frame{width:100%;overflow-x:clip;overflow-y:visible}.sheet{width:100%;max-width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;line-height:1.57;font-size:12px}.sheet col.row-col{width:42px}.sheet col.col-a{width:9%}.sheet col.col-b{width:10%}.sheet col.col-c{width:9%}.sheet col.col-d{width:14%}.sheet col.col-e{width:14%}.sheet col.col-f{width:17%}.sheet col.col-g{width:14%}.sheet col.col-h{width:auto}
+.sheet th,.sheet td{word-break:break-word;overflow-wrap:anywhere;white-space:pre-wrap;vertical-align:top;text-align:left;border-right:1px solid #e8edf3;border-bottom:1px solid #e8edf3;min-width:0;max-width:0}.sheet thead th{background:#edf3f9;padding:12px 9px;color:#324f69;font-size:12px;font-weight:800;line-height:1.4;position:sticky;top:0;z-index:5;border-bottom:2px solid #d0dfed}.sheet thead th.rowhead{background:#e2ebf4;color:#6f869d;text-align:center;padding:12px 0}.sheet tbody td{padding:12px 9px;color:#334a61;cursor:cell;min-height:34px;background:#fff}.sheet tbody tr:nth-child(even) td{background:#fafcfe}.sheet tbody tr:hover td{background:#f5f9ff}.sheet td.category{color:#2e6497;font-weight:800;background:#f5f9fd}.sheet td.product{font-weight:750;color:#315477}.sheet td.function{font-weight:800;color:#28679f}.sheet th.rowhead{position:relative;text-align:center;user-select:none;padding:12px 3px;font-weight:700;background:#f3f6fa;color:#667f96;cursor:row-resize;max-width:none}.sheet tbody th.rowhead{background:#f5f8fb;border-right:1px solid #d7e3ed;border-bottom:1px solid #e6ecf3;font-size:11px}.sheet tbody th.rowhead:hover{background:#e6f1ff}.sheet tbody th.rowhead.selected-row{background:#dcecff;color:#1e69b5;box-shadow:inset 3px 0 #2a77c1}.sheet td.selected-cell{background:#e3f0ff!important;box-shadow:inset 0 0 0 2px #4d93dd;position:relative;z-index:2}.sheet td.active-cell{box-shadow:inset 0 0 0 2px #286eb9}.sheet td.merged{background:#f8fbff;text-align:center;vertical-align:middle}.sheet td.merged .cell-editor{text-align:center}.sheet td.empty{color:#b1bdc8}.sheet td.invalid{box-shadow:inset 0 0 0 2px #d16565}.sheet tbody tr.empty-row td{text-align:center;color:#9aaabb;cursor:default}.cell-editor{display:block;width:100%;min-height:88px;resize:vertical;border:1px solid #367dc8;background:white;padding:9px;color:#253d55;border-radius:5px;line-height:1.6;box-shadow:0 4px 10px #376ca71a}.edit-hint{font-size:10px;color:#7292b0;margin-top:5px}.preview .sheet td{cursor:default}.preview .sheet th.rowhead{cursor:default}.preview .sheet td:hover{box-shadow:none}.preview .sheet tbody th.rowhead{background:#f5f8fb;color:#8d9fb2}
+.context{position:fixed;z-index:80;min-width:190px;background:#fff;border:1px solid #d7e2ed;border-radius:9px;padding:6px;box-shadow:0 16px 40px #17334f30}.context button{display:flex;align-items:center;gap:9px;width:100%;border:0;background:transparent;text-align:left;padding:10px 11px;border-radius:6px;color:#31506f;font-size:12px}.context button:hover{background:#edf5ff}.context button.danger{color:#b74345}.context .separator{height:1px;margin:5px 4px;background:#e8edf4}.context button:disabled{opacity:.35}.context .ctx-shortcut{margin-left:auto;color:#8a9eaf;font-size:10px}
+.toast{position:fixed;z-index:200;right:22px;bottom:24px;border-radius:9px;background:#244963;color:white;padding:11px 16px;box-shadow:0 10px 28px #12304444;max-width:min(440px,calc(100vw - 36px));line-height:1.6}.scrim{position:fixed;inset:0;background:#15293a79;z-index:100}.confirm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:101;width:min(480px,calc(100vw - 24px));background:white;border:1px solid var(--line);border-radius:13px;padding:22px 23px;box-shadow:0 20px 58px #1b354b30}.confirm h3{font-size:18px;color:#203c58;margin:0 0 10px}.confirm p{font-size:13px;line-height:1.8;color:#60768e;margin:0 0 22px}.confirm-actions{display:flex;justify-content:flex-end;gap:9px}.drawer{position:fixed;z-index:102;right:0;top:0;bottom:0;width:min(475px,100vw);background:white;box-shadow:-10px 0 36px #112d4b20;display:flex;flex-direction:column}.drawer-head{display:flex;justify-content:space-between;align-items:center;padding:19px 20px;border-bottom:1px solid var(--line);gap:8px}.drawer h2{font-size:17px;margin:0;color:#203f60}.drawer-body{overflow:auto;padding:16px 20px}.version{border:1px solid #dce7f1;border-radius:9px;padding:13px;margin-bottom:11px}.version strong{color:#365879}.version p{color:#8494a7;font-size:11px;margin:7px 0}.version-actions{display:flex;gap:7px}.smallnote{font-size:11px;color:#8798a8;line-height:1.7}.fullview{position:fixed;z-index:130;inset:0;background:#f4f7fb;overflow:auto;padding:21px}.fullview-wrap{max-width:1900px;margin:auto}.fullview-top{background:white;border:1px solid var(--line);border-radius:9px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}.tip{font-size:11px;color:#768ba0;border-left:3px solid #8db2dd;padding:7px 11px;background:#f1f6fc;margin:0 0 10px}.notice{background:#fff8f1;color:#9a6438;border:1px solid #f0dcc7;border-radius:8px;margin:0 0 12px;padding:12px;font-size:12px;line-height:1.6}.notice button{border:0;background:none;color:#8d5222;text-decoration:underline;padding:3px 6px;cursor:pointer}
+@media(max-width:1150px){.sheet{font-size:11px;line-height:1.48}.sheet th,.sheet td{padding-left:6px!important;padding-right:6px!important}.page{padding-left:10px;padding-right:10px}.sheet thead th{font-size:11px}}@media(max-width:750px){.page{padding:13px 5px}.heading h1{font-size:21px}.heading{gap:7px}.brand{width:38px;height:38px}.bar{padding:8px}.sheet{font-size:10px;line-height:1.43}.sheet col.row-col{width:30px}.sheet th,.sheet td{padding:7px 3px!important}.sheet thead th{font-size:10px}.sheet-head{padding:12px 10px}.btn{padding:7px 8px}.sheet-meta{gap:8px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* V5.0: 把可操作性集中在表格，而不是额外增加装饰 */
+:root{--rowhead:42px}.sheet col.row-col{width:var(--rowhead)}.sheet thead th{position:sticky;top:0}.sheet thead th.col-heading{position:sticky;user-select:none;padding-right:14px}.sheet thead th.col-heading .col-resizer{position:absolute;right:-4px;top:0;bottom:0;width:9px;cursor:col-resize;z-index:12}.sheet thead th.col-heading .col-resizer:hover,.sheet thead th.col-heading .col-resizer.resizing{background:rgba(42,119,193,.22)}
+.merge-drop{left:0;right:auto;width:184px}.dropdown-trigger{margin-left:2px;padding:8px!important;min-width:32px}.bar .menu-host#merge-menu-host{display:flex;align-items:center}.sheet tbody td.invalid{box-shadow:inset 0 0 0 2px #d65b59!important;background:#fff2f1!important}.validation-box{border-left:3px solid #c75d57;background:#fff8f6;border-color:#edd8d3;color:#854a47}.validation-box strong{font-size:13px}.validation-box .err-list{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.validation-box .err-list button{color:#a34744;text-decoration:none;border:1px solid #e8c8c4;background:#fff;border-radius:6px;padding:5px 8px;font-size:11px;cursor:pointer}.validation-box .err-list button:hover{background:#fff0ee}.validation-box .validation-close{float:right;color:#a34d47;text-decoration:none}.sheet .rowhead.moving{background:#fff0cd!important}.sheet-frame{--visible-col-total:100%}.sheet th,.sheet td{overflow-wrap:anywhere;word-break:break-word}.sheet td:empty:before{content:' ';white-space:pre}.sheet td.merged .cell-editor{min-height:90px}.sheet td.selected-cell.invalid{background:#f8e8e8!important}.tool-note{font-size:11px;color:#71859b}
+@media(max-width:750px){:root{--rowhead:30px}.sheet thead th.col-heading{padding-right:8px!important}.sheet thead th.col-heading .col-resizer{width:7px}}
+
+
+/* BG platform: common mode, save and version controls are rendered by the parent. */
+.page-top,.bar-right,#reset-demo{display:none!important}
+.page{max-width:none;margin:0;padding:18px 20px 40px;background:#edf2f8}
+.sheet-panel{border-color:#e1e9f2;border-radius:13px}
+
+.insert-label{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#526e8b;font-weight:700}.insert-label input{width:62px;border:1px solid #d2e0ed;border-radius:6px;padding:6px 7px;color:#173555}
+footer.page{display:none}
+
+.sheet tbody .rowhead{position:relative}
+.row-height-handle{position:absolute;bottom:0;left:0;right:0;height:7px;cursor:row-resize;touch-action:none}
+.row-height-handle:hover,.row-height-handle:focus-visible{background:#2877b947}
+
+.platform-text{box-sizing:border-box;max-width:980px;margin:18px auto;padding:24px;background:#fff;border:1px solid #dce7f1;border-radius:13px;white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.65 system-ui,sans-serif}
+</style>
+</head>
+<body>
+<main class="page" id="app">
+  <header class="page-top">
+    <div class="heading"><div class="brand">06</div><div><div class="eyebrow">企划设计 BG · DIM-06</div><h1>性能稳</h1><p class="subtitle">八字段性能企划表 · WPS 式编辑 / 正式成果预览</p></div></div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span class="tag">演示数据 · 非真实测试结论</span><div class="mode" role="tablist" aria-label="工作与预览模式"><button id="preview-mode" role="tab" aria-selected="true">预览模式</button><button id="work-mode" role="tab" aria-selected="false">工作模式</button></div></div>
+  </header>
+  <section id="workbar" class="bar" hidden aria-label="工作模式操作栏"><div class="bar-left"><span class="bar-title">表格操作</span><button class="btn" data-action="undo" title="Ctrl/⌘ + Z">↶ 撤销</button><button class="btn" data-action="redo" title="Ctrl/⌘ + Y">↷ 重做</button><span class="vline"></span><div class="menu-host" id="merge-menu-host"><button class="btn" data-action="merge">合并居中</button><button class="btn dropdown-trigger" id="merge-toggle" title="选择其他合并操作">▾</button><div class="drop merge-drop" id="merge-menu" hidden><button data-merge-cmd="merge">合并居中</button><button data-merge-cmd="same">合并相同单元格</button><button data-merge-cmd="contents">合并内容</button><button data-merge-cmd="unmerge">取消合并</button><button data-merge-cmd="fill">拆分并填充</button></div></div><button class="btn" data-action="copy">复制</button><button class="btn" data-action="paste" title="粘贴本页已复制数据；外部 Excel 请使用 Ctrl/⌘+V">粘贴</button><button class="btn" id="restore-widths" title="恢复初始列宽比例">重置列宽</button><label class="insert-label">插入条数 <input id="insert-count" type="number" min="1" max="200" step="1" value="1" aria-label="插入条数"></label><button class="btn" id="insert-above">上方插入</button><button class="btn" id="insert-below">下方插入</button><span id="selection-label" class="toolbar-status">请选择单元格或行号</span></div><div class="bar-right"><span id="saved-status" class="toolbar-status">已自动暂存</span><button class="btn" id="versions-btn">版本管理</button><button class="btn ghost" id="reset-demo" title="仅用于重置本地示例，不属于正式平台编辑操作">重置示例</button><div class="menu-host"><button class="btn primary" id="save-toggle">保存 ▾</button><div id="save-menu" class="drop" hidden><button id="save-draft">保存草稿</button><button id="save-apply">保存并应用</button></div></div></div></section>
+  <div class="help" id="workhelp" hidden><span><span class="key">拖动</span> 框选单元格</span><span class="small-dot">·</span><span><span class="key">右键</span> 合并/拆分、插行/删行</span><span class="small-dot">·</span><span><span class="key">双击 / F2</span> 编辑</span><span class="small-dot">·</span><span><span class="key">Enter</span> 确认并向下</span><span class="small-dot">·</span><span><span class="key">Alt+Enter</span> 换行</span><span class="small-dot">·</span><span><span class="key">Ctrl/⌘+C / V</span> 复制与粘贴</span><span class="small-dot">·</span><span><span class="key">Ctrl/⌘+Z</span> 撤销</span><span class="small-dot">·</span><span>拖动列边线调整宽度，双击自适应</span></div>
+  <div class="notice validation-box" id="validation-warning" hidden></div>
+  <section class="sheet-panel"><div class="sheet-head"><div class="sheet-title">性能指标规划表</div><div class="sheet-meta"><span><b id="row-count">0</b> 条记录</span><span><b>8</b> 个字段</span><span><b id="merge-count">0</b> 处合并</span></div></div><div class="sheet-frame" id="sheet-target"></div><div class="sheet-foot"><span id="view-message">八字段完整呈现，不进行横向滚动。</span><span id="preview-note">正式成果 · 只读</span></div></section>
+  <div id="context" class="context" hidden></div><div id="toast" class="toast" role="status" hidden></div><div id="modal-layer"></div><div id="versions-layer"></div><div id="history-layer"></div>
+<footer class="page" style="padding-top:0"><p class="smallnote">演示说明：当前文件是独立浏览器原型，数据仅在本浏览器本地暂存；WPS 部分复杂合并、拖动排序、Excel 剪贴板结构可能依版本存在差别，本示例采用保护内容的安全处理，不代表完成指定 WPS 版本的逐项一致性验收。</p></footer>
+</main>
+<script>
+(()=>{'use strict';
+const COLS=[['category','性能分类'],['product','产品名'],['function','功能'],['functional','功能性'],['design','设计指标'],['test','测试指标'],['competitor','竞品指标'],['experience','体验指标']];
+const KEYS=COLS.map(x=>x[0]);const alphabet='ABCDEFGH';const STORE='BG_DIM06_WPS_V5_DEMO_20261110';
+const seedRows=[
+{category:'无线传输',product:'U段可拔插会议麦克风',function:'无线发言',functional:'端到端传输延时：满足会议实时发言与扩声响应。',design:'规划延时≤30ms（演示目标）。',test:'规定信道、距离和采样配置，分别记录平均延时、最大延时及波动。',competitor:'竞品A标称≤25ms（假设示例；测试口径未核实）。',experience:'讲话后扩声无明显迟滞，支持自然互动。'},
+{category:'',product:'',function:'',functional:'工作距离及稳定性：移动发言期间维持连续语音连接。',design:'开阔条件下规划≥50m（演示目标）。',test:'测量典型距离、遮挡和干扰环境下的断音次数及恢复时间。',competitor:'竞品B标称50m（假设示例；条件未统一）。',experience:'调整站位时语音连续，无需反复重讲。'},
+{category:'音频性能',product:'',function:'语音拾音',functional:'语音信噪比：在会议环境下拾取清晰人声。',design:'信噪比规划≥90dB（演示目标）。',test:'明确测试带宽、计权、输入声压和增益，记录测量结果。',competitor:'竞品A标称95dB（假设示例；条件未核实）。',experience:'正常音量讲话清楚，安静场景底噪不明显。'},
+{category:'',product:'',function:'',functional:'频率响应：关键人声频段拾取与传输保持均衡。',design:'响应范围及容差结合音头、算法和工作形态确定。',test:'分别测量桌面态与手持态频响曲线，记录输入电平及测量条件。',competitor:'竞品频率范围需按相同容差条件对比。',experience:'不同声线自然可辨，避免明显发闷或尖锐。'},
+{category:'续航与供电',product:'无线会议终端',function:'电池供电',functional:'连续工作续航：支持长会议使用。',design:'规划续航≥8小时（演示目标）。',test:'规定发言占空比、发射功率及截止电量，记录持续工作时间。',competitor:'竞品A标称10小时（假设示例）。',experience:'覆盖较长会议，减少中途补电。'},
+{category:'',product:'',function:'',functional:'充电性能：在规定供电条件下可靠充满。',design:'充电时长由电池容量及充电安全设计共同确定。',test:'记录充电器输出、环境温度、初始电量、充满时间与温升。',competitor:'竞品充电指标需结合容量与适配器口径比较。',experience:'电量状态清楚，便于使用者安排充电。'},
+{category:'可靠性',product:'',function:'连续运行',functional:'运行稳定性：支持连续会议及频繁操作。',design:'连续72小时仅作为测试时长示例。',test:'循环执行发言、静音、模式切换，记录异常重启、断链与恢复时间。',competitor:'公开可靠性数据不足，暂不作排名。',experience:'长时间运行无需频繁重启。'},
+{category:'',product:'',function:'',functional:'温湿度适应：规定室内环境下维持基本功能。',design:'工作温湿度目标依据器件选型确定。',test:'在预设高低温及湿度条件下重复测试语音传输、按键响应和连接恢复。',competitor:'仅比较相同条件下的竞品规格。',experience:'日常空调与季节变化中工作稳定。'}
+];
+const fresh=()=>({widths:[9,12,10,14,15,17,12,11],rows:seedRows.map((x,i)=>({id:'r'+(i+1),...x})),merges:[{r:0,c:0,rs:2,cs:1},{r:2,c:0,rs:2,cs:1},{r:4,c:0,rs:2,cs:1},{r:6,c:0,rs:2,cs:1},{r:0,c:1,rs:4,cs:1},{r:4,c:1,rs:4,cs:1},{r:0,c:2,rs:2,cs:1},{r:2,c:2,rs:2,cs:1},{r:4,c:2,rs:2,cs:1},{r:6,c:2,rs:2,cs:1}]});
+const clone=x=>JSON.parse(JSON.stringify(x));const eq=(a,b)=>JSON.stringify(a)===JSON.stringify(b);const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const isBlank=s=>!String(s??'').trim();
+let initial={format:'v5',...fresh()};let data={W:clone(initial),P:clone(initial),versions:[],seq:100};
+let mode='preview';let selection=null,selectedRows=new Set(),rowAnchor=null,anchor=null,drag=null,editor=null,internalClipboard=null,undo=[],redo=[],activeDialog=false;let toastId;let validationErrors=[];let colWidths=[9,12,10,14,15,17,12,11];let resizing=null,rowHeightDrag=null;const MIN_COL_PCT=6;
+const current=()=>mode==='work'?data.W:data.P;const selectionText=()=>!selection?'未选择单元格':`${alphabet[selection.c1]}${selection.r1+1}:${alphabet[selection.c2]}${selection.r2+1}`;
+function store(){window.parent.postMessage({type:'bg-dim06-save-full',snapshot:clone(data.W)},location.origin);$('#saved-status').textContent='已自动暂存'}
+function snapshot(){undo.push(clone(data.W));if(undo.length>100)undo.shift();redo.length=0}
+function notify(msg){const el=$('#toast');el.textContent=msg;el.hidden=false;clearTimeout(toastId);toastId=setTimeout(()=>el.hidden=true,3400)}
+function ask(title,body,yes){activeDialog=true;$('#modal-layer').innerHTML=`<div class="scrim" data-cancel></div><div class="confirm" role="dialog" aria-modal="true"><h3>${esc(title)}</h3><p>${esc(body)}</p><div class="confirm-actions"><button class="btn" data-cancel>取消</button><button class="btn primary" id="approve">确认继续</button></div></div>`;$('#modal-layer').querySelectorAll('[data-cancel]').forEach(b=>b.addEventListener('click',closeDialog));$('#approve').addEventListener('click',()=>{closeDialog();yes()});$('#approve').focus()}
+function closeDialog(){activeDialog=false;$('#modal-layer').innerHTML=''}
+const overlap=(a,b)=>!(a.r+a.rs-1<b.r||b.r+b.rs-1<a.r||a.c+a.cs-1<b.c||b.c+b.cs-1<a.c);
+const includes=(rect,m)=>rect.r1<=m.r&&rect.r2>=m.r+m.rs-1&&rect.c1<=m.c&&rect.c2>=m.c+m.cs-1;
+const meets=(rect,m)=>!(rect.r2<m.r||m.r+m.rs-1<rect.r1||rect.c2<m.c||m.c+m.cs-1<rect.c1);
+const getMerge=(model,r,c)=>model.merges.find(m=>r>=m.r&&r<m.r+m.rs&&c>=m.c&&c<m.c+m.cs);
+const bounds=(r1,c1,r2,c2)=>({r1:Math.min(r1,r2),r2:Math.max(r1,r2),c1:Math.min(c1,c2),c2:Math.max(c1,c2)});
+function gridHtml(model,editable){
+ const rows=model.rows,widths=model.widths||colWidths,merged=new Map(),covered=new Set(),usableWidth=Math.max(280,$('#sheet-target')?.clientWidth-42||1200);
+ model.merges.forEach(m=>{merged.set(`${m.r}:${m.c}`,m);for(let r=m.r;r<m.r+m.rs;r++)for(let c=m.c;c<m.c+m.cs;c++)if(r!==m.r||c!==m.c)covered.add(`${r}:${c}`)});
+ let html=`<table class="sheet" aria-label="性能稳八字段完整企划表"><colgroup><col class="row-col">${widths.map((w,i)=>`<col data-col="${i}" style="width:${Math.round(usableWidth*w/100)}px">`).join('')}</colgroup><thead><tr><th class="rowhead">#</th>${COLS.map((a,i)=>`<th scope="col" class="col-heading" title="${alphabet[i]} 列 · 拖动右边缘调宽，双击自适应">${esc(a[1])}${editable&&i<7?`<span class="col-resizer" data-resize="${i}" title="拖动列宽，双击自动适配"></span>`:''}</th>`).join('')}</tr></thead><tbody>`;
+ rows.forEach((row,r)=>{
+  const height=model.rowHeights?.[row.id];
+  html+=`<tr data-row="${r}" style="${height?'height:'+Number(height)+'px':''}"><th scope="row" class="rowhead" data-row-head="${r}" title="单击选择行；选中后 Shift+拖动可移动">${r+1}${editable?`<span class="row-height-handle" data-height-row="${r}" title="拖动调整行高，双击恢复自动行高"></span>`:''}</th>`;
+ for(let c=0;c<8;c++){if(covered.has(`${r}:${c}`))continue;const m=merged.get(`${r}:${c}`),val=row[KEYS[c]]||'';const invalid=editable&&validationErrors.some(e=>{const mg=getMerge(model,e.r,e.c);return (mg?.r??e.r)===r&&(mg?.c??e.c)===c});const cls=[c===0?'category':c===1?'product':c===2?'function':'',m?'merged':'',!val?'empty':'',invalid?'invalid':''].filter(Boolean).join(' ');html+=`<td class="${cls}" data-r="${r}" data-c="${c}" tabindex="${editable?'0':'-1'}" ${m?`rowspan="${m.rs}" colspan="${m.cs}"`:''} title="${editable?'双击或F2编辑 · 右键查看操作':''}">${val?esc(val):editable?'':'—'}</td>`}html+='</tr>'});
+ if(rows.length===0)html+='<tr class="empty-row"><td colspan="9">暂无性能记录。进入工作模式，通过「末尾新增行」建立记录。</td></tr>';
+ html+='</tbody></table>';return html;
+}
+function renderPlatformText(){
+ const main=document.querySelector('main');main.hidden=true;
+ let article=document.querySelector('.platform-text');
+ if(!article){article=document.createElement('article');article.className='platform-text';document.body.appendChild(article)}
+ const model=data.P,lines=['性能指标总表'];
+ model.rows.forEach((row,index)=>{
+  const fields=COLS.map(([key,label],column)=>{
+   const merge=getMerge(model,index,column);
+   const value=merge?(merge.c===column?model.rows[merge.r][key]:''):row[key];
+   return {label,value};
+  });
+  if(fields.some(item=>item.value?.trim()))lines.push('',...fields.map(({label,value})=>label+'：'+(value||'—')));
+ });
+ article.textContent=lines.join('\n');
+}
+function render(){if(new URLSearchParams(location.search).get('view')==='text'){renderPlatformText();return}
+ const work=mode==='work';colWidths=(current().widths||[9,12,10,14,15,17,12,11]).slice();$('#app').classList.toggle('preview',!work);$('#workbar').hidden=!work;$('#workhelp').hidden=!work;
+ $('#preview-mode').classList.toggle('active',!work);$('#work-mode').classList.toggle('active',work);$('#preview-mode').setAttribute('aria-selected',String(!work));$('#work-mode').setAttribute('aria-selected',String(work));
+ $('#sheet-target').innerHTML=gridHtml(current(),work);$('#row-count').textContent=current().rows.length;$('#merge-count').textContent=current().merges.length;
+ $('#preview-note').textContent=work?'工作内容 · 尚未应用的修改仅在本模式可见':'正式成果 · 只读';
+ $('#view-message').textContent=work?'拖动列边界调宽；双击自适应；右键处理合并、插入和删除。':'当前展示最新已应用成果。八字段完整显示，长文本自动换行。';
+ if(work)paintSelection();else{selection=null;selectedRows.clear()}updateButtons();
+}
+function updateButtons(){
+ const work=mode==='work',hasSelection=!!selection;const buttons={undo:undo.length>0,redo:redo.length>0,merge:hasSelection,unmerge:hasSelection,copy:hasSelection,paste:!!internalClipboard};
+ $$('[data-action]').forEach(b=>b.disabled=!work||!buttons[b.dataset.action]);
+ $('#merge-toggle').disabled=!work||!hasSelection;
+ $('#selection-label').textContent=selectedRows.size?`已选 ${selectedRows.size} 行`:(hasSelection?`选区 ${selectionText()}`:'请选择单元格或行号');$('#saved-status').classList.toggle('dirty',!eq(data.W,data.P));
+}
+function paintSelection(){$$('#sheet-target td.selected-cell,#sheet-target td.active-cell,#sheet-target th.selected-row').forEach(e=>e.classList.remove('selected-cell','active-cell','selected-row'));if(selection){$$('#sheet-target td[data-r]').forEach(td=>{const r=+td.dataset.r,c=+td.dataset.c,m=getMerge(data.W,r,c)||{r,c,rs:1,cs:1};if(meets(selection,m))td.classList.add('selected-cell');if(r===selection.r1&&c===selection.c1)td.classList.add('active-cell')})}selectedRows.forEach(i=>$('#sheet-target th[data-row-head="'+i+'"]')?.classList.add('selected-row'));updateButtons()}
+function chooseCell(r,c,extend=false){if(mode!=='work')return;const m=getMerge(data.W,r,c),r2=m?m.r+m.rs-1:r,c2=m?m.c+m.cs-1:c,r0=m?m.r:r,c0=m?m.c:c;if(extend&&anchor){selection=bounds(anchor.r,anchor.c,r2,c2)}else{selection={r1:r0,c1:c0,r2,c2};anchor={r:r0,c:c0}}selectedRows.clear();paintSelection()}
+function chooseRow(r,e){if(mode!=='work')return;selection=null;if(e&&(e.ctrlKey||e.metaKey)){selectedRows.has(r)?selectedRows.delete(r):selectedRows.add(r)}else if(e&&e.shiftKey&&rowAnchor!==null){selectedRows.clear();for(let i=Math.min(rowAnchor,r);i<=Math.max(rowAnchor,r);i++)selectedRows.add(i)}else{selectedRows.clear();selectedRows.add(r);rowAnchor=r}paintSelection()}
+function contextAt(x,y,items){const el=$('#context');el.innerHTML=items.map((it,i)=>it.sep?'<div class="separator"></div>':`<button type="button" class="${it.danger?'danger':''}" data-ctx="${i}" ${it.disabled?'disabled':''}>${esc(it.label)}${it.shortcut?`<span class="ctx-shortcut">${esc(it.shortcut)}</span>`:''}</button>`).join('');el.hidden=false;const maxX=Math.max(5,window.innerWidth-210),maxY=Math.max(5,window.innerHeight-260);el.style.left=Math.min(x,maxX)+'px';el.style.top=Math.min(y,maxY)+'px';el.querySelectorAll('button[data-ctx]').forEach(button=>button.addEventListener('click',()=>{el.hidden=true;items[+button.dataset.ctx].fn?.()}))}
+function closeContext(){$('#context').hidden=true}
+function cellActionMenu(x,y){contextAt(x,y,[
+ {label:'合并居中',fn:mergeCells},{label:'合并相同单元格',fn:mergeSameCells},{label:'合并内容',fn:mergeContents},{label:'取消合并',fn:unmergeCells},{label:'拆分并填充',fn:splitAndFill},
+ {sep:true},{label:'复制',shortcut:'Ctrl+C',fn:copyCells},{label:'粘贴（本页复制）',shortcut:'Ctrl+V',fn:()=>pasteCells(internalClipboard),disabled:!internalClipboard},
+ {sep:true},{label:'编辑内容',shortcut:'F2',fn:()=>{if(selection)beginEdit(selection.r1,selection.c1)}}
+])}
+function rowActionMenu(x,y){contextAt(x,y,[
+ {label:'在上方插入行',fn:()=>insertSelected('above')},{label:'在下方插入行',fn:()=>insertSelected('below')},
+ {sep:true},{label:'删除整行',danger:true,fn:removeSelectedRows}
+])}
+
+function validRect(rect){if(!rect||data.W.rows.length===0)return false;return rect.r1>=0&&rect.r2<data.W.rows.length&&rect.c1>=0&&rect.c2<8}
+function mergePrep(){const rect=selection;if(!validRect(rect)){notify('请先选择完整表格区域');return null}if((rect.r2-rect.r1+1)*(rect.c2-rect.c1+1)<2){notify('请框选两个或更多单元格');return null}if(data.W.merges.some(m=>meets(rect,m)&&!includes(rect,m))){notify('选区只覆盖了已有合并区域的一部分，请完整框选后操作');return null}return rect}
+function createMerge(rect,contents){snapshot();for(let r=rect.r1;r<=rect.r2;r++)for(let c=rect.c1;c<=rect.c2;c++)data.W.rows[r][KEYS[c]]='';data.W.rows[rect.r1][KEYS[rect.c1]]=contents;
+ data.W.merges=data.W.merges.filter(m=>!includes(rect,m));data.W.merges.push({r:rect.r1,c:rect.c1,rs:rect.r2-rect.r1+1,cs:rect.c2-rect.c1+1});validationErrors=[];store();render()}
+function mergeSameCells(){if(mode!=='work')return;const rect=mergePrep();if(!rect)return;
+ if(data.W.merges.some(m=>meets(rect,m))){notify('批量合并相同单元格前，请先取消选区中的原有合并');return}
+ let merges=[];for(let c=rect.c1;c<=rect.c2;c++){let start=rect.r1;while(start<=rect.r2){const v=String(data.W.rows[start][KEYS[c]]||'');let end=start;while(v.trim()&&end+1<=rect.r2&&String(data.W.rows[end+1][KEYS[c]]||'')===v)end++;if(end>start)merges.push({r:start,c,rs:end-start+1,cs:1});start=end+1}}
+ if(!merges.length){notify('选区中未找到相邻且内容相同的单元格');return}snapshot();merges.forEach(m=>{for(let r=m.r+1;r<m.r+m.rs;r++)data.W.rows[r][KEYS[m.c]]='';data.W.merges.push(m)});validationErrors=[];store();render();notify(`已合并 ${merges.length} 组相同的纵向单元格`);
+}
+function mergeContents(){if(mode!=='work')return;const rect=mergePrep();if(!rect)return;const all=[];for(let r=rect.r1;r<=rect.r2;r++)for(let c=rect.c1;c<=rect.c2;c++){const v=data.W.rows[r][KEYS[c]];if(!isBlank(v))all.push(v)}
+ const combined=all.join('\n');ask('合并内容',`将 ${all.length} 条非空内容按阅读顺序合入一个单元格（每条换行），同时合并选区结构。此操作不等于默认合并居中，确认执行？`,()=>{createMerge(rect,combined);notify(`已合并 ${all.length} 条内容，原单元格不再单独储存文字`)})
+}
+function splitAndFill(){if(mode!=='work'||!selection)return;const ms=data.W.merges.filter(m=>meets(selection,m));if(!ms.length){notify('请先选择需要拆分并填充的纵向合并区域');return}if(ms.some(m=>!includes(selection,m)||m.cs!==1||m.rs<2)){notify('拆分并填充仅支持完整选中的单列纵向合并区域');return}
+ snapshot();for(const m of ms){const v=data.W.rows[m.r][KEYS[m.c]]||'';for(let r=m.r+1;r<m.r+m.rs;r++)data.W.rows[r][KEYS[m.c]]=v}
+ data.W.merges=data.W.merges.filter(m=>!ms.includes(m));validationErrors=[];store();render();notify(`已拆分 ${ms.length} 处纵向合并，并将共享值填写到每一条记录`)
+}
+function nextVisible(r,c,dir){const m=getMerge(data.W,r,c)||{r,c,rs:1,cs:1};let rr=m.r,cc=m.c;if(dir==='down')rr=m.r+m.rs;else if(dir==='up')rr=m.r-1;else if(dir==='right')cc=m.c+m.cs;else cc=m.c-1;
+ if(dir==='right'&&cc>=8){cc=0;rr=m.r+m.rs}if(dir==='left'&&cc<0){cc=7;rr=m.r-1}if(rr<0||rr>=data.W.rows.length||cc<0||cc>=8)return null;
+ const target=getMerge(data.W,rr,cc);return target?{r:target.r,c:target.c}:{r:rr,c:cc}
+}
+function navigate(r,c,dir){const n=nextVisible(r,c,dir);if(!n)return;chooseCell(n.r,n.c);$('#sheet-target td[data-r="'+n.r+'"][data-c="'+n.c+'"]')?.scrollIntoView({block:'nearest',inline:'nearest'})}
+function fitColumn(i){if(i>=7||i<0)return;const can=document.createElement('canvas').getContext('2d');can.font='12px "PingFang SC","Microsoft YaHei",sans-serif';let max=can.measureText(COLS[i][1]).width+34;for(const row of data.W.rows){const v=String(row[KEYS[i]]||'');for(const line of v.split('\n'))max=Math.max(max,can.measureText(line.slice(0,55)).width+28)}
+ const width=Math.max(380,$('#sheet-target').clientWidth-42);const target=Math.min(44,Math.max(MIN_COL_PCT,100*max/width));const sum=colWidths[i]+colWidths[i+1],actual=Math.min(sum-MIN_COL_PCT,Math.max(MIN_COL_PCT,target));if(Math.abs(actual-colWidths[i])<0.1){notify('列宽已达可用边界');return}snapshot();colWidths[i+1]=+(sum-actual).toFixed(2);colWidths[i]=+actual.toFixed(2);data.W.widths=colWidths.slice();store();render();notify(`${COLS[i][1]}：已自动调整列宽（总宽度保持不变）`)
+}
+function restoreColumnWidths(){if(colWidths.every((v,i)=>Math.abs(v-[9,12,10,14,15,17,12,11][i])<.01))return;snapshot();colWidths=[9,12,10,14,15,17,12,11];data.W.widths=colWidths.slice();store();render();notify('已恢复八字段默认列宽')}
+function displayErrors(){const el=$('#validation-warning');if(!validationErrors.length){el.hidden=true;el.innerHTML='';return}
+ const examples=validationErrors.slice(0,16);el.hidden=false;el.innerHTML=`<button class="validation-close" id="close-errors" title="关闭错误列表">×</button><strong>保存并应用未通过：${validationErrors.length} 处必填内容缺失</strong><div>前六项字段为必填，纵向合并共享值有效；横向合并不能代替其他必填字段。当前正式预览未改变。</div><div class="err-list">${examples.map((e,i)=>`<button data-err="${i}">第${e.r+1}行 · ${esc(COLS[e.c][1])}</button>`).join('')}${validationErrors.length>16?`<span>另有 ${validationErrors.length-16} 处</span>`:''}</div>`;
+ el.querySelector('#close-errors').addEventListener('click',()=>el.hidden=true);
+ el.querySelectorAll('[data-err]').forEach(b=>b.addEventListener('click',()=>{switchMode('work');const e=examples[+b.dataset.err];const mg=getMerge(data.W,e.r,e.c);const r=mg?.r??e.r,c=mg?.c??e.c;chooseCell(r,c);$('#sheet-target td[data-r="'+r+'"][data-c="'+c+'"]')?.scrollIntoView({behavior:'smooth',block:'center'});}));
+}
+function validateWork(){const issues=[];let effective=0;for(let r=0;r<data.W.rows.length;r++){
+ const row=data.W.rows[r];const present=KEYS.some((k,c)=>{const m=getMerge(data.W,r,c);return !isBlank(m?m.c===c?data.W.rows[m.r][k]:'':row[k])});if(!present)continue;effective++;
+ for(let c=0;c<6;c++){const m=getMerge(data.W,r,c);let value='';if(m){if(m.c===c)value=data.W.rows[m.r][KEYS[c]]||''}else value=row[KEYS[c]]||'';
+ if(isBlank(value))issues.push({r,c})}}
+ return {issues,effective}
+}
+function parseExternalClipboard(e){const html=e.clipboardData?.getData('text/html')||'';const plain=e.clipboardData?.getData('text/plain')||'';
+ if(html&&/<table[\s>]/i.test(html)){const doc=new DOMParser().parseFromString(html,'text/html');const table=doc.querySelector('table');if(table){const out=[],merges=[],occupied=new Set();let trIdx=0;
+ for(const tr of table.querySelectorAll('tr')){if(!out[trIdx])out[trIdx]=[];let c=0;for(const td of tr.querySelectorAll(':scope > td,:scope > th')){while(occupied.has(`${trIdx}:${c}`))c++;
+ const rs=Math.max(1,Math.min(500,parseInt(td.getAttribute('rowspan')||'1',10)||1)),cs=Math.max(1,Math.min(50,parseInt(td.getAttribute('colspan')||'1',10)||1));
+ let text=td.innerText||td.textContent||'';text=text.replace(/\u00a0/g,' ').trim();out[trIdx][c]=text;
+ if(rs>1||cs>1)merges.push({r:trIdx,c,rs,cs});for(let dr=0;dr<rs;dr++)for(let dc=0;dc<cs;dc++)if(dr||dc){occupied.add(`${trIdx+dr}:${c+dc}`);(out[trIdx+dr]??=[])[c+dc]=''}c+=cs}trIdx++}
+ const h=out.length,w=Math.max(1,...out.map(a=>a.length));if(h&&w)return {h,w,values:out.map(a=>Array.from({length:w},(_,i)=>a[i]||'')),merges};}}
+ if(!plain)return null;const rows=plain.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');if(rows.length>1&&rows.at(-1)==='')rows.pop();const values=rows.map(x=>x.split('\t'));const w=Math.max(1,...values.map(r=>r.length));return {h:values.length,w,values:values.map(r=>Array.from({length:w},(_,i)=>r[i]||'')),merges:[]};
+}
+function formatClipboard(payload){const spans=new Map(payload.merges.map(m=>[`${m.r}:${m.c}`,m]));const covered=new Set();payload.merges.forEach(m=>{for(let r=m.r;r<m.r+m.rs;r++)for(let c=m.c;c<m.c+m.cs;c++)if(r!==m.r||c!==m.c)covered.add(`${r}:${c}`)});
+ let html='<table data-bg-dim06="v5">';for(let r=0;r<payload.h;r++){html+='<tr>';for(let c=0;c<payload.w;c++){if(covered.has(`${r}:${c}`))continue;const m=spans.get(`${r}:${c}`),v=payload.values[r]?.[c]||'';html+=`<td ${m?`rowspan="${m.rs}" colspan="${m.cs}"`:''}>${esc(v).replace(/\n/g,'<br>')}</td>`}html+='</tr>'}return html+'</table>';
+}
+function mergeCells(){if(mode!=='work'||!selection)return;const rect=selection;if((rect.r2-rect.r1+1)*(rect.c2-rect.c1+1)<2){notify('先拖动选择两个或更多单元格');return}const conflict=data.W.merges.filter(m=>meets(rect,m)&&!includes(rect,m));if(conflict.length){notify('选区只覆盖了已有合并区域的一部分，请完整框选后重试（Q05）');return}const v=data.W.rows[rect.r1][KEYS[rect.c1]]||'';let erased=[];for(let r=rect.r1;r<=rect.r2;r++)for(let c=rect.c1;c<=rect.c2;c++){if(r===rect.r1&&c===rect.c1)continue;const content=data.W.rows[r]?.[KEYS[c]]||'';if(content)erased.push(`${alphabet[c]}${r+1}`)}
+const doIt=()=>{snapshot();for(let r=rect.r1;r<=rect.r2;r++)for(let c=rect.c1;c<=rect.c2;c++)if(r!==rect.r1||c!==rect.c1)data.W.rows[r][KEYS[c]]='';data.W.merges=data.W.merges.filter(m=>!includes(rect,m));data.W.merges.push({r:rect.r1,c:rect.c1,rs:rect.r2-rect.r1+1,cs:rect.c2-rect.c1+1});data.W.rows[rect.r1][KEYS[rect.c1]]=v;validationErrors=[];store();render();notify('已合并居中，其他单元格内容按规则清除')};
+if(erased.length){ask('合并将删除其他单元格内容',`按已确认的 Excel 规则，合并只保留 ${alphabet[rect.c1]}${rect.r1+1} 的文字，另外 ${erased.length} 个有内容的单元格将被清空。取消合并不会恢复这些内容，是否继续？`,doIt)}else doIt()}
+function unmergeCells(){if(mode!=='work'||!selection)return;const ms=data.W.merges.filter(m=>meets(selection,m));if(!ms.length){notify('当前选区没有合并单元格');return}if(ms.some(m=>!includes(selection,m))){notify('请完整选择需要取消合并的区域');return}snapshot();data.W.merges=data.W.merges.filter(m=>!ms.includes(m));validationErrors=[];store();render();notify(`已取消 ${ms.length} 个合并；仅原左上角保留文字`)}
+function insertSelected(pos){if(mode!=='work')return;const rr=[...selectedRows].sort((a,b)=>a-b);const n=Number($('#insert-count')?.value||1);if(!Number.isInteger(n)||n<1||n>200){notify('插入条数请输入 1～200 的整数');return}const anchor=rr.length?(pos==='above'?rr[0]:rr[rr.length-1]):selection?.r1;const at=anchor===undefined||anchor===null?(pos==='above'?0:data.W.rows.length):pos==='above'?anchor:anchor+1;snapshot();for(let i=0;i<n;i++){const blank={id:'r'+(++data.seq)};KEYS.forEach(k=>blank[k]='');data.W.rows.splice(at+i,0,blank)}data.W.merges.forEach(m=>{if(m.r<at&&at<m.r+m.rs)m.rs+=n;else if(m.r>=at)m.r+=n});selectedRows=new Set(Array.from({length:n},(_,i)=>at+i));selection=null;store();render();notify(`已插入 ${n} 行，相关合并区域已同步调整（待WPS边界对照验收）`)}
+function deleteOne(i){for(const m of data.W.merges){if(i<m.r){m.r--}else if(i>=m.r&&i<m.r+m.rs){if(m.rs>1){if(i===m.r){const old=data.W.rows[i][KEYS[m.c]];if(data.W.rows[i+1])data.W.rows[i+1][KEYS[m.c]]=old}m.rs--; }else m.rs=0}}data.W.merges=data.W.merges.filter(m=>m.rs>0&&(m.rs>1||m.cs>1));if(data.W.rowHeights)delete data.W.rowHeights[data.W.rows[i].id];data.W.rows.splice(i,1)}
+function removeSelectedRows(){if(mode!=='work'||!selectedRows.size)return;const arr=[...selectedRows].sort((a,b)=>b-a);ask('删除所选性能记录',`即将删除 ${arr.length} 条完整性能记录，涉及的合并区域将同步调整，操作可撤销。是否继续？`,()=>{snapshot();for(const i of arr)deleteOne(i);selectedRows.clear();selection=null;store();render();notify('已删除记录并调整合并区域')})}
+function moveSelectedRows(targetRow){if(mode!=='work'||selectedRows.size===0||targetRow==null)return;const ss=[...selectedRows].sort((a,b)=>a-b),start=ss[0],end=ss.at(-1),len=ss.length;if(end-start+1!==len){notify('请先选择连续整行再移动');return}if(targetRow>=start&&targetRow<=end){notify('目标位于所选行范围内，无须移动');return}
+ const dest=targetRow>end?targetRow+1:targetRow;const order=data.W.rows.map((_,i)=>i),removed=order.splice(start,len);order.splice(dest>start?dest-len:dest,0,...removed);
+ const mapping=new Map(order.map((old,i)=>[old,i]));const valid=data.W.merges.every(m=>{const indices=Array.from({length:m.rs},(_,i)=>mapping.get(m.r+i)).sort((a,b)=>a-b);return indices.at(-1)-indices[0]+1===indices.length});
+ if(!valid){notify('此次行移动会拆开合并区域，请选择完整关联行或先取消合并');return}snapshot();const oldRows=data.W.rows.slice();data.W.rows=order.map(i=>oldRows[i]);data.W.merges=data.W.merges.map(m=>({...m,r:Math.min(...Array.from({length:m.rs},(_,i)=>mapping.get(m.r+i)))}));selectedRows=new Set(removed.map(i=>mapping.get(i)));selection=null;validationErrors=[];store();render();notify(`已移动 ${len} 行，原合并关系保持完整`)
+}
+function copyCells(e){if(mode!=='work'||!selection){notify('请先选中复制区域');return null}const rect=selection;const ms=data.W.merges.filter(m=>meets(rect,m));if(ms.some(m=>!includes(rect,m))){notify('复制选区部分覆盖了合并单元格，请完整选择');return null}
+ const values=[];for(let r=rect.r1;r<=rect.r2;r++){const a=[];for(let c=rect.c1;c<=rect.c2;c++)a.push(data.W.rows[r][KEYS[c]]||'');values.push(a)}
+ internalClipboard={w:rect.c2-rect.c1+1,h:rect.r2-rect.r1+1,values,merges:ms.map(m=>({r:m.r-rect.r1,c:m.c-rect.c1,rs:m.rs,cs:m.cs}))};
+ const tsv=values.map(row=>row.map(v=>String(v).replace(/\t/g,' ').replace(/\r?\n/g,' ')).join('\t')).join('\n');
+ if(e?.clipboardData){e.clipboardData.setData('text/plain',tsv);e.clipboardData.setData('text/html',formatClipboard(internalClipboard));e.preventDefault()}
+ else if(navigator.clipboard?.writeText)navigator.clipboard.writeText(tsv).catch(()=>{});
+ updateButtons();notify(`已复制 ${internalClipboard.h} 行 × ${internalClipboard.w} 列；本页内保留合并结构`);return internalClipboard
+}
+function pasteCells(payload){if(mode!=='work'||!selection||!payload){notify('请选择目标单元格；外部Excel使用 Ctrl/⌘+V 粘贴');return}
+ const s=payload,atR=selection.r1,atC=selection.c1;const allowed=8-atC;if(allowed<=0){notify('粘贴起点超出八字段边界');return}
+ const crossing=s.merges.some(m=>m.c<allowed&&m.c+m.cs>allowed);if(crossing){notify('源合并区域跨越第八列边界，已取消整次粘贴；请先调整源表格');return}
+ const trimmed=s.w>allowed,ww=Math.min(allowed,s.w);if(ww<=0||!s.h)return;const target={r1:atR,c1:atC,r2:atR+s.h-1,c2:atC+ww-1};
+ const ms=data.W.merges.filter(m=>meets(target,m));if(ms.some(m=>!includes(target,m))){notify('目标部分覆盖已有合并区域，禁止粘贴，请重新选择完整区域');return}
+ const incoming=s.merges.filter(m=>m.c<allowed);const oldRel=ms.map(m=>`${m.r-atR}:${m.c-atC}:${m.rs}:${m.cs}`).sort().join('|');const newRel=incoming.map(m=>`${m.r}:${m.c}:${m.rs}:${m.cs}`).sort().join('|');const mismatch=ms.length>0&&oldRel!==newRel;
+ const execute=()=>{snapshot();while(data.W.rows.length<=target.r2){const blank={id:'r'+(++data.seq)};KEYS.forEach(k=>blank[k]='');data.W.rows.push(blank)}
+ data.W.merges=data.W.merges.filter(m=>!ms.includes(m));for(let i=0;i<s.h;i++)for(let j=0;j<ww;j++)data.W.rows[atR+i][KEYS[atC+j]]=s.values[i]?.[j]||'';
+ incoming.forEach(m=>data.W.merges.push({...m,r:atR+m.r,c:atC+m.c}));selection=target;anchor={r:atR,c:atC};validationErrors=[];store();render();notify(trimmed?`粘贴完成：导入 ${ww} 列，舍弃超范围 ${s.w-ww} 列（共 ${(s.w-ww)*s.h} 个位置）`:`已粘贴 ${s.h} 行 × ${ww} 列${incoming.length?'（包含合并结构）':''}`)};
+ if(mismatch)ask('目标合并结构不一致',`本次粘贴将覆盖目标范围内原有文字与合并结构（${ms.length}处），是否继续？`,execute);else execute();
+}
+function clearSelected(){if(mode!=='work'||!selection)return;const rect=selection;const ms=data.W.merges.filter(m=>meets(rect,m));if(ms.some(m=>!includes(rect,m))){notify('请完整选择已合并单元格后清空内容');return}snapshot();for(let r=rect.r1;r<=rect.r2;r++)for(let c=rect.c1;c<=rect.c2;c++)data.W.rows[r][KEYS[c]]='';store();render();notify('已清空选区内容；合并结构保留')}
+function beginEdit(r,c){if(mode!=='work'||editor)return;const merge=getMerge(data.W,r,c);if(merge){r=merge.r;c=merge.c}const cell=$(`#sheet-target td[data-r="${r}"][data-c="${c}"]`);if(!cell)return;
+ const old=data.W.rows[r][KEYS[c]]||'';const input=document.createElement('textarea');input.className='cell-editor';input.value=old;const hint=document.createElement('div');hint.className='edit-hint';hint.textContent='Enter 确认并向下 · Alt+Enter 换行 · Tab 右移 · Esc 取消';cell.replaceChildren(input,hint);editor={input,r,c,old,finished:false};input.focus();input.select();
+ function finish(ok,dir){if(!editor||editor.finished)return;editor.finished=true;editor=null;if(ok&&input.value!==old){snapshot();data.W.rows[r][KEYS[c]]=input.value;validationErrors=[];store()}render();if(dir)navigate(r,c,dir)}
+ input.addEventListener('keydown',e=>{if(e.isComposing||e.keyCode===229)return;if(e.key==='Escape'){e.preventDefault();finish(false)}else if(e.key==='Enter'&&e.altKey){e.preventDefault();input.setRangeText('\n',input.selectionStart,input.selectionEnd,'end')}else if(e.key==='Enter'){e.preventDefault();finish(true,e.shiftKey?'up':'down')}else if(e.key==='Tab'){e.preventDefault();finish(true,e.shiftKey?'left':'right')}});
+ input.addEventListener('blur',()=>{if(editor&&!editor.finished)finish(true)})
+}
+function undoAction(){if(!undo.length)return;redo.push(clone(data.W));data.W=undo.pop();selection=null;selectedRows.clear();store();render();notify('已撤销')}
+function redoAction(){if(!redo.length)return;undo.push(clone(data.W));data.W=redo.pop();selection=null;selectedRows.clear();store();render();notify('已重做')}
+function saveDraft(){if(!data.W.rows.length){notify('没有可保存的记录');return}const last=data.versions.slice().reverse().find(v=>v.status==='未应用版本');if(last&&eq(last.data,data.W)){notify('与最近一次草稿内容相同，无需重复保存');return}data.versions.push({id:'v'+Date.now(),status:'未应用版本',at:new Date().toLocaleString('zh-CN'),data:clone(data.W)});store();notify('已保存独立草稿版本；正式预览未改变')}
+function saveApply(){
+ const res=validateWork();if(!res.effective){notify('没有有效业务内容，不允许发布空维度');return}
+ if(res.issues.length){validationErrors=res.issues;render();displayErrors();notify(`未应用：${res.issues.length} 处必填字段缺失`);const f=res.issues[0],m=getMerge(data.W,f.r,f.c),r=m?.r??f.r,c=m?.c??f.c;chooseCell(r,c);$('#sheet-target td[data-r="'+r+'"][data-c="'+c+'"]')?.scrollIntoView({behavior:'smooth',block:'center'});return}
+ validationErrors=[];$('#validation-warning').hidden=true;if(eq(data.W,data.P)){notify('工作内容与已应用成果一致');return}
+ const last=data.versions.slice().reverse().find(v=>v.status==='未应用版本'&&eq(v.data,data.W));if(last){last.status='已应用版本';last.appliedAt=new Date().toLocaleString('zh-CN')}else data.versions.push({id:'v'+Date.now(),status:'已应用版本',at:new Date().toLocaleString('zh-CN'),data:clone(data.W)});
+ data.P=clone(data.W);store();render();notify('六项必填校验通过：整个维度已正式应用，当前保持工作模式')
+}
+function showVersions(){const layer=$('#versions-layer');const arr=data.versions.slice().reverse();layer.innerHTML=`<div class="scrim" data-close-versions></div><aside class="drawer"><div class="drawer-head"><h2>统一版本管理</h2><button class="btn" data-close-versions>关闭</button></div><div class="drawer-body"><p class="smallnote">工作区自动暂存不新增版本。手动保存草稿及保存并应用记录到统一版本列表。恢复只替换工作区，不影响正式预览。</p>${arr.map(v=>`<div class="version"><strong>${esc(v.at)}</strong><p>${esc(v.status)} · ${v.data.rows.length} 条记录 ${v.appliedAt?'· 应用 '+esc(v.appliedAt):''}</p><div class="version-actions"><button class="btn" data-ver-view="${esc(v.id)}">查看</button><button class="btn" data-ver-restore="${esc(v.id)}">恢复</button><button class="btn danger" data-ver-delete="${esc(v.id)}">删除</button></div></div>`).join('')}</div></aside>`;layer.onclick=onVersionsClick}
+function closeVersions(){$('#versions-layer').innerHTML=''}
+function onVersionsClick(e){if(e.target.closest('[data-close-versions]')){closeVersions();return}const view=e.target.closest('[data-ver-view]'),restore=e.target.closest('[data-ver-restore]'),del=e.target.closest('[data-ver-delete]');if(view){showVersionDetail(view.dataset.verView);return}if(restore){const v=data.versions.find(x=>x.id===restore.dataset.verRestore);if(v)ask('恢复历史版本',`恢复 ${v.at} 的内容到工作区？当前工作修改会被替换，但正式预览不会改变。`,()=>{snapshot();data.W=clone(v.data);store();closeVersions();render();notify('历史内容已恢复到工作区，未正式应用')});return}if(del){const v=data.versions.find(x=>x.id===del.dataset.verDelete);if(v)ask('删除历史记录',`确定删除 ${v.at} 的历史记录？这不会删除当前正式成果，但该版本无法再恢复。`,()=>{data.versions=data.versions.filter(x=>x.id!==v.id);store();closeVersions();showVersions()})}}
+function showVersionDetail(id){const v=data.versions.find(x=>x.id===id);if(!v)return;closeVersions();$('#history-layer').innerHTML=`<div class="fullview"><div class="fullview-wrap"><div class="fullview-top"><div><strong>历史版本 · 完整只读页面</strong><div class="smallnote">${esc(v.at)} · ${esc(v.status)}</div></div><button class="btn" id="back-to-versions">返回版本列表</button></div><div class="sheet-panel"><div class="sheet-frame">${gridHtml(v.data,false)}</div></div></div></div>`;$('#back-to-versions').addEventListener('click',()=>{$('#history-layer').innerHTML='';showVersions()})}
+function switchMode(v){if(mode===v)return;if(editor){editor.input.blur()}mode=v;selection=null;selectedRows.clear();closeContext();$('#save-menu').hidden=true;$('#merge-menu').hidden=true;$('#validation-warning').hidden=true;render();notify(mode==='preview'?'预览仅显示已应用的正式成果':'已进入工作模式，可编辑表格及合并区域')}
+function appendRow(){if(mode!=='work')return;snapshot();const r={id:'r'+(++data.seq)};KEYS.forEach(k=>r[k]='');data.W.rows.push(r);selectedRows.clear();selectedRows.add(data.W.rows.length-1);selection=null;store();render();notify('已在表格末尾新增一条空白性能记录')}
+function resetDemo(){ask('重置本地示例', '仅清空此浏览器中本示例的操作和版本记录，并恢复初始八字段演示数据。这不是正式平台的撤销应用功能。确定重置？',()=>{data={W:clone(initial),P:clone(initial),versions:[{id:'base',status:'已应用版本',at:'初始演示版本',data:clone(initial)}],seq:100};undo.length=0;redo.length=0;internalClipboard=null;selection=null;selectedRows.clear();validationErrors=[];colWidths=data.W.widths.slice();store();render();notify('已恢复初始演示数据')})}
+$('#insert-above').addEventListener('click',()=>insertSelected('above'));$('#insert-below').addEventListener('click',()=>insertSelected('below'));$('#restore-widths').addEventListener('click',restoreColumnWidths);$('#reset-demo').addEventListener('click',resetDemo);
+
+$('#preview-mode').addEventListener('click',()=>switchMode('preview'));$('#work-mode').addEventListener('click',()=>switchMode('work'));
+$('#save-toggle').addEventListener('click',()=>$('#save-menu').hidden=!$('#save-menu').hidden);$('#save-draft').addEventListener('click',()=>{$('#save-menu').hidden=true;saveDraft()});$('#save-apply').addEventListener('click',()=>{$('#save-menu').hidden=true;saveApply()});$('#versions-btn').addEventListener('click',showVersions);
+$$('[data-action]').forEach(b=>b.addEventListener('click',()=>({undo:undoAction,redo:redoAction,merge:mergeCells,unmerge:unmergeCells,copy:()=>copyCells(),paste:()=>pasteCells(internalClipboard)})[b.dataset.action]?.()));
+$('#merge-toggle').addEventListener('click',()=>$('#merge-menu').hidden=!$('#merge-menu').hidden);
+$$('[data-merge-cmd]').forEach(b=>b.addEventListener('click',()=>{const ops={merge:mergeCells,same:mergeSameCells,contents:mergeContents,unmerge:unmergeCells,fill:splitAndFill};$('#merge-menu').hidden=true;ops[b.dataset.mergeCmd]?.()}));
+const target=$('#sheet-target');target.addEventListener('pointerdown',e=>{if(mode!=='work'||editor||e.button!==0)return;closeContext();
+ const rowHandle=e.target.closest('[data-height-row]');
+ if(rowHandle){
+  const row=data.W.rows[Number(rowHandle.dataset.heightRow)];
+  const element=rowHandle.closest('tr');
+  rowHeightDrag={id:row.id,element,startY:e.clientY,startHeight:element.getBoundingClientRect().height};
+  rowHandle.setPointerCapture(e.pointerId);e.preventDefault();return;
+ }
+ const handle=e.target.closest('[data-resize]');if(handle){const i=+handle.dataset.resize;if(i>=7){notify('最右列请通过调整前一列改变宽度');return}resizing={i,startX:e.clientX,a:colWidths[i],b:colWidths[i+1],total:colWidths[i]+colWidths[i+1],changed:false};handle.classList.add('resizing');e.preventDefault();return}
+ const head=e.target.closest('[data-row-head]'),cell=e.target.closest('td[data-r]');if(head){const r=+head.dataset.rowHead;if(e.shiftKey&&selectedRows.has(r)&&selectedRows.size){drag={type:'move',start:r,end:r};e.preventDefault();notify('继续拖动到目标行号上，释放后移动整行');return}chooseRow(r,e);drag={type:'rows',start:r};e.preventDefault()}else if(cell){const r=+cell.dataset.r,c=+cell.dataset.c;if(e.shiftKey&&anchor)chooseCell(r,c,true);else chooseCell(r,c);drag={type:'cells',startR:anchor.r,startC:anchor.c};e.preventDefault()}
+});
+document.addEventListener('pointermove',e=>{
+ if(rowHeightDrag){
+  const delta=e.clientY-rowHeightDrag.startY;
+  if(Math.abs(delta)<2&&!rowHeightDrag.height)return;
+  rowHeightDrag.height=Math.max(28,Math.min(600,Math.round(rowHeightDrag.startHeight+delta)));
+  rowHeightDrag.element.style.height=rowHeightDrag.height+'px';return;
+ }
+ if(resizing){const width=Math.max(380,$('#sheet-target').clientWidth-42),delta=(e.clientX-resizing.startX)/width*100,actual=Math.max(MIN_COL_PCT,Math.min(resizing.total-MIN_COL_PCT,resizing.a+delta));if(!resizing.changed&&Math.abs(actual-resizing.a)>.2){snapshot();resizing.changed=true}if(!resizing.changed)return;colWidths[resizing.i]=+actual.toFixed(3);colWidths[resizing.i+1]=+(resizing.total-actual).toFixed(3);const cols=$$('#sheet-target col[data-col]');[resizing.i,resizing.i+1].forEach(i=>{if(cols[i])cols[i].style.width=`${Math.round(width*colWidths[i]/100)}px`});return}
+ if(!drag||mode!=='work'||editor||e.buttons!==1)return;const el=document.elementFromPoint(e.clientX,e.clientY);if(!el)return;
+ if(drag.type==='move'){const head=el.closest('#sheet-target [data-row-head]');if(head){drag.end=+head.dataset.rowHead;$$('#sheet-target [data-row-head]').forEach(x=>x.classList.toggle('moving',+x.dataset.rowHead===drag.end))}return}
+ if(drag.type==='rows'){const head=el.closest('#sheet-target [data-row-head]');if(!head)return;const rr=+head.dataset.rowHead;selectedRows.clear();for(let i=Math.min(drag.start,rr);i<=Math.max(drag.start,rr);i++)selectedRows.add(i);selection=null;paintSelection()}
+ else{const cell=el.closest('#sheet-target td[data-r]');if(!cell)return;const r=+cell.dataset.r,c=+cell.dataset.c,mg=getMerge(data.W,r,c);selection=bounds(drag.startR,drag.startC,mg?mg.r+mg.rs-1:r,mg?mg.c+mg.cs-1:c);selectedRows.clear();paintSelection()}
+});
+document.addEventListener('pointerup',()=>{
+ if(rowHeightDrag){
+  const {id,height}=rowHeightDrag;rowHeightDrag=null;
+  if(height&&height!==data.W.rowHeights?.[id]){
+   snapshot();data.W.rowHeights??={};data.W.rowHeights[id]=height;store();render();
+  }
+  return;
+ }
+ if(resizing){const changed=resizing.changed;resizing=null;if(changed){data.W.widths=colWidths.slice();store();render();notify('列宽已更新，八字段仍完整同屏；正式预览需保存并应用后更新')}return}if(drag?.type==='move')moveSelectedRows(drag.end);drag=null});
+document.addEventListener('pointercancel',()=>{if(rowHeightDrag){rowHeightDrag=null;render()}});
+target.addEventListener('dblclick',e=>{
+ const rowHandle=e.target.closest('[data-height-row]');
+ if(mode==='work'&&rowHandle){
+  const id=data.W.rows[Number(rowHandle.dataset.heightRow)]?.id;
+  if(id&&data.W.rowHeights?.[id]){snapshot();delete data.W.rowHeights[id];store();render()}
+  return;
+ }
+ const h=e.target.closest('[data-resize]');if(h){e.stopPropagation();fitColumn(+h.dataset.resize);return}if(mode!=='work')return;const td=e.target.closest('td[data-r]');if(td)beginEdit(+td.dataset.r,+td.dataset.c)});
+
+target.addEventListener('contextmenu',e=>{if(mode!=='work')return;const th=e.target.closest('[data-row-head]'),td=e.target.closest('td[data-r]');if(!th&&!td)return;e.preventDefault();if(th){const r=+th.dataset.rowHead;if(!selectedRows.has(r))chooseRow(r);rowActionMenu(e.clientX,e.clientY)}else{const r=+td.dataset.r,c=+td.dataset.c;if(!selection||r<selection.r1||r>selection.r2||c<selection.c1||c>selection.c2)chooseCell(r,c);cellActionMenu(e.clientX,e.clientY)}});
+document.addEventListener('click',e=>{if(!e.target.closest('.context'))closeContext();if(!e.target.closest('.menu-host')){$('#save-menu').hidden=true;$('#merge-menu').hidden=true}});
+document.addEventListener('copy',e=>{if(mode!=='work'||editor||!selection)return;copyCells(e)});
+document.addEventListener('paste',e=>{if(mode!=='work'||editor||!selection)return;const payload=parseExternalClipboard(e);if(!payload)return;e.preventDefault();pasteCells(payload)});
+document.addEventListener('keydown',e=>{
+ if(activeDialog){if(e.key==='Escape')closeDialog();return}if(editor||mode!=='work'||$('#versions-layer').innerHTML||$('#history-layer').innerHTML)return;
+ if(['INPUT','TEXTAREA'].includes(document.activeElement?.tagName))return;const ctrl=e.ctrlKey||e.metaKey,key=e.key.toLowerCase();
+ if(ctrl&&key==='z'){e.preventDefault();e.shiftKey?redoAction():undoAction();return}if(ctrl&&key==='y'){e.preventDefault();redoAction();return}
+ if(ctrl&&key==='c'){return} // 原生 copy 事件写入 HTML+TSV
+ if(ctrl&&key==='v'){return} // 交由原生 paste 事件识别外部 HTML / TSV 或本页内容
+ if(ctrl&&key==='a'){e.preventDefault();selectedRows.clear();selection={r1:0,c1:0,r2:Math.max(0,data.W.rows.length-1),c2:7};anchor={r:0,c:0};paintSelection();return}
+ if(key==='escape'){selection=null;selectedRows.clear();paintSelection();closeContext();return}
+ if((key==='delete'||key==='backspace')&&selection){e.preventDefault();clearSelected();return}
+ if(key==='f2'&&selection){e.preventDefault();beginEdit(selection.r1,selection.c1);return}
+ if(key==='enter'&&selection){e.preventDefault();navigate(selection.r1,selection.c1,e.shiftKey?'up':'down');return}
+ if(key==='tab'&&selection){e.preventDefault();navigate(selection.r1,selection.c1,e.shiftKey?'left':'right');return}
+ if(['arrowleft','arrowright','arrowup','arrowdown'].includes(key)&&selection){e.preventDefault();const dir={arrowleft:'left',arrowright:'right',arrowup:'up',arrowdown:'down'}[key];if(!e.shiftKey)navigate(selection.r1,selection.c1,dir);else{const n=nextVisible(selection.r2,selection.c2,dir);if(n)chooseCell(n.r,n.c,true)}return}
+});
+window.addEventListener('message',event=>{if(event.origin!==location.origin||event.source!==window.parent)return;const m=event.data||{};if(m.type==='bg-dim06-state'){mode=m.workMode?'work':'preview';if(mode==='work')data.W=convertSnapshot(m.content);else data.P=convertSnapshot(m.content);data.seq=Math.max(data.seq,...data.W.rows.map(r=>Number(String(r.id).replace(/\D/g,''))||0));selection=null;editor=null;render()}if(m.type==='bg-dim06-command'){if(editor?.input)editor.input.blur();if(m.action==='save-draft')window.parent.postMessage({type:'bg-dim06-save-draft'},location.origin);if(m.action==='publish'){const result=validateWork();if(!result.effective){notify('至少填写一条有效性能记录');return}if(result.issues.length){validationErrors=result.issues;render();displayErrors();notify('有 '+result.issues.length+' 处必填字段缺失');return}window.parent.postMessage({type:'bg-dim06-apply',snapshot:clone(data.W)},location.origin)}}});
+function convertSnapshot(value){if(value?.format==='v5'&&Array.isArray(value.rows))return clone(value);if(Array.isArray(value?.rows))return {format:'v5',widths:[9,12,10,14,15,17,12,11],rows:value.rows.map((r,i)=>({id:r.id||'legacy'+i,category:r.category||'',product:'',function:r.point||'',functional:(r.title?r.title+'：':'')+(r.functional||''),design:r.design||'',test:r.test||'',competitor:r.competitor||'',experience:r.experience||''})),merges:[]};return clone(initial)}
+render();window.parent.postMessage({type:'bg-dim06-ready',seed:clone(initial)},location.origin);
+})();
+</script>
+</body></html>

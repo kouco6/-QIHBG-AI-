@@ -1,0 +1,6 @@
+{
+  "port": 8780,
+  "source_dir": "..",
+  "data_dir": "data-dev/platform",
+  "log_dir": "logs/platform"
+}

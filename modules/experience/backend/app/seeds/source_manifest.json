@@ -1,0 +1,302 @@
+{
+  "schema_version": "1.0",
+  "job_id": "0185fa0a-1784-4353-8988-ee1aa4372b32",
+  "task_id": "T01",
+  "generated_at": "2026-10-16T10:07:14",
+  "policy": {
+    "workbook_access": "read_only",
+    "source_mutation": "forbidden",
+    "conflict_rule": "PRD/INPUT 口径优先于源表示例；矩阵冲突以矩阵为准并输出差异报告",
+    "missing_source_rule": "源不可读则该任务及其依赖标记 BLOCKED，禁止伪造数据"
+  },
+  "sources": [
+    {
+      "source_id": "SRC-INPUT",
+      "role": "需求输入",
+      "readonly": true,
+      "file": {
+        "path": "E:/AI work/tiyanwork/INPUT.md",
+        "size_bytes": 51261,
+        "sha256": "87aa8fe4a6e567b4d562fd2a1bff304634fc854f471d7c9f809308eaa33f97a1",
+        "modified_at": "2026-10-15T17:03:40.609721",
+        "readable": true
+      },
+      "notes": "合同输入源，含权威口径修订与 Q13–Q15"
+    },
+    {
+      "source_id": "SRC-PRD-V1.2-MD",
+      "role": "产品需求文档 V1.2",
+      "readonly": true,
+      "file": {
+        "path": "E:/AI work/tiyanwork/docs/体验工作台产品需求文档PRD-V1.2.md",
+        "size_bytes": 118329,
+        "sha256": "652db2aa99f336775d0ae6849c09a3e10aeb42809d0a8e388413009556441614",
+        "modified_at": "2026-10-15T17:00:49.177015",
+        "readable": true
+      },
+      "notes": "版本标识更高者优先；md 为口径提取主源，docx 为同内容交付件"
+    },
+    {
+      "source_id": "SRC-PRD-V1.2-DOCX",
+      "role": "产品需求文档 V1.2",
+      "readonly": true,
+      "file": {
+        "path": "E:/AI work/tiyanwork/docs/体验工作台产品需求文档PRD-V1.2.docx",
+        "size_bytes": 143009,
+        "sha256": "db03b51b6b74dd0a99b2c94939ac14f818f52a7175aae77c4c63f05fd4db7eae",
+        "modified_at": "2026-10-15T17:02:11.888735",
+        "readable": true
+      },
+      "notes": "版本标识更高者优先；md 为口径提取主源，docx 为同内容交付件"
+    },
+    {
+      "source_id": "SRC-UEI-WORKBOOK",
+      "role": "UEI 体系源工作簿（只读）",
+      "readonly": true,
+      "file": {
+        "path": "G:/常规文件/文件终版/12.管理/8、【其他】/【管理】产品企划部工作标准文档/【标准】UEI流程方案-20240820-V4.0.xlsx",
+        "size_bytes": 241492,
+        "sha256": "3ac4727b218ed86ee212021039508f1a98cd45978fa8f4593ffb4b96b0624e26",
+        "modified_at": "2024-08-21T13:41:35.362377",
+        "readable": true
+      },
+      "notes": "20 个 Sheet；字典、评分矩阵与回归样例权威来源；禁止修改"
+    }
+  ],
+  "workbook": {
+    "sheet_count": 20,
+    "sheets": [
+      {
+        "index": 0,
+        "name": "UEI流程",
+        "max_row": 16,
+        "max_column": 8
+      },
+      {
+        "index": 1,
+        "name": "场景调研",
+        "max_row": 25,
+        "max_column": 3
+      },
+      {
+        "index": 2,
+        "name": "用户体验地图",
+        "max_row": 7,
+        "max_column": 7
+      },
+      {
+        "index": 3,
+        "name": "业务场景评审表 ",
+        "max_row": 48,
+        "max_column": 6
+      },
+      {
+        "index": 4,
+        "name": "交互设计点",
+        "max_row": 18,
+        "max_column": 16375
+      },
+      {
+        "index": 5,
+        "name": "脚本设计",
+        "max_row": 13,
+        "max_column": 14
+      },
+      {
+        "index": 6,
+        "name": "可用性测试总结",
+        "max_row": 106,
+        "max_column": 8
+      },
+      {
+        "index": 7,
+        "name": "可视图表",
+        "max_row": 25,
+        "max_column": 5
+      },
+      {
+        "index": 8,
+        "name": "原始数据",
+        "max_row": 78,
+        "max_column": 9
+      },
+      {
+        "index": 9,
+        "name": "问题列表",
+        "max_row": 206,
+        "max_column": 13
+      },
+      {
+        "index": 10,
+        "name": "UEI分数测评",
+        "max_row": 26,
+        "max_column": 17
+      },
+      {
+        "index": 11,
+        "name": "权重比例验证",
+        "max_row": 51,
+        "max_column": 16
+      },
+      {
+        "index": 12,
+        "name": "产品数据代入",
+        "max_row": 39,
+        "max_column": 16
+      },
+      {
+        "index": 13,
+        "name": "交互控件表",
+        "max_row": 202,
+        "max_column": 3
+      },
+      {
+        "index": 14,
+        "name": "交互控件表-硬件",
+        "max_row": 70,
+        "max_column": 3
+      },
+      {
+        "index": 15,
+        "name": "自查表（例）",
+        "max_row": 33,
+        "max_column": 6
+      },
+      {
+        "index": 16,
+        "name": "体验指标（硬件）",
+        "max_row": 46,
+        "max_column": 7
+      },
+      {
+        "index": 17,
+        "name": "体验指标（软件）",
+        "max_row": 116,
+        "max_column": 8
+      },
+      {
+        "index": 18,
+        "name": "硬件单品体验维度",
+        "max_row": 226,
+        "max_column": 6
+      },
+      {
+        "index": 19,
+        "name": "产品数据代入2",
+        "max_row": 159,
+        "max_column": 13
+      }
+    ]
+  },
+  "dictionary_expectations": {
+    "software": {
+      "l1": 1,
+      "l2": 4,
+      "l3_names": 33,
+      "check_items": 114,
+      "check_item_range": [
+        1,
+        114
+      ],
+      "continuity_required": true
+    },
+    "hardware_metrics": {
+      "l3": 15
+    },
+    "hardware_single_unit": {
+      "l3_dimensions": 56,
+      "grade_rows": 224,
+      "physical_rows": 226,
+      "grades": [
+        "致命",
+        "严重",
+        "一般",
+        "轻微"
+      ],
+      "deduct": [
+        5,
+        3,
+        2,
+        1
+      ]
+    },
+    "interactive_controls_software": {
+      "components": 46,
+      "details": 136,
+      "component_definition_rows": 46,
+      "source_rows": 182,
+      "prd_documented_details": 136,
+      "difference_logged": "docs/SOURCE_DIFFERENCES.md#D-01"
+    },
+    "interactive_controls_hardware": {
+      "components": 5,
+      "details": 50
+    }
+  },
+  "scoring": {
+    "schemes_total": 20,
+    "business_ratios": [
+      "9:1",
+      "8:2",
+      "7:3",
+      "6:4"
+    ],
+    "problem_ratios": [
+      "6:3:2:1",
+      "4:3:2:1",
+      "7:5:3:1",
+      "10:7:4:1",
+      "7:5:1:0.5"
+    ],
+    "matrix_cells": 160,
+    "default_scheme": {
+      "business_ratio": "8:2",
+      "problem_ratio": "7:5:3:1"
+    },
+    "regression": {
+      "product": "会议一体机",
+      "version": "V7.32",
+      "problem_total": 32,
+      "core_ratio": "0.8",
+      "core_problems": 23,
+      "non_core_ratio": "0.2",
+      "non_core_problems": 9,
+      "distribution": "0/0/23/0 (核心) + 0/0/9/0 (非核心)",
+      "core_deduct": 55.2,
+      "non_core_deduct": 5.4,
+      "total_deduct": 60.6,
+      "uei": 39.4,
+      "source": "源工作簿 Sheet「问题列表」r3–r8（明细 r10+，32 条问题）；与 PRD V1.2 §8.3、INPUT.md L183 一致"
+    }
+  },
+  "nodes": {
+    "count": 13,
+    "source_sheet": "UEI流程",
+    "phases": [
+      "一、产品企划",
+      "二、需求分析阶段",
+      "三、产品设计阶段",
+      "四、产品发布阶段"
+    ]
+  },
+  "bei_threshold_source": {
+    "document": "docs/体验工作台产品需求文档PRD-V1.2.md",
+    "section": "§8.8.6",
+    "status": "经验阈值·待校准",
+    "frozen_at": "docs/BEI_THRESHOLD_SOURCE.md"
+  },
+  "outputs_of_this_task": [
+    "docs/SOURCE_AUDIT.md",
+    "docs/BEI_THRESHOLD_SOURCE.md",
+    "docs/SOURCE_DIFFERENCES.md",
+    "backend/app/seeds/source_manifest.json"
+  ],
+  "blocked": [],
+  "workbook_key_sheets": {
+    "问题列表": {
+      "rows": 206,
+      "cols": 13,
+      "role": "会议一体机 V7.32 回归实测：总分100/扣分60.6/UEI39.4/32条问题"
+    }
+  }
+}

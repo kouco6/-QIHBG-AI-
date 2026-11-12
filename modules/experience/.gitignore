@@ -1,0 +1,37 @@
+# 依赖与环境
+.venv/
+venv/
+node_modules/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# 前端构建产物
+frontend/dist/
+frontend/.vite/
+dist/
+coverage/
+
+# 运行时数据（数据库、日志、上传）
+data/*.db
+data/*.db-wal
+data/*.db-shm
+logs/*.log
+test-results/
+
+# 环境变量（含密钥，禁止提交）
+.env
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# 中间产物
+*.tmp
+_*.json

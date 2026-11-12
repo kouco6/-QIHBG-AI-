@@ -1,0 +1,10 @@
+:root {
+  --color-brand-primary: #2462a8;
+  --color-brand-primaryHover: #194d8c;
+  --color-brand-primaryActive: #153c69;
+  --color-brand-primaryLight: #e8f1fb;
+  --color-border-default: #dce5f0;
+  --color-brand-gradient: linear-gradient(135deg, #2d75bd, #245c9a);
+}
+.topbar { border-bottom-color: #dce5f0; }
+.nav-group-header:focus-visible, .btn:focus-visible { outline: 2px solid #2462a8; outline-offset: 2px; }

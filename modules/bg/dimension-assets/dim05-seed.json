@@ -1,0 +1,1975 @@
+{
+  "schema_version": "1.0",
+  "report_key": "dim05-yealink-20261028",
+  "dimension_id": "DIM-05",
+  "dimension_name": "功能强",
+  "subject": "亿联Yealink会议协作终端",
+  "research_date": "2026-10-28",
+  "scope": {
+    "products": [
+      {
+        "key": "legacy",
+        "name": "MeetingBoard 一代",
+        "label": "MeetingBoard一代（65/86）"
+      },
+      {
+        "key": "pro",
+        "name": "MeetingBoard Pro",
+        "label": "MeetingBoard Pro（65/75/86）"
+      },
+      {
+        "key": "a24",
+        "name": "DeskVision A24",
+        "label": "DeskVision A24"
+      }
+    ],
+    "study_basis": "用户提供的亿联Yealink DIM-05最终整合研究MD；公开资料，未进行样机实测",
+    "external_competitor": "海康DS-D5A／DS-65PL0010待内部核验；本报告不可认定其功能支持与否"
+  },
+  "architecture": {
+    "pillars": [
+      {
+        "title": "显示与交互",
+        "module_internal_ids": [
+          "F1"
+        ]
+      },
+      {
+        "title": "视音频核心",
+        "module_internal_ids": [
+          "F2",
+          "F3"
+        ]
+      },
+      {
+        "title": "会议与内容协作",
+        "module_internal_ids": [
+          "F4",
+          "F5",
+          "F6"
+        ]
+      },
+      {
+        "title": "平台与系统",
+        "module_internal_ids": [
+          "F7",
+          "F8"
+        ]
+      },
+      {
+        "title": "管理与生态",
+        "module_internal_ids": [
+          "F9",
+          "F10"
+        ]
+      }
+    ]
+  },
+  "inventory": [
+    {
+      "internal_id": "F1",
+      "module_name": "显示触控",
+      "feature_count": 4,
+      "features": [
+        {
+          "internal_id": "F1-01",
+          "feature_name": "显示会议内容",
+          "module_internal_id": "F1",
+          "module_name": "显示触控",
+          "original_research_anchor": "原MD第3.1节／F1-01",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "4K、60Hz、350nit",
+              "raw_research_statement": "完全/已发布：4K、60Hz、350nit"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "4K、60Hz、400cd/㎡（面板 60Hz≠远端视频 60fps）",
+              "raw_research_statement": "完全/已发布：4K、60Hz、400cd/㎡（面板 60Hz≠远端视频 60fps）"
+            },
+            "a24": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "23.8\"、1920×1080、60Hz",
+              "raw_research_statement": "完全/已发布：23.8\"、1920×1080、60Hz"
+            }
+          }
+        },
+        {
+          "internal_id": "F1-02",
+          "feature_name": "多人触控操作",
+          "module_internal_id": "F1",
+          "module_name": "显示触控",
+          "original_research_anchor": "原MD第3.1节／F1-02",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "20 点、±1mm（90% 区域）；≠20 人同写",
+              "raw_research_statement": "完全/已发布：20 点、±1mm（90% 区域）；≠20 人同写"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "红外 20 点、±1mm；21ms 仅 Yealink 白板测得",
+              "raw_research_statement": "完全/已发布：红外 20 点、±1mm；21ms 仅 Yealink 白板测得"
+            },
+            "a24": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "10 点；精度/延迟无可比值",
+              "raw_research_statement": "完全/已发布：10 点；精度/延迟无可比值"
+            }
+          }
+        },
+        {
+          "internal_id": "F1-03",
+          "feature_name": "笔/手势区分写擦",
+          "module_internal_id": "F1",
+          "module_name": "显示触控",
+          "original_research_anchor": "原MD第3.1节／F1-03",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "四级输入识别（笔尖写/手指导航/笔尾擦/防掌误触），非 4096 压感",
+              "raw_research_statement": "完全/已发布：四级输入识别（笔尖写/手指导航/笔尾擦/防掌误触），非 4096 压感"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "四级笔及防掌误触，笔尾擦可配置",
+              "raw_research_statement": "完全/已发布：四级笔及防掌误触，笔尾擦可配置"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "未查到专用智能笔或笔尾擦证据",
+              "raw_research_statement": "未知/未知：未查到专用智能笔或笔尾擦证据"
+            }
+          }
+        },
+        {
+          "internal_id": "F1-04",
+          "feature_name": "双屏分呈人像与内容",
+          "module_internal_id": "F1",
+          "module_name": "显示触控",
+          "original_research_anchor": "原MD第3.1节／F1-04",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "可接 ETV65/86 或第三方显示；ETV 自 155.15.0.46",
+              "raw_research_statement": "完全/已发布：可接 ETV65/86 或第三方显示；ETV 自 155.15.0.46"
+            },
+            "pro": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "可双屏但不支持 ETV；FAQ 给两台 Pro 方案，CTP25 需 LAN 配对",
+              "raw_research_statement": "部分/已发布：可双屏但不支持 ETV；FAQ 给两台 Pro 方案，CTP25 需 LAN 配对"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "未披露外接第二屏输出（HDMI 为输入）",
+              "raw_research_statement": "未知/未知：未披露外接第二屏输出（HDMI 为输入）"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "internal_id": "F2",
+      "module_name": "视频采集与 AI 取景",
+      "feature_count": 9,
+      "features": [
+        {
+          "internal_id": "F2-01",
+          "feature_name": "采集并输出本地人像",
+          "module_internal_id": "F2",
+          "module_name": "视频采集与 AI 取景",
+          "original_research_anchor": "原MD第3.1节／F2-01",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "8MP、4×ePTZ、HFOV110°（传感器 4K≠平台 4K 会议）",
+              "raw_research_statement": "完全/已发布：8MP、4×ePTZ、HFOV110°（传感器 4K≠平台 4K 会议）"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "三 50MP（广角+双长焦）；规格视频上限≠平台输出",
+              "raw_research_statement": "完全/已发布：三 50MP（广角+双长焦）；规格视频上限≠平台输出"
+            },
+            "a24": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "当前 4K Camera，通话最高 1080p30；无无摄像头 SKU 证据",
+              "raw_research_statement": "完全/已发布：当前 4K Camera，通话最高 1080p30；无无摄像头 SKU 证据"
+            }
+          }
+        },
+        {
+          "internal_id": "F2-02",
+          "feature_name": "摄像头物理隐私遮挡",
+          "module_internal_id": "F2",
+          "module_name": "视频采集与 AI 取景",
+          "original_research_anchor": "原MD第3.1节／F2-02",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "电动隐私盖，会中/调整时开",
+              "raw_research_statement": "完全/已发布：电动隐私盖，会中/调整时开"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "自动物理隐私盖，可设备/网页配置",
+              "raw_research_statement": "完全/已发布：自动物理隐私盖，可设备/网页配置"
+            },
+            "a24": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "自动或手动升降＋实体开关键",
+              "raw_research_statement": "完全/已发布：自动或手动升降＋实体开关键"
+            }
+          }
+        },
+        {
+          "internal_id": "F2-03",
+          "feature_name": "自动框取全景",
+          "module_internal_id": "F2",
+          "module_name": "视频采集与 AI 取景",
+          "original_research_anchor": "原MD第3.1节／F2-03",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "Auto Framing",
+              "raw_research_statement": "完全/已发布：Auto Framing"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "Auto Framing",
+              "raw_research_statement": "完全/已发布：Auto Framing"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "未取得 Auto Framing 模式证据",
+              "raw_research_statement": "未知/未知：未取得 Auto Framing 模式证据"
+            }
+          }
+        },
+        {
+          "internal_id": "F2-04",
+          "feature_name": "跟随发言者取景",
+          "module_internal_id": "F2",
+          "module_name": "视频采集与 AI 取景",
+          "original_research_anchor": "原MD第3.1节／F2-04",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "Speaker Tracking",
+              "raw_research_statement": "完全/已发布：Speaker Tracking"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "Speaker Tracking；.64 在 Zoom 可配 IntelliFocus",
+              "raw_research_statement": "完全/已发布：Speaker Tracking；.64 在 Zoom 可配 IntelliFocus"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "未披露说话人追踪",
+              "raw_research_statement": "未知/未知：未披露说话人追踪"
+            }
+          }
+        },
+        {
+          "internal_id": "F2-05",
+          "feature_name": "突出多名发言者",
+          "module_internal_id": "F2",
+          "module_name": "视频采集与 AI 取景",
+          "original_research_anchor": "原MD第3.1节／F2-05",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "Multi-Focus 最多 6 分屏",
+              "raw_research_statement": "完全/已发布：Multi-Focus 最多 6 分屏"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "IntelliFocus 最多 4 活跃者＋全景；Multi-Focus 旧模式功能表为 ×",
+              "raw_research_statement": "完全/已发布：IntelliFocus 最多 4 活跃者＋全景；Multi-Focus 旧模式功能表为 ×"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "未披露多人拼贴",
+              "raw_research_statement": "未知/未知：未披露多人拼贴"
+            }
+          }
+        },
+        {
+          "internal_id": "F2-06",
+          "feature_name": "特写＋全景同呈",
+          "module_internal_id": "F2",
+          "module_name": "视频采集与 AI 取景",
+          "original_research_anchor": "原MD第3.1节／F2-06",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "PIP",
+              "raw_research_statement": "完全/已发布：PIP"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "PIP（布局由应用决定）",
+              "raw_research_statement": "完全/已发布：PIP（布局由应用决定）"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "未披露 PIP",
+              "raw_research_statement": "未知/未知：未披露 PIP"
+            }
+          }
+        },
+        {
+          "internal_id": "F2-07",
+          "feature_name": "分会议室为独立视频流",
+          "module_internal_id": "F2",
+          "module_name": "视频采集与 AI 取景",
+          "original_research_anchor": "原MD第3.1节／F2-07",
+          "products": {
+            "legacy": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "Smart Gallery 仅 Zoom Rooms",
+              "raw_research_statement": "部分/已发布：Smart Gallery 仅 Zoom Rooms"
+            },
+            "pro": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "Smart Gallery 仅 Zoom；流档依 Zoom 设备表",
+              "raw_research_statement": "部分/已发布：Smart Gallery 仅 Zoom；流档依 Zoom 设备表"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "未核实 A24 Smart Gallery",
+              "raw_research_statement": "未知/未知：未核实 A24 Smart Gallery"
+            }
+          }
+        },
+        {
+          "internal_id": "F2-08",
+          "feature_name": "排除取景区外人员",
+          "module_internal_id": "F2",
+          "module_name": "视频采集与 AI 取景",
+          "original_research_anchor": "原MD第3.1节／F2-08",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "Video Fence（非 Pro 独有）",
+              "raw_research_statement": "完全/已发布：Video Fence（非 Pro 独有）"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "视频围栏设宽深（非打码）",
+              "raw_research_statement": "完全/已发布：视频围栏设宽深（非打码）"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "未披露视频围栏",
+              "raw_research_statement": "未知/未知：未披露视频围栏"
+            }
+          }
+        },
+        {
+          "internal_id": "F2-09",
+          "feature_name": "扩展远距取景",
+          "module_internal_id": "F2",
+          "module_name": "视频采集与 AI 取景",
+          "original_research_anchor": "原MD第3.1节／F2-09",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "选配",
+              "display_label": "支持（选配）",
+              "source_state": "完全/选配",
+              "detail": "MB-CAM-6X/12X，≥155.15.0.37/.46",
+              "raw_research_statement": "完全/选配：MB-CAM-6X/12X，≥155.15.0.37/.46"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "选配",
+              "display_label": "支持（选配）",
+              "source_state": "完全/选配",
+              "detail": "MB-12X Pro；.64 另支持 SmartVision80/MTower（二者互斥）",
+              "raw_research_statement": "完全/选配：MB-12X Pro；.64 另支持 SmartVision80/MTower（二者互斥）"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "外接房间 PTZ 未核实",
+              "raw_research_statement": "未知/未知：外接房间 PTZ 未核实"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "internal_id": "F3",
+      "module_name": "音频处理",
+      "feature_count": 6,
+      "features": [
+        {
+          "internal_id": "F3-01",
+          "feature_name": "远场全双工",
+          "module_internal_id": "F3",
+          "module_name": "音频处理",
+          "original_research_anchor": "原MD第3.1节／F3-01",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "16MEMS；最佳 0–8m、有效 0–12m（安静低混响）",
+              "raw_research_statement": "完全/已发布：16MEMS；最佳 0–8m、有效 0–12m（安静低混响）"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "16MEMS；最佳 0–12m、有效 0–15m（非任意声场）",
+              "raw_research_statement": "完全/已发布：16MEMS；最佳 0–12m、有效 0–15m（非任意声场）"
+            },
+            "a24": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "双麦＋立体声全双工；未披露可比拾音距离",
+              "raw_research_statement": "完全/已发布：双麦＋立体声全双工；未披露可比拾音距离"
+            }
+          }
+        },
+        {
+          "internal_id": "F3-02",
+          "feature_name": "降噪",
+          "module_internal_id": "F3",
+          "module_name": "音频处理",
+          "original_research_anchor": "原MD第3.1节／F3-02",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "Enhanced Noise Proof/AGC/波束成形（无实测 dB）",
+              "raw_research_statement": "完全/已发布：Enhanced Noise Proof/AGC/波束成形（无实测 dB）"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "AI Audio 2.1（TNS/噪声屏障/舒适噪声可配）",
+              "raw_research_statement": "完全/已发布：AI Audio 2.1（TNS/噪声屏障/舒适噪声可配）"
+            },
+            "a24": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "智能降噪（无幅度实测）",
+              "raw_research_statement": "完全/已发布：智能降噪（无幅度实测）"
+            }
+          }
+        },
+        {
+          "internal_id": "F3-03",
+          "feature_name": "抑制回声/混响",
+          "module_internal_id": "F3",
+          "module_name": "音频处理",
+          "original_research_anchor": "原MD第3.1节／F3-03",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "AEC＋Reverberation Suppression",
+              "raw_research_statement": "完全/已发布：AEC＋Reverberation Suppression"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "多通道回声/去混响（受安装声场影响）",
+              "raw_research_statement": "完全/已发布：多通道回声/去混响（受安装声场影响）"
+            },
+            "a24": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "明确智能回声消除；去混响未单独核实",
+              "raw_research_statement": "部分/已发布：明确智能回声消除；去混响未单独核实"
+            }
+          }
+        },
+        {
+          "internal_id": "F3-04",
+          "feature_name": "限制拾音范围",
+          "module_internal_id": "F3",
+          "module_name": "音频处理",
+          "original_research_anchor": "原MD第3.1节／F3-04",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "Acoustic Shield/Audio Fence（≠物理隔音）",
+              "raw_research_statement": "完全/已发布：Acoustic Shield/Audio Fence（≠物理隔音）"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "Acoustic Shield 60/90/120°（无预览，须远端听测）",
+              "raw_research_statement": "完全/已发布：Acoustic Shield 60/90/120°（无预览，须远端听测）"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "未披露音频围栏",
+              "raw_research_statement": "未知/未知：未披露音频围栏"
+            }
+          }
+        },
+        {
+          "internal_id": "F3-05",
+          "feature_name": "扩展麦覆盖远端",
+          "module_internal_id": "F3",
+          "module_name": "音频处理",
+          "original_research_anchor": "原MD第3.1节／F3-05",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "选配",
+              "display_label": "支持（选配）",
+              "source_state": "完全/选配",
+              "detail": "VCM35/VCM36-W 最多 2；CM20 最多 4（≥.117）；不可混型",
+              "raw_research_statement": "完全/选配：VCM35/VCM36-W 最多 2；CM20 最多 4（≥.117）；不可混型"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "选配",
+              "display_label": "支持（选配）",
+              "source_state": "完全/选配",
+              "detail": "VCM35/VCM36-W 最多 4；.64 新增各 4 台 Pro 版麦；CM20 最多 4（≥.30）",
+              "raw_research_statement": "完全/选配：VCM35/VCM36-W 最多 4；.64 新增各 4 台 Pro 版麦；CM20 最多 4（≥.30）"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "房间扩展麦未核实（USB 耳麦≠房间麦阵列）",
+              "raw_research_statement": "未知/未知：房间扩展麦未核实（USB 耳麦≠房间麦阵列）"
+            }
+          }
+        },
+        {
+          "internal_id": "F3-06",
+          "feature_name": "外接扩声/辅助听力",
+          "module_internal_id": "F3",
+          "module_name": "音频处理",
+          "original_research_anchor": "原MD第3.1节／F3-06",
+          "products": {
+            "legacy": {
+              "ability_state": "部分支持",
+              "delivery_state": "选配",
+              "display_label": "部分支持（选配）",
+              "source_state": "部分/选配",
+              "detail": "RCA 入出；CS10 需 CM20（≥.117）",
+              "raw_research_statement": "部分/选配：RCA 入出；CS10 需 CM20（≥.117）"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "选配",
+              "display_label": "支持（选配）",
+              "source_state": "完全/选配",
+              "detail": ".64 可 CS10 配内置麦；Hearing Aid Mode 经 Line out",
+              "raw_research_statement": "完全/选配：.64 可 CS10 配内置麦；Hearing Aid Mode 经 Line out"
+            },
+            "a24": {
+              "ability_state": "部分支持",
+              "delivery_state": "选配",
+              "display_label": "部分支持（选配）",
+              "source_state": "部分/选配",
+              "detail": "USB 耳麦兼容；天花扩声/Line out/听力环路未核实",
+              "raw_research_statement": "部分/选配：USB 耳麦兼容；天花扩声/Line out/听力环路未核实"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "internal_id": "F4",
+      "module_name": "会议业务",
+      "feature_count": 4,
+      "features": [
+        {
+          "internal_id": "F4-01",
+          "feature_name": "日程同步与一键入会",
+          "module_internal_id": "F4",
+          "module_name": "会议业务",
+          "original_research_anchor": "原MD第3.1节／F4-01",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "原生 Teams/Zoom 日历、一键入会",
+              "raw_research_statement": "完全/已发布：原生 Teams/Zoom 日历、一键入会"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "Teams 日程/ID/邻近入会（同域+蓝牙前提）",
+              "raw_research_statement": "完全/已发布：Teams 日程/ID/邻近入会（同域+蓝牙前提）"
+            },
+            "a24": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "日历、一键入会（MTR/Display 分别验收）",
+              "raw_research_statement": "完全/已发布：日历、一键入会（MTR/Display 分别验收）"
+            }
+          }
+        },
+        {
+          "internal_id": "F4-02",
+          "feature_name": "会中人与音视频控制",
+          "module_internal_id": "F4",
+          "module_name": "会议业务",
+          "original_research_anchor": "原MD第3.1节／F4-02",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "邀请/挂断/摄像头/静音/音量",
+              "raw_research_statement": "完全/已发布：邀请/挂断/摄像头/静音/音量"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "会控/参会人/布局/字幕（字幕≠本地 AI 纪要）",
+              "raw_research_statement": "完全/已发布：会控/参会人/布局/字幕（字幕≠本地 AI 纪要）"
+            },
+            "a24": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "添加参会人/静音/摄像头/结束",
+              "raw_research_statement": "完全/已发布：添加参会人/静音/摄像头/结束"
+            }
+          }
+        },
+        {
+          "internal_id": "F4-03",
+          "feature_name": "H.323/SIP 通话与双流",
+          "module_internal_id": "F4",
+          "module_name": "会议业务",
+          "original_research_anchor": "原MD第3.1节／F4-03",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "Call 应用、H.323 账号/直拨、H.239；SIP 有 V21+分享表证据（BFCP 待补）",
+              "raw_research_statement": "完全/已发布：Call 应用、H.323 账号/直拨、H.239；SIP 有 V21+分享表证据（BFCP 待补）"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "API 列 H.323/SIP 账号/直拨与 BFCP；会中 4K15 辅流；≠任意 MCU 互通",
+              "raw_research_statement": "完全/已发布：API 列 H.323/SIP 账号/直拨与 BFCP；会中 4K15 辅流；≠任意 MCU 互通"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "API 示例远端名≠正式能力",
+              "raw_research_statement": "未知/未知：API 示例远端名≠正式能力"
+            }
+          }
+        },
+        {
+          "internal_id": "F4-04",
+          "feature_name": "通话中远控对端摄像头",
+          "module_internal_id": "F4",
+          "module_name": "会议业务",
+          "original_research_anchor": "原MD第3.1节／F4-04",
+          "products": {
+            "legacy": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "H.323 FECC 参数明确，需双方启用；SIP FECC 未核实",
+              "raw_research_statement": "部分/已发布：H.323 FECC 参数明确，需双方启用；SIP FECC 未核实"
+            },
+            "pro": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "取得通话 API 但未锁 FECC 参数（不可借一代手册补）",
+              "raw_research_statement": "未知/未知：取得通话 API 但未锁 FECC 参数（不可借一代手册补）"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "FECC 未核实",
+              "raw_research_statement": "未知/未知：FECC 未核实"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "internal_id": "F5",
+      "module_name": "内容投屏",
+      "feature_count": 6,
+      "features": [
+        {
+          "internal_id": "F5-01",
+          "feature_name": "有线送上屏",
+          "module_internal_id": "F5",
+          "module_name": "内容投屏",
+          "original_research_anchor": "原MD第3.1节／F5-01",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布或选配",
+              "display_label": "支持（部分需选配）",
+              "source_state": "完全/已发布或选配",
+              "detail": "HDMI/VCH51；通用模式会外 HDMI 4K60",
+              "raw_research_statement": "完全/已发布或选配：HDMI/VCH51；通用模式会外 HDMI 4K60"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布或选配",
+              "display_label": "支持（部分需选配）",
+              "source_state": "完全/已发布或选配",
+              "detail": "HDMI/VCH51/VCH51Pro/CTP25；会外 HDMI 4K60",
+              "raw_research_statement": "完全/已发布或选配：HDMI/VCH51/VCH51Pro/CTP25；会外 HDMI 4K60"
+            },
+            "a24": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "HDMI in 或 USB-C DP-IN；USB-C 兼扩展坞",
+              "raw_research_statement": "完全/已发布：HDMI in 或 USB-C DP-IN；USB-C 兼扩展坞"
+            }
+          }
+        },
+        {
+          "internal_id": "F5-02",
+          "feature_name": "无线送上屏",
+          "module_internal_id": "F5",
+          "module_name": "内容投屏",
+          "original_research_anchor": "原MD第3.1节／F5-02",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布或选配",
+              "display_label": "支持（部分需选配）",
+              "source_state": "完全/已发布或选配",
+              "detail": "AirPlay/Miracast、WPP20/30/PA20（PA20≥.117）；4 配对≠4 同投",
+              "raw_research_statement": "完全/已发布或选配：AirPlay/Miracast、WPP20/30/PA20（PA20≥.117）；4 配对≠4 同投"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布或选配",
+              "display_label": "支持（部分需选配）",
+              "source_state": "完全/已发布或选配",
+              "detail": "AirPlay/Miracast、WPP30/PA20（WPP20×）；投屏器有地区限制",
+              "raw_research_statement": "完全/已发布或选配：AirPlay/Miracast、WPP30/PA20（WPP20×）；投屏器有地区限制"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "有 Wi-Fi≠支持 AirPlay/Miracast/WPP",
+              "raw_research_statement": "未知/未知：有 Wi-Fi≠支持 AirPlay/Miracast/WPP"
+            }
+          }
+        },
+        {
+          "internal_id": "F5-03",
+          "feature_name": "多设备同投",
+          "module_internal_id": "F5",
+          "module_name": "内容投屏",
+          "original_research_anchor": "原MD第3.1节／F5-03",
+          "products": {
+            "legacy": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "中文官网检索「最多 4 台」未锁版本；当前 WPP 仅 1 台并发（冲突保留）",
+              "raw_research_statement": "部分/已发布：中文官网检索「最多 4 台」未锁版本；当前 WPP 仅 1 台并发（冲突保留）"
+            },
+            "pro": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "后投替换先投说明，未证四路并发（4 配对≠4 显示）",
+              "raw_research_statement": "未知/未知：后投替换先投说明，未证四路并发（4 配对≠4 显示）"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "多设备并发未核实",
+              "raw_research_statement": "未知/未知：多设备并发未核实"
+            }
+          }
+        },
+        {
+          "internal_id": "F5-04",
+          "feature_name": "远端同步内容与声音",
+          "module_internal_id": "F5",
+          "module_name": "内容投屏",
+          "original_research_anchor": "原MD第3.1节／F5-04",
+          "products": {
+            "legacy": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "会中 WPP30-C/VCH51：Teams/Zoom 1080p15、SIP/H323 4K15；HDMI 1080p30/4K15",
+              "raw_research_statement": "部分/已发布：会中 WPP30-C/VCH51：Teams/Zoom 1080p15、SIP/H323 4K15；HDMI 1080p30/4K15"
+            },
+            "pro": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "受平台限制；会外 4K60≠会中辅流；Teams 共享声音需 Include Audio",
+              "raw_research_statement": "部分/已发布：受平台限制；会外 4K60≠会中辅流；Teams 共享声音需 Include Audio"
+            },
+            "a24": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "规格列内容共享；无逐接口/平台/会内外分辨率表",
+              "raw_research_statement": "部分/已发布：规格列内容共享；无逐接口/平台/会内外分辨率表"
+            }
+          }
+        },
+        {
+          "internal_id": "F5-05",
+          "feature_name": "触控反控电脑",
+          "module_internal_id": "F5",
+          "module_name": "内容投屏",
+          "original_research_anchor": "原MD第3.1节／F5-05",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布或选配",
+              "display_label": "支持（部分需选配）",
+              "source_state": "完全/已发布或选配",
+              "detail": "HDMI+USB-B 反控；WPP/VCH 反控须通用或 BYOD 模式",
+              "raw_research_statement": "完全/已发布或选配：HDMI+USB-B 反控；WPP/VCH 反控须通用或 BYOD 模式"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布或选配",
+              "display_label": "支持（部分需选配）",
+              "source_state": "完全/已发布或选配",
+              "detail": "有线/无线反控；VCH51 条目限 Windows PC",
+              "raw_research_statement": "完全/已发布或选配：有线/无线反控；VCH51 条目限 Windows PC"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "USB 触控回传及 PC 系统条件未核实",
+              "raw_research_statement": "未知/未知：USB 触控回传及 PC 系统条件未核实"
+            }
+          }
+        },
+        {
+          "internal_id": "F5-06",
+          "feature_name": "共享内容批注截图",
+          "module_internal_id": "F5",
+          "module_name": "内容投屏",
+          "original_research_anchor": "原MD第3.1节／F5-06",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "中国 V21 全平台批注/截图（≠国际所有场景）",
+              "raw_research_statement": "完全/已发布：中国 V21 全平台批注/截图（≠国际所有场景）"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "通用模式侧栏批注/截图；BYOD 同投同批自 .64",
+              "raw_research_statement": "完全/已发布：通用模式侧栏批注/截图；BYOD 同投同批自 .64"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "全局批注/截图/保存机制未核实",
+              "raw_research_statement": "未知/未知：全局批注/截图/保存机制未核实"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "internal_id": "F6",
+      "module_name": "电子白板",
+      "feature_count": 5,
+      "features": [
+        {
+          "internal_id": "F6-01",
+          "feature_name": "本地白板创作",
+          "module_internal_id": "F6",
+          "module_name": "电子白板",
+          "original_research_anchor": "原MD第3.1节／F6-01",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "Yealink Whiteboard 与 Teams/Zoom 白板（入口随模式）",
+              "raw_research_statement": "完全/已发布：Yealink Whiteboard 与 Teams/Zoom 白板（入口随模式）"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "通用模式笔/擦/套索/画布缩放/多页（≠所有平台同应用）",
+              "raw_research_statement": "完全/已发布：通用模式笔/擦/套索/画布缩放/多页（≠所有平台同应用）"
+            },
+            "a24": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "规格列 Whiteboard，无本地独立/离线指南",
+              "raw_research_statement": "部分/已发布：规格列 Whiteboard，无本地独立/离线指南"
+            }
+          }
+        },
+        {
+          "internal_id": "F6-02",
+          "feature_name": "双人同写/一写一擦",
+          "module_internal_id": "F6",
+          "module_name": "电子白板",
+          "original_research_anchor": "原MD第3.1节／F6-02",
+          "products": {
+            "legacy": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "FAQ 称最多 2 人（≠20 点触控推所有 Teams 版本）",
+              "raw_research_statement": "部分/已发布：FAQ 称最多 2 人（≠20 点触控推所有 Teams 版本）"
+            },
+            "pro": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "通用白板 2 人；Multi Inking 锁画布；Teams Android 指南明确不支持当地双人同写",
+              "raw_research_statement": "部分/已发布：通用白板 2 人；Multi Inking 锁画布；Teams Android 指南明确不支持当地双人同写"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "双人书写未核实",
+              "raw_research_statement": "未知/未知：双人书写未核实"
+            }
+          }
+        },
+        {
+          "internal_id": "F6-03",
+          "feature_name": "结构化图形/表格/便签",
+          "module_internal_id": "F6",
+          "module_name": "电子白板",
+          "original_research_anchor": "原MD第3.1节／F6-03",
+          "products": {
+            "legacy": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "云白板图表/模板，本地全工具逐版本未齐",
+              "raw_research_statement": "部分/已发布：云白板图表/模板，本地全工具逐版本未齐"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "形状/表格规整、图片、便签、手写转文字（语言/精度未核）",
+              "raw_research_statement": "完全/已发布：形状/表格规整、图片、便签、手写转文字（语言/精度未核）"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "工具集与识别未核实",
+              "raw_research_statement": "未知/未知：工具集与识别未核实"
+            }
+          }
+        },
+        {
+          "internal_id": "F6-04",
+          "feature_name": "远端共编同一白板",
+          "module_internal_id": "F6",
+          "module_name": "电子白板",
+          "original_research_anchor": "原MD第3.1节／F6-04",
+          "products": {
+            "legacy": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "Teams/Zoom 云白板（账号/租户/存储决定范围；≠跨 Teams/Zoom 同板）",
+              "raw_research_statement": "部分/已发布：Teams/Zoom 云白板（账号/租户/存储决定范围；≠跨 Teams/Zoom 同板）"
+            },
+            "pro": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "原生平台云白板（≠跨 Teams/Zoom/私有化互编）",
+              "raw_research_statement": "部分/已发布：原生平台云白板（≠跨 Teams/Zoom/私有化互编）"
+            },
+            "a24": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "规格列会议白板；端到端协作/账号限制缺机型指南",
+              "raw_research_statement": "部分/已发布：规格列会议白板；端到端协作/账号限制缺机型指南"
+            }
+          }
+        },
+        {
+          "internal_id": "F6-05",
+          "feature_name": "保存/导出/带走",
+          "module_internal_id": "F6",
+          "module_name": "电子白板",
+          "original_research_anchor": "原MD第3.1节／F6-05",
+          "products": {
+            "legacy": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "早期 Teams FAQ 写 PC 导出；本地 USB/邮件/二维码路径未锁",
+              "raw_research_statement": "部分/已发布：早期 Teams FAQ 写 PC 导出；本地 USB/邮件/二维码路径未锁"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "通用白板 USB 导出 png/pdf/ywb、邮件发送（各需权限/配置）",
+              "raw_research_statement": "完全/已发布：通用白板 USB 导出 png/pdf/ywb、邮件发送（各需权限/配置）"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "导出格式/二维码流程未核实",
+              "raw_research_statement": "未知/未知：导出格式/二维码流程未核实"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "internal_id": "F7",
+      "module_name": "平台与互通",
+      "feature_count": 4,
+      "features": [
+        {
+          "internal_id": "F7-01",
+          "feature_name": "原生房间系统运行会议平台",
+          "module_internal_id": "F7",
+          "module_name": "平台与互通",
+          "original_research_anchor": "原MD第3.1节／F7-01",
+          "products": {
+            "legacy": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "Teams/Zoom 官方发布；微软逐 65/86 列 Android13 认证；腾讯仅锁 65、86 待核",
+              "raw_research_statement": "部分/已发布：Teams/Zoom 官方发布；微软逐 65/86 列 Android13 认证；腾讯仅锁 65、86 待核"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "Teams 及腾讯逐 SKU 可核；Zoom 见厂商与 Zoom 能力表；飞书/钉钉逐 SKU 缺",
+              "raw_research_statement": "完全/已发布：Teams 及腾讯逐 SKU 可核；Zoom 见厂商与 Zoom 能力表；飞书/钉钉逐 SKU 缺"
+            },
+            "a24": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "Android13 Teams Rooms 认证可核；Zoom Display 为厂商表述，平台端未闭合",
+              "raw_research_statement": "部分/已发布：Android13 Teams Rooms 认证可核；Zoom Display 为厂商表述，平台端未闭合"
+            }
+          }
+        },
+        {
+          "internal_id": "F7-02",
+          "feature_name": "借用房间音视频开电脑会议",
+          "module_internal_id": "F7",
+          "module_name": "平台与互通",
+          "original_research_anchor": "原MD第3.1节／F7-02",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "选配",
+              "display_label": "支持（选配）",
+              "source_state": "完全/选配",
+              "detail": "VCH51/WPP30 BYOD（PC 应用承载）",
+              "raw_research_statement": "完全/选配：VCH51/WPP30 BYOD（PC 应用承载）"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布或选配",
+              "display_label": "支持（部分需选配）",
+              "source_state": "完全/已发布或选配",
+              "detail": "BYOD 支持 VCH/HDMI+USB/CTP25（PC 选 Yealink Room Audio/Camera）",
+              "raw_research_statement": "完全/已发布或选配：BYOD 支持 VCH/HDMI+USB/CTP25（PC 选 Yealink Room Audio/Camera）"
+            },
+            "a24": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "USB-C 一线作 PC 显示与音视频外设，PD≤45W＋扩展坞",
+              "raw_research_statement": "完全/已发布：USB-C 一线作 PC 显示与音视频外设，PD≤45W＋扩展坞"
+            }
+          }
+        },
+        {
+          "internal_id": "F7-03",
+          "feature_name": "切换原生平台及工作模式",
+          "module_internal_id": "F7",
+          "module_name": "平台与互通",
+          "original_research_anchor": "原MD第3.1节／F7-03",
+          "products": {
+            "legacy": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "历史 V20 免重启；V21 起 Teams/Zoom 与其他原生平台切换需恢复出厂；FAQ 否定无恢复切 Teams↔Zoom",
+              "raw_research_statement": "部分/已发布：历史 V20 免重启；V21 起 Teams/Zoom 与其他原生平台切换需恢复出厂；FAQ 否定无恢复切 Teams↔Zoom"
+            },
+            "pro": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "多模式/BYOD 有，但无逐版本 10 秒免重启证据（不得沿用旧宣传）",
+              "raw_research_statement": "未知/未知：多模式/BYOD 有，但无逐版本 10 秒免重启证据（不得沿用旧宣传）"
+            },
+            "a24": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "独立 Android 终端与 PC 显示模式切换，Android 来电后台（≠Teams↔Zoom 无重启）",
+              "raw_research_statement": "完全/已发布：独立 Android 终端与 PC 显示模式切换，Android 来电后台（≠Teams↔Zoom 无重启）"
+            }
+          }
+        },
+        {
+          "internal_id": "F7-04",
+          "feature_name": "桌面个人通信与共享办公",
+          "module_internal_id": "F7",
+          "module_name": "平台与互通",
+          "original_research_anchor": "原MD第3.1节／F7-04",
+          "products": {
+            "legacy": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "未核实个人 Display 热桌面/聊天/Boss/Admin",
+              "raw_research_statement": "未知/未知：未核实个人 Display 热桌面/聊天/Boss/Admin"
+            },
+            "pro": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "未在 Pro 房间系统核实个人 Display 专属功能",
+              "raw_research_statement": "未知/未知：未在 Pro 房间系统核实个人 Display 专属功能"
+            },
+            "a24": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "旧 Display 列聊天/文件/热桌面/留言/委派；旧应用 2025-09-03 停支持（≠当前 MTR 同等能力）",
+              "raw_research_statement": "部分/已发布：旧 Display 列聊天/文件/热桌面/留言/委派；旧应用 2025-09-03 停支持（≠当前 MTR 同等能力）"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "internal_id": "F8",
+      "module_name": "系统与部署",
+      "feature_count": 3,
+      "features": [
+        {
+          "internal_id": "F8-01",
+          "feature_name": "独立运行并扩展 Windows 应用",
+          "module_internal_id": "F8",
+          "module_name": "系统与部署",
+          "original_research_anchor": "原MD第3.1节／F8-01",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "当前 Android13、历史 Android10；可选 OPS",
+              "raw_research_statement": "完全/已发布：当前 Android13、历史 Android10；可选 OPS"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "Android13 8GB+64GB；可选 MCore OPS（MTR-W 需对应 OPS/控制台）",
+              "raw_research_statement": "完全/已发布：Android13 8GB+64GB；可选 MCore OPS（MTR-W 需对应 OPS/控制台）"
+            },
+            "a24": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "历史 Android10、当前 Android13；未披露 OPS（PC 外设见 F7-02）",
+              "raw_research_statement": "完全/已发布：历史 Android10、当前 Android13；未披露 OPS（PC 外设见 F7-02）"
+            }
+          }
+        },
+        {
+          "internal_id": "F8-02",
+          "feature_name": "联网/初始化/升级",
+          "module_internal_id": "F8",
+          "module_name": "系统与部署",
+          "original_research_anchor": "原MD第3.1节／F8-02",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "有线/Wi-Fi6、平台选择、管理员密码、自动升级",
+              "raw_research_statement": "完全/已发布：有线/Wi-Fi6、平台选择、管理员密码、自动升级"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "Wi-Fi6、双千兆；.64 不可降级 .55 及更早",
+              "raw_research_statement": "完全/已发布：Wi-Fi6、双千兆；.64 不可降级 .55 及更早"
+            },
+            "a24": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "RJ45、双频 Wi-Fi、蓝牙 4.2；单电源线可独立工作",
+              "raw_research_statement": "完全/已发布：RJ45、双频 Wi-Fi、蓝牙 4.2；单电源线可独立工作"
+            }
+          }
+        },
+        {
+          "internal_id": "F8-03",
+          "feature_name": "自动唤醒与节能待机",
+          "module_internal_id": "F8",
+          "module_name": "系统与部署",
+          "original_research_anchor": "原MD第3.1节／F8-03",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "人体传感器＋自动睡眠/唤醒＋节能计划",
+              "raw_research_statement": "完全/已发布：人体传感器＋自动睡眠/唤醒＋节能计划"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "运动传感器唤醒＋节能计划（≠RoomSensor 随箱）",
+              "raw_research_statement": "完全/已发布：运动传感器唤醒＋节能计划（≠RoomSensor 随箱）"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "自动唤醒/完整节能计划未取得独立证据",
+              "raw_research_statement": "未知/未知：自动唤醒/完整节能计划未取得独立证据"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "internal_id": "F9",
+      "module_name": "设备管理与安全",
+      "feature_count": 5,
+      "features": [
+        {
+          "internal_id": "F9-01",
+          "feature_name": "远程集中配置/升级/监控",
+          "module_internal_id": "F9",
+          "module_name": "设备管理与安全",
+          "original_research_anchor": "原MD第3.1节／F9-01",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "YMCS；微软 2026 起 TAC→PMP 迁移",
+              "raw_research_statement": "完全/已发布：YMCS；微软 2026 起 TAC→PMP 迁移"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "YMCS/平台管理；.64 增设备巡检、会话状态/人数上报、通知中心",
+              "raw_research_statement": "完全/已发布：YMCS/平台管理；.64 增设备巡检、会话状态/人数上报、通知中心"
+            },
+            "a24": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "YMCS 授权诊断＋平台固件管理（MTR 与旧 Display 生命周期分开）",
+              "raw_research_statement": "部分/已发布：YMCS 授权诊断＋平台固件管理（MTR 与旧 Display 生命周期分开）"
+            }
+          }
+        },
+        {
+          "internal_id": "F9-02",
+          "feature_name": "远程诊断与数据采集",
+          "module_internal_id": "F9",
+          "module_name": "设备管理与安全",
+          "original_research_anchor": "原MD第3.1节／F9-02",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "YMCS 日志/抓包/截图需授权",
+              "raw_research_statement": "完全/已发布：YMCS 日志/抓包/截图需授权"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": ".64 音频/摄像诊断＋YMCS 巡检",
+              "raw_research_statement": "完全/已发布：.64 音频/摄像诊断＋YMCS 巡检"
+            },
+            "a24": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "可授权远程截图/诊断",
+              "raw_research_statement": "完全/已发布：可授权远程截图/诊断"
+            }
+          }
+        },
+        {
+          "internal_id": "F9-03",
+          "feature_name": "企业网络与加密传输",
+          "module_internal_id": "F9",
+          "module_name": "设备管理与安全",
+          "original_research_anchor": "原MD第3.1节／F9-03",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "802.1X、VLAN、TLS/SRTP、AES256、SCEP（协议支持≠合规测评）",
+              "raw_research_statement": "完全/已发布：802.1X、VLAN、TLS/SRTP、AES256、SCEP（协议支持≠合规测评）"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "802.1X、HTTPS、TLS/SRTP、AES256、OpenVPN（未实测渗透/E2EE）",
+              "raw_research_statement": "完全/已发布：802.1X、HTTPS、TLS/SRTP、AES256、OpenVPN（未实测渗透/E2EE）"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "当前规格未给同等网络安全条款（不据 Android/认证推定）",
+              "raw_research_statement": "未知/未知：当前规格未给同等网络安全条款（不据 Android/认证推定）"
+            }
+          }
+        },
+        {
+          "internal_id": "F9-04",
+          "feature_name": "离线/私有化/数据留存",
+          "module_internal_id": "F9",
+          "module_name": "设备管理与安全",
+          "original_research_anchor": "原MD第3.1节／F9-04",
+          "products": {
+            "legacy": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "终端 H.323 及云管理≠云白板可私有部署",
+              "raw_research_statement": "未知/未知：终端 H.323 及云管理≠云白板可私有部署"
+            },
+            "pro": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "本地白板可导出≠全部云白板/云管理可私有化；区域存储/审计待核",
+              "raw_research_statement": "未知/未知：本地白板可导出≠全部云白板/云管理可私有化；区域存储/审计待核"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "白板存储/地区/清理/私有部署条款未取得",
+              "raw_research_statement": "未知/未知：白板存储/地区/清理/私有部署条款未取得"
+            }
+          }
+        },
+        {
+          "internal_id": "F9-05",
+          "feature_name": "远程交互控制设备",
+          "module_internal_id": "F9",
+          "module_name": "设备管理与安全",
+          "original_research_anchor": "原MD第3.1节／F9-05",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "YMCS 列 MeetingBoard 支持远控（需在线+设备端允许）",
+              "raw_research_statement": "完全/已发布：YMCS 列 MeetingBoard 支持远控（需在线+设备端允许）"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "MeetingBoard 系列可授权远控",
+              "raw_research_statement": "完全/已发布：MeetingBoard 系列可授权远控"
+            },
+            "a24": {
+              "ability_state": "明确不支持",
+              "delivery_state": "未知",
+              "display_label": "明确不支持",
+              "source_state": "明确不具备/未知",
+              "detail": "YMCS 文档明示 A24 不支持远程控制（不否定诊断/截图）",
+              "raw_research_statement": "明确不具备/未知：YMCS 文档明示 A24 不支持远程控制（不否定诊断/截图）"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "internal_id": "F10",
+      "module_name": "配件与空间生态",
+      "feature_count": 4,
+      "features": [
+        {
+          "internal_id": "F10-01",
+          "feature_name": "桌面触控台控房间设备",
+          "module_internal_id": "F10",
+          "module_name": "配件与空间生态",
+          "original_research_anchor": "原MD第3.1节／F10-01",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "选配",
+              "display_label": "支持（选配）",
+              "source_state": "完全/选配",
+              "detail": "CTP18（Teams 1 台、Zoom/通用最多 4，≥.37）；CTP25 不兼容",
+              "raw_research_statement": "完全/选配：CTP18（Teams 1 台、Zoom/通用最多 4，≥.37）；CTP25 不兼容"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "选配",
+              "display_label": "支持（选配）",
+              "source_state": "完全/选配",
+              "detail": "CTP25（投屏/BYOD/反控；MTR-W 另配 MTouch Plus-MB；CTP18×）",
+              "raw_research_statement": "完全/选配：CTP25（投屏/BYOD/反控；MTR-W 另配 MTouch Plus-MB；CTP18×）"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "CTP18/25 配对未核实",
+              "raw_research_statement": "未知/未知：CTP18/25 配对未核实"
+            }
+          }
+        },
+        {
+          "internal_id": "F10-02",
+          "feature_name": "移动/壁挂/升降",
+          "module_internal_id": "F10",
+          "module_name": "配件与空间生态",
+          "original_research_anchor": "原MD第3.1节／F10-02",
+          "products": {
+            "legacy": {
+              "ability_state": "支持",
+              "delivery_state": "选配",
+              "display_label": "支持（选配）",
+              "source_state": "完全/选配",
+              "detail": "65/86 支架分开；MB-FS-Lift 兼容",
+              "raw_research_statement": "完全/选配：65/86 支架分开；MB-FS-Lift 兼容"
+            },
+            "pro": {
+              "ability_state": "支持",
+              "delivery_state": "选配",
+              "display_label": "支持（选配）",
+              "source_state": "完全/选配",
+              "detail": "推车 MB-FS-P650T/P750T/P860T 逐尺寸；MB-FS-Lift 可选",
+              "raw_research_statement": "完全/选配：推车 MB-FS-P650T/P750T/P860T 逐尺寸；MB-FS-Lift 可选"
+            },
+            "a24": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "自带桌面支座（未证兼容大屏推车/升降架）",
+              "raw_research_statement": "完全/已发布：自带桌面支座（未证兼容大屏推车/升降架）"
+            }
+          }
+        },
+        {
+          "internal_id": "F10-03",
+          "feature_name": "房间预约/环境感知",
+          "module_internal_id": "F10",
+          "module_name": "配件与空间生态",
+          "original_research_anchor": "原MD第3.1节／F10-03",
+          "products": {
+            "legacy": {
+              "ability_state": "部分支持",
+              "delivery_state": "已发布",
+              "display_label": "部分支持",
+              "source_state": "部分/已发布",
+              "detail": "历史方案提 RoomPanel/RoomSensor/Touch Console（联动/固件未全锁）",
+              "raw_research_statement": "部分/已发布：历史方案提 RoomPanel/RoomSensor/Touch Console（联动/固件未全锁）"
+            },
+            "pro": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "Pro RoomPanel/RoomSensor 完整型号—拓扑—固件证据不足",
+              "raw_research_statement": "未知/未知：Pro RoomPanel/RoomSensor 完整型号—拓扑—固件证据不足"
+            },
+            "a24": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "RoomSensor/RoomPanel 联动未核实",
+              "raw_research_statement": "未知/未知：RoomSensor/RoomPanel 联动未核实"
+            }
+          }
+        },
+        {
+          "internal_id": "F10-04",
+          "feature_name": "桌面扩展坞与手机充电",
+          "module_internal_id": "F10",
+          "module_name": "配件与空间生态",
+          "original_research_anchor": "原MD第3.1节／F10-04",
+          "products": {
+            "legacy": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "未披露个人 USB-C PD 扩展坞或 Qi",
+              "raw_research_statement": "未知/未知：未披露个人 USB-C PD 扩展坞或 Qi"
+            },
+            "pro": {
+              "ability_state": "待核实",
+              "delivery_state": "未知",
+              "display_label": "待核实",
+              "source_state": "未知/未知",
+              "detail": "未披露 A24 式扩展坞/Qi（CTP25 PD 口不归主机能力）",
+              "raw_research_statement": "未知/未知：未披露 A24 式扩展坞/Qi（CTP25 PD 口不归主机能力）"
+            },
+            "a24": {
+              "ability_state": "支持",
+              "delivery_state": "已发布",
+              "display_label": "支持",
+              "source_state": "完全/已发布",
+              "detail": "USB-C 上行≤45W PD、下行 USB 扩展、Qi 充电",
+              "raw_research_statement": "完全/已发布：USB-C 上行≤45W PD、下行 USB 扩展、Qi 充电"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "highlight_features": [
+    {
+      "title": "智能发言者构图",
+      "category": "视频协作",
+      "product_scope": "MeetingBoard Pro",
+      "behavior": "三颗50MP摄像头（广角＋双长焦）结合IntelliFocus，在适用模式下可呈现最多4名活跃发言者及会议全景。",
+      "value": "帮助远端参会者辨认多人会议中的发言者及整体会议画面。",
+      "boundary": "一代已有自动取景、发言者跟踪、画中画和视频围栏；不同构图机制不按人数直接评分。",
+      "linked_feature_ids": [
+        "F2-01",
+        "F2-05"
+      ]
+    },
+    {
+      "title": "远场拾音与扩展能力",
+      "category": "音频协作",
+      "product_scope": "MeetingBoard一代／Pro",
+      "behavior": "均采用16 MEMS；按同口径厂商资料，最佳拾音距离为8m／12m，有效拾音距离为12m／15m；指定VCM35／VCM36-W扩展麦克风上限为2／4台。",
+      "value": "为不同空间规模提供拾音与音频扩展配置选择。",
+      "boundary": "最佳／有效拾音是两种口径；实际效果受到声场环境影响，未经过样机实测。",
+      "linked_feature_ids": [
+        "F3-01",
+        "F3-05"
+      ]
+    },
+    {
+      "title": "白板创作与成果导出",
+      "category": "内容协作",
+      "product_scope": "MeetingBoard Pro通用模式",
+      "behavior": "提供形状、表格、图片、便签等工具，支持USB导出PNG／PDF／YWB及适用条件下的邮件发送。",
+      "value": "将会议讨论记录保存并用于会后整理。",
+      "boundary": "本地白板与Teams／Zoom云白板功能边界不同，跨平台共编尚未核实。",
+      "linked_feature_ids": [
+        "F6-01",
+        "F6-03",
+        "F6-05"
+      ]
+    },
+    {
+      "title": "A24桌面办公整合",
+      "category": "桌面协作",
+      "product_scope": "DeskVision A24",
+      "behavior": "23.8英寸FHD触控显示、USB-C连接PC显示及音视频外设、最高45W PD和Qi充电。",
+      "value": "集成个人桌面会议、显示、连接和充电功能。",
+      "boundary": "不能据MeetingBoard的大屏功能推定A24具有相同的房间级取景与扩展能力。",
+      "linked_feature_ids": [
+        "F1-01",
+        "F7-02",
+        "F10-04"
+      ]
+    },
+    {
+      "title": "BYOD电脑会议外设共享",
+      "category": "平台互通",
+      "product_scope": "MeetingBoard适用配置",
+      "behavior": "在适用设备、线缆、配件和模式下，让外接电脑会议软件使用会议室摄像、麦克风及显示能力。",
+      "value": "会议室设备可以覆盖原生会议与PC会议的不同接入方式。",
+      "boundary": "BYOD切换不等于Teams／Zoom原生会议平台免重启切换。",
+      "linked_feature_ids": [
+        "F7-02"
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "feature": "摄像采集",
+      "legacy": "8MP单摄",
+      "pro": "三颗50MP摄像头（广角＋双长焦）",
+      "comparison": "摄像主体不同",
+      "linked_feature_ids": [
+        "F2-01"
+      ]
+    },
+    {
+      "feature": "多人发言者构图",
+      "legacy": "Multi-Focus，最多6分屏",
+      "pro": "IntelliFocus，最多4名活跃者＋全景",
+      "comparison": "构图机制不同，不能简单按人数评判",
+      "linked_feature_ids": [
+        "F2-05"
+      ]
+    },
+    {
+      "feature": "最佳／有效拾音距离",
+      "legacy": "8m／12m",
+      "pro": "12m／15m",
+      "comparison": "同口径厂商资料显示Pro覆盖范围扩大；未经实测",
+      "linked_feature_ids": [
+        "F3-01"
+      ]
+    },
+    {
+      "feature": "自动取景及相关能力",
+      "legacy": "自动取景、发言者跟踪、画中画、视频围栏",
+      "pro": "自动取景、发言者跟踪、画中画、视频围栏",
+      "comparison": "上述能力并非Pro全部新增",
+      "linked_feature_ids": [
+        "F2-03",
+        "F2-04",
+        "F2-06",
+        "F2-08"
+      ]
+    },
+    {
+      "feature": "指定扩展麦克风",
+      "legacy": "VCM35／VCM36-W最多2台",
+      "pro": "VCM35／VCM36-W最多4台",
+      "comparison": "具体数量受型号、固件及配件条件限制",
+      "linked_feature_ids": [
+        "F3-05"
+      ]
+    },
+    {
+      "feature": "通用模式白板导出",
+      "legacy": "公开资料尚未锁定同等导出路径",
+      "pro": "USB导出PNG／PDF／YWB；适用条件下支持邮件发送",
+      "comparison": "现有证据明确程度不同，不能推定一代不支持",
+      "linked_feature_ids": [
+        "F6-05"
+      ]
+    },
+    {
+      "feature": "旧配件兼容",
+      "legacy": "可使用适用的ETV、CTP18、WPP20旧配件",
+      "pro": "不支持旧ETV、CTP18、WPP20",
+      "comparison": "存在代际兼容限制",
+      "linked_feature_ids": [
+        "F1-04",
+        "F10-01",
+        "F5-02"
+      ]
+    },
+    {
+      "feature": "原生会议平台快速切换",
+      "legacy": "历史V20曾支持免重启；V21起限制变化",
+      "pro": "10秒免重启切换尚未核实",
+      "comparison": "不可将历史功能泛化为Pro能力",
+      "linked_feature_ids": [
+        "F7-03"
+      ]
+    }
+  ],
+  "stats": {
+    "module_count": 10,
+    "researched_feature_count": 50,
+    "product_family_count": 3,
+    "status_count_by_product": {
+      "legacy": {
+        "支持": 35,
+        "部分支持": 12,
+        "待核实": 3
+      },
+      "pro": {
+        "支持": 38,
+        "部分支持": 5,
+        "待核实": 7
+      },
+      "a24": {
+        "支持": 16,
+        "待核实": 25,
+        "部分支持": 8,
+        "明确不支持": 1
+      }
+    },
+    "caveat": "研究条目数不是任意单一型号的支持功能总数。配件与生态为实现关系，不应额外叠加评分。状态按研究记录中限定的型号/平台/条件统计，不等于真实性测评或跨产品评分。"
+  },
+  "display_policy": {
+    "visible_page_headings": [
+      "产品功能架构",
+      "完整功能清单",
+      "核心功能与亮点",
+      "竞品功能对标"
+    ],
+    "internal_ids_visible": false,
+    "preserve_critical_unknowns": true,
+    "do_not_display": [
+      "内部功能编号",
+      "内部项目配置和Skill版本",
+      "模板英语标签",
+      "重复操作提示",
+      "重复数据统计",
+      "开发/调研执行过程说明"
+    ],
+    "notes": "技术交付状态、内部ID、原始研究短语及产品证据边界保留在后台数据；重要限制仍在用户页面显示。"
+  }
+}

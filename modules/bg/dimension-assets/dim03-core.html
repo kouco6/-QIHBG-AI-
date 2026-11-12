@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>DIM-03 证书资质全｜15行分页·精简看板·完整交互示例 V5.0</title>
+<style>
+:root{font-family:Inter,-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;--nav:#132944;--nav-light:#27466b;--blue:#256bd7;--ink:#1b304c;--mute:#7e90a6;--line:#e2e9f2;--light:#f4f7fc;--green:#198666;--red:#ca5460;--yellow:#d39637;color:var(--ink)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#f2f5f9}button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.4;cursor:not-allowed}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #8db8f7;outline-offset:2px}[hidden]{display:none!important}
+.topbar{height:64px;background:var(--nav);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 clamp(16px,3vw,54px);position:sticky;top:0;z-index:20;box-shadow:0 3px 12px #1029431a}.brand{display:flex;align-items:center;gap:11px;white-space:nowrap}.brand-mark{width:31px;height:31px;background:linear-gradient(145deg,#4faff0,#2466c8);border-radius:8px;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:900}.brand-title{font-size:14px;font-weight:850}.brand-sub{font-size:11px;color:#a5bfd9;border-left:1px solid #516981;padding-left:11px}.project-title{font-size:12px;color:#b5c6da;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.mode-switch{display:flex;gap:3px;padding:4px;background:#244160;border:1px solid #345475;border-radius:9px;white-space:nowrap}.mode-switch button{background:transparent;border:0;color:#b5cbe3;border-radius:6px;font-size:12px;font-weight:700;padding:8px 13px}.mode-switch button.active{background:#fff;color:#1f436b;box-shadow:0 2px 7px #0002}
+main{padding:25px clamp(15px,3.4vw,65px) 30px;max-width:1800px;margin:auto}.breadcrumb{font-size:11px;color:#94a2b5;margin-bottom:22px}.breadcrumb strong{color:#60748c}.pagehead{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:22px;flex-wrap:wrap}.page-title{margin:0;color:#162d49;font-size:27px;letter-spacing:-.7px;font-weight:850}.page-sub{color:#8796a9;font-size:12px;margin:6px 0 0}.toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.btn{border:1px solid #dbe4ee;background:white;color:#3c506c;font-size:12px;font-weight:750;padding:10px 14px;border-radius:7px;line-height:1.15;white-space:nowrap}.btn:hover{border-color:#a9bfdd;background:#f8faff}.btn.primary{border-color:var(--blue);background:var(--blue);color:#fff}.btn.primary:hover{background:#175bbf}.btn.danger{background:#c94854;color:#fff;border-color:#c94854}.save-wrap{position:relative}.save-menu{position:absolute;right:0;top:43px;background:#fff;border:1px solid var(--line);width:165px;z-index:15;padding:5px;border-radius:8px;box-shadow:0 12px 30px #16314c24}.save-menu button{display:block;width:100%;background:none;border:0;text-align:left;padding:12px;border-radius:5px;font-size:12px;color:#253b55}.save-menu button:hover{background:#f0f5fd}.saving{font-size:11px;color:#708ba2;white-space:nowrap}
+.sheet{background:white;border:1px solid #e3eaf2;border-radius:12px;box-shadow:0 5px 25px #15365e08;overflow:hidden}.sheethead{min-height:71px;padding:15px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line);flex-wrap:wrap}.sheetname{font-weight:850;font-size:16px;color:#1b3554}.sheetname small{font-size:11px;color:#8fa0b4;font-weight:550;margin-left:10px}.headright{display:flex;align-items:center;gap:11px;flex-wrap:wrap}.count-pill{height:36px;display:flex;align-items:center;background:#f6f9fd;border:1px solid #e2e9f1;border-radius:7px;overflow:hidden}.count-part{padding:0 13px;display:flex;align-items:center;gap:8px;color:#63748a;font-size:12px;white-space:nowrap}.count-part strong{font-size:18px;color:#1e3857;font-weight:850;font-variant-numeric:tabular-nums}.count-part i{width:7px;height:7px;display:inline-block;border-radius:50%;background:#24a77e}.count-part.no i{background:#e16a72}.count-divider{width:1px;height:18px;background:#d8e2ed}.small-btn{border:1px solid #dce6f1;color:#4b709c;background:#fff;border-radius:6px;padding:8px 11px;font-size:11px;font-weight:750}.small-btn:hover{background:#f5f9ff}.sheet-scroll{overflow-x:auto;width:100%}.sheet-table{border-collapse:collapse;min-width:940px;width:100%;table-layout:fixed}.sheet-table th{height:54px;background:#f4f7fb;border-bottom:1px solid #e0e8f1;text-align:left;color:#60748a;font-size:12px;font-weight:800;padding:0 14px;white-space:nowrap}.sheet-table th.grip-col{width:42px;padding:0}.sheet-table th:nth-child(2){width:29%}.sheet-table th:nth-child(3){width:15%}.sheet-table th:nth-child(4){width:15%}.sheet-table th:nth-child(5){width:14%}.sheet-table th:nth-child(6){width:13.5%}.sheet-table th:nth-child(7){width:13.5%}.sheet-table td{border-bottom:1px solid #edf1f6;min-height:53px;padding:7px 14px;vertical-align:middle;position:relative;line-height:1.55;overflow-wrap:anywhere}.sheet-table tbody tr.data-row:hover td{background:#f8fbff}.sheet-table tbody tr.row-selected td{background:#f0f6ff}.sheet-table tbody tr.drag-over td{border-top:2px solid #2a73dc}.sheet-table tbody tr:last-child td{border-bottom:0}.grip{width:29px;height:31px;border:0;background:transparent;color:#a5b5c8;font-size:18px;cursor:grab;border-radius:5px;touch-action:none}.grip:hover{background:#e9f1fc;color:#2966bc}.grip:active{cursor:grabbing}.rowcell{min-height:32px;padding:5px 6px;margin:-2px -6px;border:1px solid transparent;border-radius:5px;outline:none;cursor:default;word-break:break-word}.rowcell.active{border-color:#4e85e3;background:#f9fbff}.rowcell.invalid{background:#fff5f3;border-color:#efc3bd}.rowcell .placeholder{color:#bdc7d1}.rowcell input,.rowcell select{height:33px;padding:5px 6px;border-radius:5px;width:100%;background:#fff;border:1px solid #568ef1;color:#243852;outline:none;font-size:12px}.state-badge{font-size:11px;font-weight:800;border-radius:5px;padding:4px 9px;display:inline-block}.state-badge.yes{background:#e4f5ec;color:#198664}.state-badge.no{background:#fff0f1;color:#c44a57}.delete-btn{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:#fff0f1;color:#cd5162;border-radius:5px;width:27px;height:28px;font-weight:800;opacity:0;pointer-events:none}.data-row:hover .delete-btn,.row-selected .delete-btn,.delete-btn:focus-visible{opacity:1;pointer-events:auto}.last-td{padding-right:38px!important}.empty-row td{background:#fbfdff;border-bottom:1px dashed #e0e9f4;color:#a1b0bf}.new-prompt{border:0;background:transparent;color:#3975c9;font-weight:700;font-size:12px;padding:8px 0;display:inline-flex;align-items:center;gap:7px}.new-prompt:hover{color:#1557bb}.sheetfooter{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 20px;min-height:60px}.page-note{font-size:11px;color:#8b9aae}.pagination{display:flex;align-items:center;gap:6px}.pagination button{min-width:31px;height:31px;border:1px solid #e0e6ed;background:white;border-radius:5px;color:#546985;font-size:12px}.pagination button.active{border-color:#8fb3ee;color:#246cce;background:#edf4ff;font-weight:850}.pagination button.page-hover{background:#ddebff;border-color:#3476e2}.footnote{font-size:11px;color:#96a7b8;margin:15px 0 0;line-height:1.8}.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#19324e;color:white;box-shadow:0 12px 35px #0c244044;border-radius:9px;padding:12px 19px;font-size:12px;z-index:60;max-width:90vw;text-align:center}.overlay{position:fixed;inset:0;background:#12264170;z-index:40;display:flex;justify-content:center;align-items:center;padding:20px}.modal{background:#fff;border-radius:12px;width:min(440px,100%);box-shadow:0 20px 60px #14294238;padding:25px}.modal h3{font-size:18px;color:#213a58;margin:0 0 13px}.modal p{color:#6e8094;font-size:13px;line-height:1.8;margin:0 0 24px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}.drawer-scrim{position:fixed;inset:0;background:#12264167;z-index:35}.drawer{position:fixed;right:0;top:0;bottom:0;background:#fff;width:min(430px,96vw);z-index:36;padding:26px;overflow-y:auto;box-shadow:-8px 0 35px #14264026}.drawer-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.drawer h3{margin:0;font-size:18px}.drawer-sub{font-size:12px;color:#8c9aaa;margin:0 0 22px;line-height:1.7}.version{border:1px solid var(--line);border-radius:9px;padding:15px;margin:10px 0}.version-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.version-name{font-size:13px;font-weight:800}.version-time{font-size:11px;color:#899aaf;margin:8px 0 13px}.version-badge{border-radius:5px;padding:4px 6px;background:#eaf5ef;color:#247e60;font-size:10px}.version-badge.draft{background:#eef4fc;color:#4776ac}.mini-preview{width:100%;border-collapse:collapse;font-size:11px}.mini-preview th,.mini-preview td{border-bottom:1px solid #edf2f7;padding:7px 5px;text-align:left}.inspect-close{margin-top:20px}.empty-preview{padding:80px 20px;color:#8493a5;text-align:center}.empty-preview strong{font-size:18px;color:#637a97;display:block;margin-bottom:10px}
+@media(max-width:850px){.project-title{display:none}.topbar{padding:0 14px}.brand-sub{display:none}main{padding:18px 12px}.page-title{font-size:23px}.sheethead{padding:13px}.sheetfooter{padding:12px}.count-part{padding:0 9px;gap:6px}.count-part strong{font-size:16px}}@media(max-width:520px){.brand-title{font-size:12px}.mode-switch button{padding:8px 9px;font-size:11px}.pagehead{align-items:flex-start}.toolbar{width:100%}.sheetname{font-size:15px}}
+
+/* V5.0｜每页15条：仅压缩纵向结构，不压缩字段信息、不改变交互 */
+.topbar{height:60px}
+main{padding-top:20px;padding-bottom:22px}
+.breadcrumb{margin-bottom:15px}
+.pagehead{margin-bottom:16px}
+.page-title{font-size:25px}
+.page-sub{margin-top:4px}
+.sheethead{min-height:61px;padding:11px 19px}
+.sheet-table th{height:43px;font-size:11px;padding:0 12px}
+.sheet-table td{height:40px;min-height:0;padding:3px 12px;line-height:1.35;font-size:12px}
+.sheet-table tr.data-row{min-height:40px}
+.rowcell{min-height:26px;padding:3px 5px;margin:-2px -5px}
+.rowcell input,.rowcell select{height:29px;padding:3px 6px}
+.state-badge{padding:3px 8px}
+.grip{height:27px;width:28px}
+.sheetfooter{min-height:49px;padding:9px 18px}
+.footnote{margin-top:11px}
+@media(max-width:850px){.sheethead{padding:11px 13px}.sheet-table th{padding:0 10px}.sheet-table td{padding:3px 10px}}
+
+/* BG platform adapter: common navigation, saving, and version management live in the parent workspace. */
+.topbar,.breadcrumb,.pagehead,.footnote,.toolbar{display:none!important}
+main{max-width:none;padding:17px 20px 40px;background:#edf2f8}
+.sheet{border-radius:13px;box-shadow:0 8px 24px #112d4e0e}
+
+.platform-text{box-sizing:border-box;max-width:980px;margin:18px auto;padding:24px;background:#fff;border:1px solid #dce7f1;border-radius:13px;white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.65 system-ui,sans-serif}
+.field-errors{display:grid;gap:6px;max-height:45vh;overflow:auto;margin:12px 0}.field-errors button{text-align:left}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="brand"><span class="brand-mark">BG</span><span class="brand-title">企划设计BG平台</span><span class="brand-sub">AI企划能力</span></div><div class="project-title">示例项目　/　DIM-03 证书资质全</div><div class="mode-switch"><button data-mode="work" class="active">工作模式</button><button data-mode="preview">预览模式</button></div></header>
+<main>
+<div class="breadcrumb">企划项目　›　12大维度　›　<strong>DIM-03 证书资质全</strong></div>
+<div class="pagehead"><div><h1 class="page-title">证书资质全</h1><div class="page-sub" id="modeCaption">DIM-03 / 工作模式 · 当前编辑内容</div></div><div class="toolbar" id="workTools"><span class="saving" id="savingState">● 工作内容已自动暂存</span><button class="btn" id="undoBtn" title="撤销上一步工作操作">↶ 撤销</button><button class="btn" id="versionBtn">版本管理</button><div class="save-wrap"><button class="btn primary" id="saveTrigger">保存 ▾</button><div class="save-menu" id="saveMenu" hidden><button data-save="draft">保存草稿</button><button data-save="apply">保存并应用</button></div></div></div></div>
+<section class="sheet"><div class="sheethead"><div class="sheetname">资质信息总表 <small id="recordInfo"></small></div><div class="headright"><div class="count-pill" aria-label="资质拥有状态统计"><span class="count-part"><i></i>已拥有 <strong id="yesCount">0</strong></span><span class="count-divider"></span><span class="count-part no"><i></i>未拥有 <strong id="noCount">0</strong></span></div><button class="small-btn work-only" id="newBtn">＋ 新增一行</button></div></div>
+<div class="sheet-scroll" id="tableScroll"><table class="sheet-table"><thead><tr><th class="grip-col"></th><th>资质名称</th><th>资质等级</th><th>有效期</th><th>公司是否拥有</th><th>获取难度</th><th>行业门槛</th></tr></thead><tbody id="rows"></tbody></table></div>
+<div class="sheetfooter"><span id="pageCaption" class="page-note"></span><div id="pager" class="pagination"></div></div></section>
+<p class="footnote" id="hint">双击单元格编辑　·　Enter / Tab连续录入　·　Ctrl+V粘贴Excel数据　·　拖动行首手柄排序　·　Ctrl+Z撤销。<br>演示数据仅用于查看页面效果，不代表任何企业真实资质情况。</p>
+</main>
+<div id="toast" class="toast" hidden role="status"></div><div id="modalRoot"></div><div id="drawerRoot"></div>
+<script>
+(()=>{'use strict';
+const $=q=>document.querySelector(q),$$=q=>Array.from(document.querySelectorAll(q));
+const F=['name','grade','expiry','owned','difficulty','barrier'];
+const N=['资质名称','资质等级','有效期','公司是否拥有','获取难度','行业门槛'];
+const sample=[
+['国家强制性产品认证（CCC）','强制性','2028年','是','中','高'],
+['IEC 61508功能安全相关认证','行业','2029年','否','高','高'],
+['ISO 9001质量管理体系认证','行业','2028-12-31','是','低','低'],
+['CE符合性认证','强制性','2029年','否','中','中'],
+['ISO 27001信息安全管理体系认证','行业','2027年','是','中','中'],
+['RoHS符合性声明','行业','长期有效','否','中','低'],
+['ISO 14001环境管理体系认证','行业','2028年','是','低','低'],
+['EMC电磁兼容检测报告','行业','2027年','否','中','中'],
+['EAC符合性认证','行业','2028年','否','中','中'],
+['FCC符合性认证','行业','长期有效','是','中','中'],
+['ISO 45001职业健康安全认证','行业','2028年','是','低','低'],
+['产品环境可靠性检测报告','行业','2029年','否','中','中'],
+['IEC 62368-1音视频设备安全认证','行业','2028年','是','中','高'],
+['信息技术服务管理体系认证','行业','2029年','否','中','中'],
+['ISO 50001能源管理体系认证','行业','2028年','是','中','中'],
+['产品电磁辐射检测报告','行业','2029年','否','中','低'],
+['企业知识产权管理体系认证','行业','2028年','是','中','中'],
+['高新技术企业认定证书','国家级','2029年','是','高','高'],
+['第三方电气安全检测报告','行业','2028年','否','低','中'],
+['计算机软件著作权登记证书','国家级','长期有效','是','低','中'],
+['声学性能测试报告','行业','2029年','否','中','中'],
+['网络安全相关测评报告','行业','2028年','否','高','高'],
+['软件产品登记证明','行业','长期有效','是','低','中'],
+['环境适应性试验报告','行业','2029年','否','中','中']
+];
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clone=x=>JSON.parse(JSON.stringify(x));
+const key='dim03_prototype_v5_15rows';
+let idCounter=100;const make=a=>({id:'cert_'+(++idCounter),...Object.fromEntries(F.map((f,i)=>[f,String(a?.[i]??'')]))});
+let published=[],work=[],versions=[];
+let mode='preview',page=0,pageSize=15,selected=null,editing=null,undoStack=[],dirty=false,toastTimer=null,dragging=null,pageHover=null,hoverTimer=null,modalAction=null,viewingVersion=null;
+const hasContent=r=>F.some(f=>String(r[f]??'').trim()!=='');
+const missing=(f,v)=>{v=String(v??'').trim();return !v||(f==='owned'&&!['是','否'].includes(v))||(['difficulty','barrier'].includes(f)&&!['低','中','高','待核实'].includes(v));};
+const errors=r=>F.filter(f=>missing(f,r[f]));
+const allRows=()=>mode==='work'?work:published;
+const activeCount=arr=>arr.filter(hasContent).length;
+const stamp=()=>new Date().toLocaleString('zh-CN',{hour12:false});
+function persist(){window.parent.postMessage({type:'bg-dim03-save-full',snapshot:{format:'v5',rows:clone(work)}},location.origin)}
+function load(){};
+function fromSnapshot(value){
+ if(value?.format==='v5'&&Array.isArray(value.rows)){
+  for(const row of value.rows){const number=/^cert_(\d+)$/.exec(row.id);if(number)idCounter=Math.max(idCounter,Number(number[1]))}
+  return clone(value.rows);
+ }
+ if(Array.isArray(value?.groups))return value.groups.flatMap(group=>group.items||[]).map(item=>({id:'legacy_'+(++idCounter),name:String(item['资质名称']||''),grade:String(item['资质等级']||''),expiry:String(item['有效期']||''),owned:String(item['公司是否拥有']||''),difficulty:String(item['获取难度']||''),barrier:String(item['行业门槛']||'')}));
+ return [];
+}
+window.addEventListener('message',event=>{
+ if(event.origin!==location.origin||event.source!==window.parent)return;
+ const msg=event.data||{};
+ if(msg.type==='bg-dim03-state'){
+  mode=msg.workMode?'work':'preview';
+  if(mode==='work')work=fromSnapshot(msg.content);else published=fromSnapshot(msg.content);
+  selected=null;editing=null;render();return;
+ }
+ if(msg.type==='bg-dim03-command'){
+  if(editing)finishEdit(true);
+  if(msg.action==='publish'){
+   const issues=work.flatMap((row,i)=>hasContent(row)?errors(row).map(field=>({row,i,field})):[]);
+   if(issues.length){
+    selectCell(issues[0].row.id,issues[0].field);
+    dialog('保存并应用前需要补全','请选择一项定位到相应单元格。',[{text:'返回工作区',id:'cancel'}]);
+    $('#modalRoot .modal-actions').insertAdjacentHTML('beforebegin','<div class="field-errors">'+issues.map(({row,i,field})=>`<button class="btn" data-error-row="${esc(row.id)}" data-error-field="${esc(field)}">第 ${i+1} 行 · ${N[F.indexOf(field)]}</button>`).join('')+'</div>');
+    return;
+   }
+   window.parent.postMessage({type:'bg-dim03-apply',snapshot:{format:'v5',rows:clone(work)}},location.origin);
+  }
+  if(msg.action==='save-draft')window.parent.postMessage({type:'bg-dim03-save-draft'},location.origin);
+ }
+});
+function snapshot(){undoStack.push(clone(work));if(undoStack.length>70)undoStack.shift()}
+function changed(){dirty=true;$('#savingState').textContent='● 已自动暂存';persist()}
+function notice(s){$('#toast').textContent=s;$('#toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').hidden=true,3400)}
+function renderPlatformText(){
+ const main=document.querySelector('main');main.hidden=true;
+ let article=document.querySelector('.platform-text');
+ if(!article){article=document.createElement('article');article.className='platform-text';document.body.appendChild(article)}
+ const data=published.filter(hasContent);
+ const lines=['证书资质全',...data.flatMap(row=>['',...F.map((key,i)=>N[i]+'：'+row[key])])];
+ article.textContent=lines.join('\n');
+}
+function render(){if(new URLSearchParams(location.search).get('view')==='text'){renderPlatformText();return}
+ const data=allRows(),pc=Math.max(1,Math.ceil(data.length/pageSize));page=Math.max(0,Math.min(page,pc-1));
+ $$('#topbar [data-mode],.mode-switch [data-mode]').forEach(x=>x.classList.toggle('active',x.dataset.mode===mode));
+ $('#modeCaption').textContent='DIM-03 / '+(mode==='work'?'工作模式 · 当前编辑内容':'预览模式 · 最新已应用成果');
+ $('#workTools').hidden=mode!=='work';$$('.work-only').forEach(x=>x.hidden=mode!=='work');
+ $('#undoBtn').disabled=undoStack.length===0;
+ $('#hint').innerHTML=(mode==='work'?'双击单元格编辑　·　Enter / Tab连续录入　·　Ctrl+V粘贴Excel数据　·　拖动行首手柄排序　·　Ctrl+Z撤销。':'预览模式仅查看已应用成果，不显示任何编辑控件。')+'<br>演示数据仅用于查看页面效果，不代表任何企业真实资质情况。';
+ const real=data.filter(hasContent);$('#recordInfo').textContent='共 '+real.length+' 条';$('#yesCount').textContent=real.filter(x=>x.owned==='是').length;$('#noCount').textContent=real.filter(x=>x.owned==='否').length;
+ if(mode==='preview'&&!real.length){$('#rows').innerHTML='<tr><td colspan="7"><div class="empty-preview"><strong>暂无正式资质内容</strong>请切换工作模式录入并保存应用</div></td></tr>'}
+ else {
+  $('#rows').innerHTML=(mode==='work'&&page===0?'<tr class="empty-row"><td>＋</td><td colspan="6"><button class="new-prompt" data-action="add">＋ 默认空白编辑行 · 点击开始录入</button></td></tr>':'')+
+  data.slice(page*pageSize,(page+1)*pageSize).map(r=>{
+   const isSelected=selected?.id===r.id;
+   return '<tr class="data-row '+(isSelected&&mode==='work'?'row-selected':'')+'" data-row="'+esc(r.id)+'"><td>'+(mode==='work'?'<button draggable="true" class="grip" title="按住拖动以调整排序" aria-label="拖动资质行" data-drag="'+esc(r.id)+'">⠿</button>':'')+'</td>'+F.map((f,i)=>{
+    const v=String(r[f]??''),invalid=mode==='work'&&missing(f,v);
+    const chosen=isSelected&&selected.field===f;
+    let display=v?esc(v):'<span class="placeholder">—</span>';
+    if(f==='owned'&&['是','否'].includes(v))display='<span class="state-badge '+(v==='是'?'yes':'no')+'">'+v+'</span>';
+    const warning=invalid?' title="必填或取值无效，请完善"':'';
+    return '<td '+(i===5&&mode==='work'?'class="last-td"':'')+'><div class="rowcell '+(chosen?'active ':'')+(invalid?'invalid':'')+'" tabindex="'+(mode==='work'?'0':'-1')+'" data-id="'+esc(r.id)+'" data-field="'+esc(f)+'"'+warning+'>'+display+'</div>'+(i===5&&mode==='work'?'<button class="delete-btn" data-delete="'+esc(r.id)+'" title="删除本条资质">×</button>':'')+'</td>';}).join('')+'</tr>';}).join('');
+ }
+ $('#pageCaption').textContent='每页15行 · 第 '+(page+1)+' / '+pc+' 页 · 共 '+activeCount(data)+' 条资质记录';
+ let nav='<button data-page="'+(page-1)+'" '+(page===0?'disabled':'')+' aria-label="上一页">‹</button>';
+ for(let i=0;i<pc;i++)nav+='<button data-page="'+i+'" '+(i===page?'class="active"':'')+'>'+ (i+1)+'</button>';
+ nav+='<button data-page="'+(page+1)+'" '+(page===pc-1?'disabled':'')+' aria-label="下一页">›</button>';
+ $('#pager').innerHTML=nav;
+}
+function selectCell(id,f,scroll=true){selected={id,field:f};const idx=work.findIndex(x=>x.id===id);if(idx>=0)page=Math.floor(idx/pageSize);render();const el=$$('.rowcell').find(x=>x.dataset.id===id&&x.dataset.field===f);if(el){el.focus({preventScroll:true});if(scroll)el.scrollIntoView({block:'nearest',inline:'nearest'});}}
+function addRow(){if(mode!=='work')return;finishEdit(true);snapshot();let r=make(['','','','','','']);work.unshift(r);page=0;changed();selectCell(r.id,'name');notice('已在第一行新增资质，可双击填写')}
+function beginEdit(cell){if(mode!=='work')return;if(editing)finishEdit(true);const id=cell.dataset.id,f=cell.dataset.field,r=work.find(x=>x.id===id);if(!r)return;selected={id,field:f};editing={id,f,before:r[f]};let el;
+ if(f==='owned'||f==='difficulty'||f==='barrier'){
+  el=document.createElement('select');let items=f==='owned'?['','是','否']:['','低','中','高','待核实'];if(r[f]&&!items.includes(r[f]))items.push(r[f]);
+  el.innerHTML=items.map(x=>'<option value="'+esc(x)+'">'+esc(x||'请选择')+'</option>').join('');el.value=r[f];
+ }else if(f==='grade'){
+  el=document.createElement('input');el.setAttribute('list','gradeSuggestions');el.value=r[f];el.placeholder=N[F.indexOf(f)];
+ }else{el=document.createElement('input');el.value=r[f];el.placeholder=N[F.indexOf(f)];}
+ cell.innerHTML='';cell.appendChild(el);cell.classList.add('active');el.focus();if(el instanceof HTMLInputElement)el.select();
+ el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key==='Tab'){e.preventDefault();finishEdit(true,e.key==='Enter'?'enter':'tab')}else if(e.key==='Escape'){e.preventDefault();finishEdit(false)}});
+ el.addEventListener('blur',()=>{if(editing?.id===id&&editing?.f===f)finishEdit(true)});
+}
+function finishEdit(commit,move){if(!editing)return;const {id,f,before}=editing;const editor=$$('.rowcell').find(x=>x.dataset.id===id&&x.dataset.field===f)?.querySelector('input,select');const value=editor?.value??before;editing=null;
+ if(commit){const r=work.find(x=>x.id===id);if(r&&r[f]!==value){snapshot();r[f]=value;changed();if(f==='name'&&value&&work.filter(x=>x.id!==id&&x.name.trim()===value.trim()).length)notice('同名资质已存在，请核对；不影响应用')}}
+ if(move){let i=work.findIndex(x=>x.id===id),j=F.indexOf(f),target=work[i],tf=f;
+  if(move==='enter'&&i<work.length-1)target=work[i+1];
+  if(move==='tab'){if(j<F.length-1)tf=F[j+1];else if(i<work.length-1){target=work[i+1];tf=F[0]}}
+  if(target)selectCell(target.id,tf);else render();
+ }else selectCell(id,f,false);
+}
+function pasteGrid(text){if(mode!=='work'||!selected)return;const at=work.findIndex(x=>x.id===selected.id),j=F.indexOf(selected.field);if(at<0||j<0)return;let lines=text.replace(/\r/g,'').replace(/\n$/,'').split('\n').map(line=>line.split('\t'));snapshot();let count=0;while(work.length<at+lines.length)work.push(make(['','','','','','']));
+ lines.forEach((cols,i)=>cols.forEach((value,k)=>{const field=F[j+k];if(field){work[at+i][field]=value;count++}}));changed();selectCell(work[at].id,F[j],false);notice('已粘贴 '+lines.length+' 行 · '+count+' 个单元格，支持整批撤销');}
+function undo(){if(editing){finishEdit(false);return}if(!undoStack.length){notice('当前没有可撤销的操作');return}work=undoStack.pop();selected=null;changed();render();notice('已撤销上一步操作')}
+function dialog(title,description,choices){$('#modalRoot').innerHTML='<div class="overlay"><div class="modal"><h3>'+esc(title)+'</h3><p>'+esc(description)+'</p><div class="modal-actions">'+choices.map(c=>'<button class="btn '+(c.danger?'danger':c.primary?'primary':'')+'" data-modal="'+esc(c.id)+'">'+esc(c.text)+'</button>').join('')+'</div></div></div>';}
+function closeDialog(){$('#modalRoot').innerHTML='';modalAction=null}
+function deleteRow(id){const r=work.find(x=>x.id===id);if(!r)return;modalAction={type:'delete',id};dialog('确认删除资质？','将从当前工作内容中删除「'+(r.name||'未命名资质')+'」。正式预览在保存并应用之前不会改变。',[{id:'cancel',text:'取消'},{id:'confirm',text:'确认删除',danger:true}])}
+function apply(){const actual=work.filter(hasContent);if(!actual.length){notice('维度没有有效资质数据，不能发布空成果');return}
+ const failing=actual.find(r=>errors(r).length);if(failing){const count=actual.filter(r=>errors(r).length).length;selectCell(failing.id,errors(failing)[0]);notice('有 '+count+' 条资质字段缺失或无效，请修正后统一应用');return}
+ if(JSON.stringify(actual)===JSON.stringify(published)){notice('当前内容与正式成果一致，无需重复应用');return}
+ published=clone(actual);work=clone(actual);const identical=versions.find(v=>!v.applied&&JSON.stringify(v.records.filter(hasContent))===JSON.stringify(published));if(identical){identical.applied=true;identical.label='保存并应用';identical.appliedTime=stamp()}else versions.unshift({id:'v'+Date.now(),label:'保存并应用',time:stamp(),applied:true,records:clone(published)});
+ dirty=false;undoStack=[];persist();$('#savingState').textContent='● 已保存并应用';render();notice('保存并应用成功，预览成果已更新');}
+function save(type){if(editing)finishEdit(true);$('#saveMenu').hidden=true;if(type==='apply')return apply();if(type==='draft'){
+ const last=versions.find(v=>!v.applied);if(last&&JSON.stringify(last.records)===JSON.stringify(work)){notice('当前内容与已保存草稿相同，无须重复保存');return}
+ versions.unshift({id:'v'+Date.now(),label:'手动保存草稿',time:stamp(),applied:false,records:clone(work)});dirty=false;persist();$('#savingState').textContent='● 草稿已保存';notice('草稿已加入版本管理，预览未改变')}}
+function drawer(){const root=$('#drawerRoot');root.innerHTML='<div class="drawer-scrim" data-close-drawer></div><aside class="drawer"><div class="drawer-head"><h3>版本管理</h3><button class="btn" data-close-drawer>关闭 ×</button></div><p class="drawer-sub">查看历史时只读；恢复版本只替换工作区内容，正式预览不变。</p>'+versions.map((v,i)=>'<div class="version"><div class="version-head"><span class="version-name">'+esc(v.label)+'</span><span class="version-badge '+(v.applied?'':'draft')+'">'+(v.applied?'已应用版本':'未应用版本')+'</span></div><div class="version-time">'+esc(v.time)+(v.appliedTime?' · 应用 '+esc(v.appliedTime):'')+'　·　'+activeCount(v.records)+' 条资质</div><button class="small-btn" data-version-view="'+i+'">查看</button> <button class="small-btn" data-version-restore="'+i+'">恢复</button></div>').join('')+'</aside>'}
+function closeDrawer(){$('#drawerRoot').innerHTML='';viewingVersion=null}
+function inspect(i){const v=versions[i];if(!v)return;viewingVersion=i;
+ $('#drawerRoot').innerHTML='<div class="drawer-scrim" data-close-drawer></div><aside class="drawer"><div class="drawer-head"><h3>历史版本 · 只读查看</h3><button class="btn" data-version-back>返回列表</button></div><p class="drawer-sub">'+esc(v.time)+' · '+activeCount(v.records)+' 条资质</p><table class="mini-preview"><thead><tr><th>资质名称</th><th>公司拥有</th></tr></thead><tbody>'+v.records.filter(hasContent).map(r=>'<tr><td>'+esc(r.name||'—')+'</td><td>'+esc(r.owned||'—')+'</td></tr>').join('')+'</tbody></table><button class="btn primary inspect-close" data-version-restore="'+i+'">恢复该版本</button></aside>'}
+function restore(i){const v=versions[i];if(!v)return;const applyRestore=()=>{snapshot();work=clone(v.records);selected=null;page=0;changed();closeDialog();closeDrawer();render();notice('版本已恢复到工作区，正式预览未改变')};
+ closeDrawer();if(dirty){modalAction={type:'restore',index:i,restore:applyRestore};dialog('替换当前工作内容？','当前工作区存在尚未手动保存的修改，请选择如何处理。',[{id:'savefirst',text:'先保存草稿再恢复'},{id:'discard',text:'放弃当前修改并恢复',primary:true},{id:'cancel',text:'取消'}]);}
+ else{modalAction={type:'restore',index:i,restore:applyRestore};dialog('确认恢复历史版本？','历史版本将载入工作区，不会自动应用到预览。',[{id:'discard',text:'确认恢复',primary:true},{id:'cancel',text:'取消'}]);}}
+function modeChange(to){if(to===mode)return;if(editing)finishEdit(true);mode=to;selected=null;$('#saveMenu').hidden=true;render();if(to==='preview'&&dirty)notice('预览显示最新已应用成果；当前工作修改已暂存');}
+// Click delegation
+ document.addEventListener('click',e=>{
+ const sw=e.target.closest('[data-mode]');if(sw){modeChange(sw.dataset.mode);return}
+ if(e.target.closest('#newBtn')||e.target.closest('[data-action="add"]')){addRow();return}
+ if(e.target.closest('#undoBtn')){undo();return}
+ if(e.target.closest('#versionBtn')){if(editing)finishEdit(true);drawer();return}
+ if(e.target.closest('#saveTrigger')){$('#saveMenu').hidden=!$('#saveMenu').hidden;return}
+ const saves=e.target.closest('[data-save]');if(saves){save(saves.dataset.save);return}
+ const pg=e.target.closest('[data-page]');if(pg&&!pg.disabled){if(editing)finishEdit(true);page=Number(pg.dataset.page);selected=null;render();return}
+ const del=e.target.closest('[data-delete]');if(del){if(editing)finishEdit(true);deleteRow(del.dataset.delete);return}
+ const issue=e.target.closest('[data-error-row]');if(issue){closeDialog();selectCell(issue.dataset.errorRow,issue.dataset.errorField);return}
+ const modal=e.target.closest('[data-modal]');if(modal){const v=modal.dataset.modal,act=modalAction;if(v==='cancel'){closeDialog();return}if(act?.type==='delete'&&v==='confirm'){snapshot();work=work.filter(r=>r.id!==act.id);selected=null;changed();closeDialog();render();notice('该资质已删除，可按Ctrl+Z撤销');return}
+  if(act?.type==='restore'){if(v==='savefirst'){save('draft');act.restore();return}if(v==='discard'){act.restore();return}}return}
+ if(e.target.closest('[data-close-drawer]')){closeDrawer();return}
+ if(e.target.closest('[data-version-back]')){drawer();return}
+ const vView=e.target.closest('[data-version-view]');if(vView){inspect(Number(vView.dataset.versionView));return}
+ const vRestore=e.target.closest('[data-version-restore]');if(vRestore){restore(Number(vRestore.dataset.versionRestore));return}
+ const cell=e.target.closest('.rowcell');if(cell&&mode==='work'&&!editing){selected={id:cell.dataset.id,field:cell.dataset.field};$$('.rowcell.active').forEach(x=>x.classList.remove('active'));cell.classList.add('active');cell.focus({preventScroll:true})}
+ });
+ document.addEventListener('dblclick',e=>{const cell=e.target.closest('.rowcell');if(cell&&mode==='work')beginEdit(cell)});
+ document.addEventListener('paste',e=>{if(mode!=='work'||e.target.matches('input,textarea,select'))return;let text=e.clipboardData?.getData('text/plain');if(text&&selected){e.preventDefault();pasteGrid(text)}});
+ document.addEventListener('keydown',e=>{const el=e.target;if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'&&!el.matches('input,textarea,select')){e.preventDefault();undo()}});
+ document.addEventListener('dragstart',e=>{const handle=e.target.closest('[data-drag]');if(!handle||mode!=='work')return;dragging=handle.dataset.drag;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',dragging)});
+ document.addEventListener('dragover',e=>{if(!dragging)return;const row=e.target.closest('[data-row]');if(row){e.preventDefault();$$('.drag-over').forEach(x=>x.classList.remove('drag-over'));row.classList.add('drag-over')}
+ const pg=e.target.closest('[data-page]');if(pg&&!pg.disabled&&Number(pg.dataset.page)!==page){e.preventDefault();pg.classList.add('page-hover');if(pageHover!==Number(pg.dataset.page)){clearTimeout(hoverTimer);pageHover=Number(pg.dataset.page);hoverTimer=setTimeout(()=>{page=pageHover;pageHover=null;render()},650)}}else if(!pg){clearTimeout(hoverTimer);pageHover=null}});
+ document.addEventListener('drop',e=>{if(!dragging)return;e.preventDefault();clearTimeout(hoverTimer);pageHover=null;const row=e.target.closest('[data-row]');if(row&&row.dataset.row!==dragging){const from=work.findIndex(x=>x.id===dragging),to=work.findIndex(x=>x.id===row.dataset.row);if(from>=0&&to>=0){snapshot();const [moved]=work.splice(from,1);const target=from<to?to-1:to;work.splice(target,0,moved);changed();page=Math.floor(target/pageSize);render();notice('已调整资质顺序，可撤销')}}dragging=null;$$('.drag-over').forEach(x=>x.classList.remove('drag-over'))});
+ document.addEventListener('dragend',()=>{dragging=null;clearTimeout(hoverTimer);pageHover=null;$$('.drag-over').forEach(x=>x.classList.remove('drag-over'))});
+ load();render();window.parent.postMessage({type:'bg-dim03-ready',seed:{format:'v5',rows:sample.map(make)}},location.origin);
+})();
+</script>
+<datalist id="gradeSuggestions"><option value="强制性"><option value="市级"><option value="省级"><option value="国家级"><option value="行业"></datalist>
+</body></html>

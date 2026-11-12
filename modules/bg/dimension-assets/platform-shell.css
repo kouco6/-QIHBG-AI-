@@ -1,0 +1,60 @@
+:root{--bg:#edf2f8;--ink:#173555;--muted:#6f8198;--line:#e0e9f2;--brand:#2877b9;--brandsoft:#eaf3fb;--shadow:0 8px 24px rgba(17,45,78,.055)}
+body{background:var(--bg);color:var(--ink)}
+.workspace-shell>.rail,.workspace-shell .topbar,.workspace-shell .footerhint{display:none!important}
+.workspace-shell .main-shell{width:100%;min-width:0}
+.workspace-shell .content,.shell.workspace-shell.dim01-fullscreen .content{max-width:none;width:100%;padding:18px clamp(16px,2vw,36px) 48px}
+.workspace-topbar{position:sticky;top:0;z-index:20;min-height:64px;background:#112d4e;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:9px clamp(16px,2vw,36px);box-shadow:0 5px 20px #112d4e20}
+.workspace-top-left,.workspace-top-right{display:flex;align-items:center;gap:10px;min-width:0}.workspace-top-left strong{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.workspace-icon,.workspace-back,.workspace-top-button,.workspace-mode button,.workspace-save-menu summary{border:1px solid #ffffff45;background:#ffffff12;color:white;border-radius:8px;min-height:35px;padding:7px 12px;font-size:12px;font-weight:700;white-space:nowrap}
+.workspace-icon{font-size:17px;min-width:35px;padding:3px}.workspace-back:hover,.workspace-icon:hover,.workspace-top-button:hover,.workspace-save-menu summary:hover{background:#ffffff24}.workspace-divider{width:1px;height:23px;background:#ffffff50;margin:0 5px}
+.workspace-save-state{font-size:11px;color:#bdd1e6;white-space:nowrap}.workspace-mode{display:flex;gap:3px;padding:3px;border:1px solid #ffffff38;border-radius:9px;background:#08223f}.workspace-mode button{border:0;background:transparent;min-height:30px;padding:5px 12px}.workspace-mode button.active{background:#fff;color:#173555}
+.workspace-save-menu{position:relative}.workspace-save-menu summary{list-style:none;cursor:pointer;background:#2877b9;border-color:#4994cb}.workspace-save-menu summary::-webkit-details-marker{display:none}.workspace-save-menu>div{position:absolute;top:calc(100% + 7px);right:0;background:white;border:1px solid var(--line);border-radius:10px;box-shadow:0 16px 34px #112d4e24;min-width:150px;padding:6px;z-index:30}.workspace-save-menu>div button{display:block;width:100%;border:0;background:white;text-align:left;padding:10px;border-radius:6px;color:#173555;font-size:12px}.workspace-save-menu>div button:hover{background:#edf4fb}
+.workspace-nav-backdrop{position:fixed;inset:64px 0 0;background:#0b1d3270;z-index:24}.workspace-nav-panel{position:fixed;top:64px;bottom:0;left:0;width:min(335px,88vw);overflow:auto;background:white;z-index:25;box-shadow:12px 0 32px #112d4e22;padding:17px}.workspace-nav-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;font-size:15px}.workspace-nav-head button{border:0;background:#edf2f8;border-radius:7px;width:30px;height:30px;font-size:20px;color:#34506d}.workspace-nav-item{display:flex;width:100%;justify-content:space-between;gap:10px;text-align:left;align-items:center;border:0;background:transparent;padding:12px 10px;border-radius:8px;color:#37516d}.workspace-nav-item:hover,.workspace-nav-item.active{background:#eaf3fb;color:#155989}.workspace-nav-item small{font-size:10px;color:#8798aa;white-space:nowrap}
+.workspace-shell .dim01-dimstrip{display:none!important}.workspace-shell .dim01-head .actions{display:none!important}.workspace-shell .dim01-head{margin:0 0 12px}.workspace-shell .dim01-head h1{font-size:23px;color:#173555}.workspace-shell .dim01-head .sub{font-size:11px;color:#788ba2}.workspace-shell .dim01-modules,.shell.workspace-shell.dim01-fullscreen .dim01-modules{top:64px;margin-bottom:11px;border-color:#dce7f1;box-shadow:0 5px 16px #112d4e0a}.workspace-shell .dim01-stage-inner,.shell.workspace-shell.dim01-fullscreen .dim01-stage-inner{padding-right:43px}.workspace-shell .dim01-viewrail,.shell.workspace-shell.dim01-fullscreen .dim01-viewrail{display:block}.workspace-shell .dim01-frame,.shell.workspace-shell.dim01-fullscreen .dim01-frame{height:calc(100vh - 175px);min-height:560px;border-radius:13px;background:#fff}.workspace-shell .dim01-viewrail{background:#fff;border-color:#dbe6f1}
+@media(max-width:740px){.workspace-topbar{flex-wrap:wrap}.workspace-top-right{width:100%;justify-content:flex-end}.workspace-top-left strong{font-size:13px}.workspace-save-state{display:none}.workspace-shell .content{padding:12px 10px 28px}.workspace-shell .dim01-modules{top:105px}.workspace-nav-backdrop,.workspace-nav-panel{top:105px}}
+.workspace-shell .dim01-head .sub{display:none}
+.workspace-shell.unapplied-preview .dim01-stage-inner{position:relative;min-height:450px;background:#fff;border:1px solid #dce7f1;border-radius:13px}
+.workspace-shell.unapplied-preview .dim01-stage-inner>.dim01-frame{visibility:hidden}
+.dim01-modules button[hidden]{display:none!important}
+.workspace-empty{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;text-align:center;color:#536c86;padding:24px}.workspace-empty h2{color:#173555;margin:0}.workspace-empty p{margin:10px 0 16px}
+
+/* Keep one scrolling content viewport while retaining the workspace controls. */
+.workspace-shell .dim01-head{
+ position:absolute;width:1px;height:1px;margin:0;overflow:hidden;clip-path:inset(50%);
+}
+.workspace-shell:has(.dim01-frame){height:100dvh;min-height:0;overflow:hidden}
+.workspace-shell:has(.dim01-frame) .main-shell{min-height:0}
+.workspace-shell:has(.dim01-frame) #main{
+ display:flex;flex:1;min-height:0;margin:0;padding:14px clamp(10px,1.6vw,26px) 14px;
+}
+.workspace-shell:has(.dim01-frame) .dim01-workspace{display:flex;flex-direction:column;min-height:0}
+.workspace-shell:has(.dim01-frame) .dim01-modules{position:static;flex:none;margin-bottom:10px}
+.workspace-shell:has(.dim01-frame) .dim01-stage{display:flex;flex:1;min-height:0}
+.workspace-shell:has(.dim01-frame) .dim01-stage-inner{flex:1;min-width:0;min-height:0}
+.shell.workspace-shell .dim01-stage-inner>.dim01-frame{
+ height:100%;min-height:0;border:1px solid #dce7f1;background:#fff;
+}
+.workspace-shell.unapplied-preview .dim01-stage-inner{margin-right:43px;padding-right:0}
+.workspace-shell .dim01-viewrail{
+ width:40px;bottom:auto;min-height:0;border-radius:9px;background:#fff;
+}
+.workspace-shell .dim01-viewrail:hover,
+.workspace-shell .dim01-viewrail:focus-within,
+.workspace-shell .dim01-viewrail.open{width:154px}
+.workspace-shell .dim01-rail-handle{
+ position:static;width:100%;height:34px;padding:0 6px;writing-mode:horizontal-tb;
+ border-right:0;border-bottom:1px solid #dbe6f1;font-size:11px;white-space:nowrap;
+}
+.workspace-shell .dim01-rail-items{margin:0;padding:3px;width:100%;display:grid;grid-template-columns:minmax(0,1fr);gap:2px}
+.workspace-shell .dim01-rail-choice{min-width:0;overflow:hidden;gap:8px;height:34px;padding:0 6px;border-radius:5px}
+.workspace-shell .dim01-rail-choice span{flex:0 0 20px;text-align:center;font-size:15px}
+.workspace-shell .dim01-rail-choice b{opacity:0;transition:opacity .1s}
+.workspace-shell .dim01-viewrail:hover b,
+.workspace-shell .dim01-viewrail:focus-within b,
+.workspace-shell .dim01-viewrail.open b{opacity:1}
+
+.workspace-legacy-text{
+ position:absolute;inset:0;overflow:auto;padding:20px clamp(16px,3vw,36px);
+}
+.workspace-legacy-text pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}
+.workspace-shell .dim01-modules button[aria-current="true"]{color:#155989}
