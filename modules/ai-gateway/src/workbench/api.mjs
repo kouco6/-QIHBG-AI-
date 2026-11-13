@@ -21,6 +21,7 @@ import { DOMAINS, TEMPLATES, buildPrompt, findTemplate } from "./templates.mjs";
 import { HubClient, HubError } from "./hub-client.mjs";
 import { describeHubSettings, saveHubSettings } from "./hub-settings.mjs";
 import { applySkills, autoSkillNames, skillStoreFor } from "./skill-mount.mjs";
+import { prepareResearch, researchResult, researchView, runtimeResearch, trustedResearch, researchOwner, workbuddyConnection, ResearchFailure } from "./research.mjs";
 
 const MAX_BODY = 2 * 1024 * 1024;
 
@@ -221,6 +222,42 @@ export async function handleWorkbenchApi(req, res, path, url, ctx) {
 
   const skillStore = () => skillStoreFor(config);
   const hubClient = () => new HubClient(config.hub);
+
+  if (path.startsWith("/api/research/")) {
+    trustedResearch(req, config);
+    const connection = workbuddyConnection(config);
+    if (path === "/api/research/workbuddy" && method === "GET") {
+      json(res, 200, connection.info()); return true;
+    }
+    if (method === "POST" && ["authorization", "callback", "online", "refresh"].some(action =>
+      path === "/api/research/workbuddy/" + action)) {
+      const body = await readJson(req), action = path.split("/").pop();
+      const allowed = action === "callback" ? ["state", "code"] : [];
+      if (!body || Array.isArray(body) || Object.keys(body).some(k => !allowed.includes(k)))
+        throw new ResearchFailure("INVALID_REQUEST", "WorkBuddy 接入请求字段无效", 422);
+      const value = action === "authorization" ? connection.begin() :
+        action === "callback" ? await connection.complete(body) :
+        action === "refresh" ? await connection.refresh() : await connection.checkOnline();
+      json(res, 200, value); return true;
+    }
+    if (method !== "GET") throw new ResearchFailure("METHOD_NOT_ALLOWED", "研究查询只读", 405);
+    if (path === "/api/research/runtime") { json(res, 200, runtimeResearch(config)); return true; }
+    const projectId = params.get("projectId");
+    if (!projectId || !/^[A-Za-z0-9._-]{1,120}$/.test(projectId))
+      throw new ResearchFailure("INVALID_REQUEST", "必须指定 projectId", 422);
+    const owned = t => t?.research?.ownerId === researchOwner(config) && t.research.projectId === projectId;
+    if (path === "/api/research/tasks") {
+      const items = [...manager.tasks.values()].filter(owned)
+        .filter(t => !params.get("dimensionId") || t.research.dimensionId === params.get("dimensionId"))
+        .filter(t => !params.get("cycleId") || t.research.cycleId === params.get("cycleId"))
+        .sort((a,b) => b.research.version - a.research.version).map(researchView);
+      json(res, 200, { items }); return true;
+    }
+    const match = path.match(/^\/api\/research\/(tasks|results)\/([A-Za-z0-9-]+)$/);
+    const task = match ? manager.tasks.get(match[2]) : null;
+    if (!owned(task)) throw new ResearchFailure("RESEARCH_TASK_NOT_FOUND", "当前项目下未找到研究任务", 404);
+    json(res, 200, match[1] === "results" ? researchResult(config, task) : researchView(task)); return true;
+  }
 
   // ---------------------------------------------------------------- skills（工作方法库）
   // 云端目录、拉取安装、本地列表、删除，都走这几个口。平台账号密码只在服务端用。
@@ -900,6 +937,8 @@ export async function handleWorkbenchApi(req, res, path, url, ctx) {
 
   if (method === "POST" && path === "/api/tasks") {
     const body = await readJson(req);
+    if (Object.hasOwn(body, "research") || body.taskType === "planning_research")
+      { const result=await prepareResearch(req, body, config, manager); json(res,result.status,result.value); return true; }
     const template = body.taskType ? findTemplate(body.taskType) : null;
     const values = body.values && typeof body.values === "object" ? body.values : {};
     let prompt = String(body.prompt ?? "").trim() || (template ? buildPrompt(template, values) : "");

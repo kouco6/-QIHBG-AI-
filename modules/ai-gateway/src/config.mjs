@@ -199,9 +199,8 @@ export function loadConfig(env = process.env) {
       modelEnv: env.WORKBUDDY_KIMI_MODEL?.trim(),
       tokensEnv: env.WORKBUDDY_KIMI_MAX_OUTPUT_TOKENS,
     },
-    // WorkBuddy 暂不在册（2026-11-02 先拿下，等 API 到手再加回）。
-    // 它在时走的是标准 OpenAI 兼容通道，加回来直接用「新建员工」填地址+模型+Key，
-    // 不需要在这里补 preset，也不需要动 agents 注册表。
+    // WorkBuddy localassistant uses OAuth and a dedicated adapter, never an
+    // OpenAI-compatible endpoint/model/API-key preset.
   };
 
   const agents = {};
@@ -303,6 +302,14 @@ export function loadConfig(env = process.env) {
     };
   }
 
+  // Native WorkBuddy is represented in the existing employee registry, but
+  // cannot become a generic model runner, even if legacy keys are present.
+  agents.workbuddy = { id: "workbuddy", provider: "workbuddy-localassistant", name: "WorkBuddy",
+    enabled: fileConfig.workbuddy?.enabled === true,
+    configured: Boolean(fileConfig.workbuddy?.clientId && fileConfig.workbuddy?.redirectUri),
+    available: false, availabilityReason: "workbuddy_authorization_required",
+    apiKey: "", baseUrl: "", model: "", maxOutputTokens: 0 };
+
   const rootsSource = env.WORKBUDDY_ALLOWED_ROOTS
     ?? (Array.isArray(fileConfig.allowedRoots) ? fileConfig.allowedRoots.join(process.platform === "win32" ? ";" : delimiter) : "");
   const allowedRoots = splitRoots(rootsSource).map(canonicalDirectory);
@@ -357,6 +364,9 @@ export function loadConfig(env = process.env) {
     // AI 能力平台：从云端把技能拉进本地工作方法库。账号密码在 hub-secrets.json。
     hub: loadHubSettings(configPath, fileConfig, env),
     skillDir: resolve(dirname(configPath), env.WORKBUDDY_SKILL_DIR ?? fileConfig.skillDir ?? "skills"),
+    // Nonsecret operator configuration only; no environment credential discovery.
+    workbuddy: fileConfig.workbuddy && typeof fileConfig.workbuddy === "object" ? fileConfig.workbuddy : {},
+    workbuddyCredentialRoot: env.WORKBUDDY_RESEARCH_AUTH_DIR ?? fileConfig.workbuddyCredentialRoot ?? null,
   };
 }
 

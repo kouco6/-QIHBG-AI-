@@ -14,6 +14,9 @@ from urllib.parse import parse_qs, unquote, urlsplit
 
 from platform_identity import DEFAULT_LOGIN, MODULES, REMEMBER_AGE
 from prepare_sources import ROOT
+from platform_research import ResearchError, PREFIX as RESEARCH_PREFIX, authorize as research_authorize, handle as research_handle
+from platform_research_gateway import ResearchGateway
+from platform_research_sync import ResearchSync
 
 
 COOKIE = "bg_platform_session"
@@ -208,6 +211,106 @@ class Handler(BaseHTTPRequestHandler):
         finally:
             conn.close()
 
+    def _research(self, parsed, account):
+        def owned_state():
+            try:
+                port, _ = self.server.modules.get("bg", account["id"])
+                conn = http.client.HTTPConnection("127.0.0.1", port, timeout=15)
+                try:
+                    conn.request("GET", "/api/state", headers={
+                        "X-Integration-Key": self.server.modules.key,
+                        "Host": f"127.0.0.1:{port}",
+                    })
+                    response = conn.getresponse()
+                    data = response.read(50 * 1024 * 1024 + 1)
+                    if response.status != 200 or len(data) > 50 * 1024 * 1024:
+                        raise ValueError("BG state unavailable")
+                    return json.loads(data)["state"]
+                finally:
+                    conn.close()
+            except (OSError, ValueError, KeyError, RuntimeError, http.client.HTTPException):
+                raise ResearchError(503, "PROJECT_STORAGE_UNAVAILABLE", "当前账号的企划存储暂不可用。") from None
+
+        try:
+            public_contract = parsed.path == RESEARCH_PREFIX + "/contract" and self.command in {"GET", "HEAD"}
+            if not public_contract:
+                research_authorize(account)
+            frontend_current = getattr(self.server, 'research_frontend_current', None)
+            if self.command == 'POST' and frontend_current and not frontend_current():
+                raise ResearchError(409, 'FRONTEND_SOURCE_CHANGED', 'Cursor前端已更新，当前联调快照过期。请重建最新前后端环境。')
+            body = None
+            if self.command == "POST" and parsed.path in {RESEARCH_PREFIX + suffix for suffix in (
+                    "/tasks", "/batches", "/imports", "/workbuddy/authorization", "/workbuddy/online", "/workbuddy/refresh")} | {'/bg/api/research/imports'}:
+                if self.headers.get("Content-Type", "").split(";", 1)[0].strip().lower() != "application/json":
+                    raise ResearchError(415, "JSON_REQUIRED", "研究请求必须使用 application/json。")
+                try:
+                    length = self._length(1024 * 1024)
+                except ValueError:
+                    raise ResearchError(413, "REQUEST_TOO_LARGE", "请求为空、长度无效或超过 1 MiB。") from None
+                try:
+                    body = json.loads(self.rfile.read(length))
+                except (ValueError, UnicodeDecodeError):
+                    raise ResearchError(400, "INVALID_JSON", "研究请求不是有效的 JSON。") from None
+            gateway = ResearchGateway(self.server.modules, account) if not public_contract else None
+            if parsed.path in {RESEARCH_PREFIX + '/imports/preview', '/bg/api/research/imports/preview'} and self.command == 'GET':
+                params = parse_qs(parsed.query, keep_blank_values=True)
+                if set(params) != {'projectId', 'dimensionId', 'taskId', 'resultVersion'} or any(len(v) != 1 for v in params.values()):
+                    raise ResearchError(422, 'INVALID_REQUEST', '请指定唯一项目、维度、任务及成果版本。')
+                value = {k: v[0] for k, v in params.items()}
+                try:
+                    value['resultVersion'] = int(value['resultVersion'])
+                except ValueError:
+                    raise ResearchError(422, 'INVALID_REQUEST', '成果版本无效。') from None
+                return self._json(200, ResearchSync(self.server.modules, account, gateway).preview(value))
+            if parsed.path in {RESEARCH_PREFIX + '/imports', '/bg/api/research/imports'} and self.command == 'POST':
+                return self._json(200, ResearchSync(self.server.modules, account, gateway).confirm(body))
+            status, value = research_handle(self.command, parsed.path, parsed.query, account, owned_state, body, gateway)
+            return self._json(status, value)
+        except ResearchError as error:
+            return self._json(error.status, error.response())
+
+    def _research_member(self, parsed):
+        """Narrow machine entry: preserve member auth; never substitute service auth."""
+        suffix = parsed.path.removeprefix('/platform/collab/research/')
+        read = suffix in {'info', 'pending'} and self.command == 'GET'
+        task = re.fullmatch(r'tasks/[A-Za-z0-9._-]{1,120}/(claim|heartbeat|status|complete|files/md|files/json)', suffix)
+        if parsed.query or not (read or task and (
+                self.command == 'POST' or task[1] == 'status' and self.command == 'GET')):
+            return self._error(404, '研究协作接口不存在。')
+        authorization = self.headers.get('Authorization', '')
+        account_id = self.headers.get('X-Research-Account', '')
+        if not re.fullmatch(r'Bearer cb_[A-Za-z0-9_-]{16,128}', authorization):
+            return self._error(401, '需要有效协作成员身份。')
+        if not re.fullmatch(r'[A-Za-z0-9_-]{1,120}', account_id):
+            return self._error(403, '账号路由无效。')
+        # Account id is a routing hint, not proof of identity. The selected gateway
+        # still validates the member token, assignment, project and execution lease.
+        with self.server.identity.db() as db:
+            active = db.execute('SELECT id FROM account WHERE id=? AND active=1', (account_id,)).fetchone()
+            grants = {r[0] for r in db.execute('SELECT module FROM grant_module WHERE account=?', (account_id,))}
+        if not active or not {'bg', 'ai'}.issubset(grants):
+            return self._error(403, '账号未获研究授权。')
+        try:
+            length = self._length(8 * 1024 * 1024)
+            body = self.rfile.read(length) if length else None
+            if body is not None and len(body) != length:
+                return self._error(400, '请求中途断开。')
+            port, _ = self.server.modules.get('ai', account_id)
+            headers = {'Authorization': authorization, 'Content-Type': self.headers.get('Content-Type', ''),
+                       'X-Research-Claim': self.headers.get('X-Research-Claim', ''),
+                       'X-Research-Lease': self.headers.get('X-Research-Lease', '')}
+            conn = http.client.HTTPConnection('127.0.0.1', port, timeout=45)
+            try:
+                conn.request(self.command, '/api/collab/research/' + suffix, body=body, headers=headers)
+                response = conn.getresponse(); raw = response.read(1024 * 1024 + 1)
+                if len(raw) > 1024 * 1024 or 300 <= response.status < 400:
+                    return self._error(502, '协作服务响应无效。')
+                return self._json(response.status, json.loads(raw))
+            finally:
+                conn.close()
+        except (OSError, RuntimeError, http.client.HTTPException):
+            return self._error(503, '研究协作服务暂不可用。')
+
     def _dispatch(self):
         server = self.server
         host = self.headers.get("Host")
@@ -237,8 +340,14 @@ class Handler(BaseHTTPRequestHandler):
             if path.endswith("/open") and self.command == "POST":
                 return self._json(200, {"url": server.launch_url()})
             return self._error(405, "操作方法无效。")
-        if not read and self.headers.get("Origin") != f"http://{host}":
+        member_entry = path.startswith('/platform/collab/research/')
+        origin = self.headers.get('Origin')
+        if not read and origin != f"http://{host}" and not (member_entry and origin is None):
             return self._error(403, "请求来源与平台入口不一致。")
+        if member_entry:
+            if origin is not None and origin != f'http://{host}':
+                return self._error(403, '请求来源与平台入口不一致。')
+            return self._research_member(parsed)
         identity = server.identity
         cookie = self._token()
         if path == "/platform/enter" and self.command == "GET":
@@ -269,6 +378,10 @@ class Handler(BaseHTTPRequestHandler):
             if not account:
                 return self._error(401, "登录已失效。")
             return self._json(200, {key: account[key] for key in ("id", "name", "modules")})
+        if path.startswith('/bg/api/research/internal/'):
+            return self._error(403, '研究写入只允许平台服务调用。')
+        if path == RESEARCH_PREFIX or path.startswith(RESEARCH_PREFIX + "/") or path in {'/bg/api/research/imports', '/bg/api/research/imports/preview'}:
+            return self._research(parsed, account)
         if read and (path == "/" or path in {f"/work/{m}" for m in MODULES}):
             return self._file(ROOT / "portal" / "index.html")
         if read and path.startswith("/platform/") and path.split("/")[-1] in PLATFORM_ASSETS:

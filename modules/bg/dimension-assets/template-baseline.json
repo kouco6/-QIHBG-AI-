@@ -1,0 +1,381 @@
+{
+  "schemaVersion": 1,
+  "scope": "shell+seed",
+  "scopeNote": "记录各维呈现壳（HTML/CSS/JS）与 seed 示例结构；不含平台工作台统一外壳（顶栏/侧轨等）。",
+  "activeBaselineId": "baseline-2026-11-13",
+  "versions": [
+    {
+      "id": "baseline-2026-11-13",
+      "label": "当前呈现基线",
+      "recordedAt": "2026-11-13",
+      "note": "首版基线：供后续多版本并存、对账与恢复。本轮管理页只读展示，不提供更新/恢复操作。",
+      "dimensions": {
+        "DIM-01": {
+          "name": "产品线齐全",
+          "shellFamily": "dedicated-01",
+          "workspaceEntry": "dim01WorkspacePage",
+          "primaryHtml": "dim01-v7.html",
+          "legacyHtml": "dim01-core.html",
+          "scripts": [],
+          "seeds": [],
+          "pattern": "矩阵卡片 · iframe",
+          "files": [
+            {
+              "path": "dim01-v7.html",
+              "sha256": "04882d4b0b9c3c63adfc50136bda972aa45f2a26113f509395bc788eadebd4be"
+            },
+            {
+              "path": "dim01-core.html",
+              "sha256": "81f601db629dc1b425822b42a14dabf36de8d062765b30af34cebbf8f4470624"
+            }
+          ]
+        },
+        "DIM-02": {
+          "name": "行业应用场景",
+          "shellFamily": "dedicated-02",
+          "workspaceEntry": "dim02WorkspacePage",
+          "primaryHtml": "dim02-core.html",
+          "legacyHtml": null,
+          "scripts": [
+            "dim02-workmode.js"
+          ],
+          "seeds": [],
+          "pattern": "双章场景 · iframe",
+          "files": [
+            {
+              "path": "dim02-core.html",
+              "sha256": "93d9c8a6282f72b1b599f2c11dbbc8542bd04eb6d5082366474bf4e86bad39b5"
+            },
+            {
+              "path": "dim02-workmode.js",
+              "sha256": "541c7dffd10e156e009734b24476a70e680e43f7b7de9b8758002d6d314adef5"
+            }
+          ]
+        },
+        "DIM-03": {
+          "name": "证书资质全",
+          "shellFamily": "dedicated-03",
+          "workspaceEntry": "dim03WorkspacePage",
+          "primaryHtml": "dim03-core.html",
+          "legacyHtml": null,
+          "scripts": [
+            "dim03-core.js"
+          ],
+          "seeds": [
+            "dim03-seed.json"
+          ],
+          "pattern": "资质卡片 · iframe",
+          "files": [
+            {
+              "path": "dim03-core.html",
+              "sha256": "6e1220e2e1674045d2a050bcac4f7bdf2302e8f52dc2ef43afb2fc18b2385921"
+            },
+            {
+              "path": "dim03-core.js",
+              "sha256": "c2e56391c5f43c2138405da28be6291b70a2abfcb4070207632b74cd8fedd37f"
+            },
+            {
+              "path": "dim03-seed.json",
+              "sha256": "a4f692562938839aa8b227c5fc76cc1268b14ae06d6e0c6ca78b8e22c4abd8e7"
+            }
+          ]
+        },
+        "DIM-04": {
+          "name": "技术先进",
+          "shellFamily": "dedicated-04",
+          "workspaceEntry": "dim04WorkspacePage",
+          "primaryHtml": "dim04-core.html",
+          "legacyHtml": "dim04-legacy.html",
+          "scripts": [
+            "dim04-core.js"
+          ],
+          "seeds": [
+            "dim04-seed.json"
+          ],
+          "pattern": "专题长页+对比表 · iframe",
+          "files": [
+            {
+              "path": "dim04-core.html",
+              "sha256": "1d94fef01e9e3e73893ade00039bbb4cd8de5749523840a8acecf348ecd6816a"
+            },
+            {
+              "path": "dim04-core.js",
+              "sha256": "c79b4ecc956184550ccb64a83b75c3bb15486a11f9e420d88f1ef855c7715b95"
+            },
+            {
+              "path": "dim04-seed.json",
+              "sha256": "2836492cc86d4fa06fd05542f64fff88d07bae13c4861bae88fdcc9af7f7d500"
+            },
+            {
+              "path": "dim04-legacy.html",
+              "sha256": "8ac2ad31d8127810e9bd4f85054cfc2ef835fc10f407097c36f1a3681e50b6e2"
+            }
+          ]
+        },
+        "DIM-05": {
+          "name": "功能强",
+          "shellFamily": "multi",
+          "workspaceEntry": "dimMultiWorkspacePage",
+          "primaryHtml": "dim-multi-core.html",
+          "legacyHtml": null,
+          "scripts": [
+            "dim-multi-core.js",
+            "dim-multi-platform.js"
+          ],
+          "seeds": [
+            "dim05-seed.json"
+          ],
+          "pattern": "四段连续页 · iframe ?dim=05",
+          "files": [
+            {
+              "path": "dim-multi-core.html",
+              "sha256": "0568b733f94500d0c5728d1be2c5ff483ace7b979570806edec781212f04a427"
+            },
+            {
+              "path": "dim-multi-core.js",
+              "sha256": "c2e0c28940b10fc3d367f9e42ff62790724778af029715a3a52e45762c5c5881"
+            },
+            {
+              "path": "dim-multi-platform.js",
+              "sha256": "53e815956730bbcc6497070f3ba512041142f15e2a720ec572565b715ec4865b"
+            },
+            {
+              "path": "dim05-seed.json",
+              "sha256": "4499a84cf8d32a001b1f78d86261112d879a90a0ebb5b7af91348d99c9601c96"
+            }
+          ]
+        },
+        "DIM-06": {
+          "name": "性能稳",
+          "shellFamily": "multi-06",
+          "workspaceEntry": "dimMultiWorkspacePage",
+          "primaryHtml": "dim06-core.html",
+          "legacyHtml": "dim-multi-core.html",
+          "scripts": [
+            "dim-multi-platform.js"
+          ],
+          "seeds": [
+            "dim06-seed.json"
+          ],
+          "pattern": "电子表/性能表 · iframe",
+          "files": [
+            {
+              "path": "dim06-core.html",
+              "sha256": "39fd27dd354f91885f1fd1431e01cc568f581c887080a9bd599a4c168464b968"
+            },
+            {
+              "path": "dim06-seed.json",
+              "sha256": "cd3e1d484253bd17d89bff45f6ad41f40c5d6c78f269cdfc2323077cdbec83c0"
+            },
+            {
+              "path": "dim-multi-core.html",
+              "sha256": "0568b733f94500d0c5728d1be2c5ff483ace7b979570806edec781212f04a427"
+            },
+            {
+              "path": "dim-multi-platform.js",
+              "sha256": "53e815956730bbcc6497070f3ba512041142f15e2a720ec572565b715ec4865b"
+            }
+          ]
+        },
+        "DIM-07": {
+          "name": "AI 智慧力",
+          "shellFamily": "multi",
+          "workspaceEntry": "dimMultiWorkspacePage",
+          "primaryHtml": "dim-multi-core.html",
+          "legacyHtml": null,
+          "scripts": [
+            "dim-multi-core.js",
+            "dim-multi-platform.js"
+          ],
+          "seeds": [
+            "dim07-seed.json"
+          ],
+          "pattern": "单表 · iframe ?dim=07",
+          "files": [
+            {
+              "path": "dim-multi-core.html",
+              "sha256": "0568b733f94500d0c5728d1be2c5ff483ace7b979570806edec781212f04a427"
+            },
+            {
+              "path": "dim-multi-core.js",
+              "sha256": "c2e0c28940b10fc3d367f9e42ff62790724778af029715a3a52e45762c5c5881"
+            },
+            {
+              "path": "dim-multi-platform.js",
+              "sha256": "53e815956730bbcc6497070f3ba512041142f15e2a720ec572565b715ec4865b"
+            },
+            {
+              "path": "dim07-seed.json",
+              "sha256": "d03d0628067600986109a999e80b622101e1441b8248327a857e109be0e6dbd9"
+            }
+          ]
+        },
+        "DIM-08": {
+          "name": "成本优势",
+          "shellFamily": "bid",
+          "workspaceEntry": "dimMultiWorkspacePage",
+          "primaryHtml": "dim-bid-core.html",
+          "legacyHtml": null,
+          "scripts": [
+            "dim-bid-core.js",
+            "dim-multi-platform.js"
+          ],
+          "seeds": [
+            "dim08-seed.json"
+          ],
+          "pattern": "BOM+对比 · iframe ?dim=08",
+          "files": [
+            {
+              "path": "dim-bid-core.html",
+              "sha256": "c7b99c39c6a91f959e8dce1fa3affb4e8a05547ac97f681d8ea4c022caabb424"
+            },
+            {
+              "path": "dim-bid-core.js",
+              "sha256": "9e3eb97de1096d104ad32847efe93698b7a97f41dafc53b460e41ae0eebfbe0b"
+            },
+            {
+              "path": "dim-multi-platform.js",
+              "sha256": "53e815956730bbcc6497070f3ba512041142f15e2a720ec572565b715ec4865b"
+            },
+            {
+              "path": "dim08-seed.json",
+              "sha256": "aad31c86f285cb4ebc3b1e92a7728755621e277d436363494a68405a8b93765f"
+            }
+          ]
+        },
+        "DIM-09": {
+          "name": "控标能力强",
+          "shellFamily": "bid",
+          "workspaceEntry": "dimMultiWorkspacePage",
+          "primaryHtml": "dim-bid-core.html",
+          "legacyHtml": null,
+          "scripts": [
+            "dim-bid-core.js",
+            "dim-multi-platform.js"
+          ],
+          "seeds": [
+            "dim09-seed.json"
+          ],
+          "pattern": "原文条款+控标点 · iframe ?dim=09",
+          "files": [
+            {
+              "path": "dim-bid-core.html",
+              "sha256": "c7b99c39c6a91f959e8dce1fa3affb4e8a05547ac97f681d8ea4c022caabb424"
+            },
+            {
+              "path": "dim-bid-core.js",
+              "sha256": "9e3eb97de1096d104ad32847efe93698b7a97f41dafc53b460e41ae0eebfbe0b"
+            },
+            {
+              "path": "dim-multi-platform.js",
+              "sha256": "53e815956730bbcc6497070f3ba512041142f15e2a720ec572565b715ec4865b"
+            },
+            {
+              "path": "dim09-seed.json",
+              "sha256": "bc4090b40f103bfead7805f180c7663a18da1df4aa6fedce7cd07bb22e4c008a"
+            }
+          ]
+        },
+        "DIM-10": {
+          "name": "应标能力强",
+          "shellFamily": "bid",
+          "workspaceEntry": "dimMultiWorkspacePage",
+          "primaryHtml": "dim-bid-core.html",
+          "legacyHtml": null,
+          "scripts": [
+            "dim-bid-core.js",
+            "dim-multi-platform.js"
+          ],
+          "seeds": [
+            "dim10-seed.json"
+          ],
+          "pattern": "应标统计+整合表 · iframe ?dim=10",
+          "files": [
+            {
+              "path": "dim-bid-core.html",
+              "sha256": "c7b99c39c6a91f959e8dce1fa3affb4e8a05547ac97f681d8ea4c022caabb424"
+            },
+            {
+              "path": "dim-bid-core.js",
+              "sha256": "9e3eb97de1096d104ad32847efe93698b7a97f41dafc53b460e41ae0eebfbe0b"
+            },
+            {
+              "path": "dim-multi-platform.js",
+              "sha256": "53e815956730bbcc6497070f3ba512041142f15e2a720ec572565b715ec4865b"
+            },
+            {
+              "path": "dim10-seed.json",
+              "sha256": "d8c73bf3cbd9f499e17e176bd774c2d3e08a9686e8b7c6ae58aefd4210501d44"
+            }
+          ]
+        },
+        "DIM-11": {
+          "name": "外观高档大气",
+          "shellFamily": "final",
+          "workspaceEntry": "dimMultiWorkspacePage",
+          "primaryHtml": "dim-final-core.html",
+          "legacyHtml": null,
+          "scripts": [
+            "dim-final-core.js",
+            "dim-multi-platform.js"
+          ],
+          "seeds": [
+            "dim11-seed.json"
+          ],
+          "pattern": "外观画廊+详情抽屉 · iframe ?dim=11",
+          "files": [
+            {
+              "path": "dim-final-core.html",
+              "sha256": "0bc43a9dae5347ed293dbbf1eeaf675900ea3871186e2e475bd8000774ad3499"
+            },
+            {
+              "path": "dim-final-core.js",
+              "sha256": "d86d1027d3a7f10c04757174ff6a8385e40eac02246c71b31632ecf5647d1fe0"
+            },
+            {
+              "path": "dim-multi-platform.js",
+              "sha256": "53e815956730bbcc6497070f3ba512041142f15e2a720ec572565b715ec4865b"
+            },
+            {
+              "path": "dim11-seed.json",
+              "sha256": "e4f57f7cc5f1e582d8fd79c2bc96eb44227ef975546234d25965aab518a07e3a"
+            }
+          ]
+        },
+        "DIM-12": {
+          "name": "体验感好",
+          "shellFamily": "final",
+          "workspaceEntry": "dimMultiWorkspacePage",
+          "primaryHtml": "dim-final-core.html",
+          "legacyHtml": null,
+          "scripts": [
+            "dim-final-core.js",
+            "dim-multi-platform.js"
+          ],
+          "seeds": [
+            "dim12-seed.json"
+          ],
+          "pattern": "运维规划矩阵 · iframe ?dim=12",
+          "files": [
+            {
+              "path": "dim-final-core.html",
+              "sha256": "0bc43a9dae5347ed293dbbf1eeaf675900ea3871186e2e475bd8000774ad3499"
+            },
+            {
+              "path": "dim-final-core.js",
+              "sha256": "d86d1027d3a7f10c04757174ff6a8385e40eac02246c71b31632ecf5647d1fe0"
+            },
+            {
+              "path": "dim-multi-platform.js",
+              "sha256": "53e815956730bbcc6497070f3ba512041142f15e2a720ec572565b715ec4865b"
+            },
+            {
+              "path": "dim12-seed.json",
+              "sha256": "717c3e0a475e36a9223ba6a572a09255d733ce1b4d70b4039e658fbded25927c"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

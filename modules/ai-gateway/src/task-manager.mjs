@@ -14,7 +14,7 @@ const PUBLIC_FIELDS = [
   "summary", "conclusions", "risks", "nextActions", "structured",
   "artifacts", "runs", "readAt", "archivedAt", "preview",
   // 成本观测：这次派活到底烧了多少 token（钱由单价算出，不落库）
-  "usage",
+  "usage", "research",
 ];
 
 /**
@@ -113,7 +113,7 @@ export class TaskManager {
     let restored = 0;
     let interrupted = 0;
     for (const record of records) {
-      if (this.tasks.size >= this.maxTasks) break;
+      if (this.tasks.size >= this.maxTasks && !record?.research) continue;
       if (!record || typeof record.id !== "string" || this.tasks.has(record.id)) continue;
       const task = {
         id: record.id,
@@ -155,6 +155,8 @@ export class TaskManager {
         risks: Array.isArray(record.risks) ? record.risks : [],
         nextActions: Array.isArray(record.nextActions) ? record.nextActions : [],
         structured: record.structured ?? false,
+        research: record.research ?? null,
+        skills: record.skills ?? [],
         artifacts: Array.isArray(record.artifacts) ? record.artifacts : [],
         runs: Array.isArray(record.runs) ? record.runs : [],
         usage: normalizeUsage(record.usage),
@@ -168,7 +170,8 @@ export class TaskManager {
         controller: new AbortController(),
         restored: true,
       };
-      if (["queued", "running", "waiting_approval"].includes(task.status)) {
+      if (["queued", "running", "waiting_approval"].includes(task.status) &&
+          !(task.status === "queued" && task.research?.transport === "local-pull")) {
         task.status = "interrupted";
         task.error = "Gateway restarted before this task finished";
         task.terminationReason = "gateway_restart";
@@ -176,6 +179,7 @@ export class TaskManager {
         interrupted += 1;
       }
       this.tasks.set(task.id, task);
+      if (task.status === "queued" && task.research?.transport === "local-pull") this.queue.push(task.id);
       if (task.idempotencyKey) this.idempotency.set(task.idempotencyKey, task.id);
       restored += 1;
     }
@@ -240,6 +244,11 @@ export class TaskManager {
       subscribers: new Set(),
       controller: new AbortController(),
     };
+    // Research must have a durable draft before it is visible or dispatched.
+    if (task.research) {
+      if (!draft || !this.persist) throw new Error("Research requires a persistent draft");
+      this.persist(task, idempotencyKey);
+    }
     this.tasks.set(task.id, task);
     if (options?.toolContext) this.toolContexts.set(task.id, options.toolContext);
     if (idempotencyKey) this.idempotency.set(idempotencyKey, task.id);
@@ -261,6 +270,30 @@ export class TaskManager {
     return [...this.tasks.values()].reverse().map((task) => publicTask(task));
   }
 
+  // Internal WorkBuddy transport journal, stored on the existing research task.
+  // Fail closed before any dispatch; never hide a failed durable checkpoint.
+  researchCheckpoint(id, transport) {
+    const task = this.tasks.get(id);
+    if (!task?.research || !this.persist) throw new Error("Durable research task required");
+    const previous = task.research.workbuddy;
+    task.research.workbuddy = { ...transport };
+    try { this.persist(task, task.idempotencyKey); }
+    catch (error) { task.research.workbuddy = previous; throw error; }
+  }
+
+  /** External executors share this task record and queue; persist before exposing a transition. */
+  researchTransition(id, patch) {
+    const task = this.tasks.get(id);
+    if (!task?.research || !this.persist) throw new Error("Durable research task required");
+    const candidate = { ...task, ...patch, updatedAt: new Date().toISOString() };
+    this.persist(candidate, candidate.idempotencyKey);
+    Object.assign(task, candidate);
+    if (task.status !== "queued") this.queue = this.queue.filter(value => value !== id);
+    else if (!this.queue.includes(id)) this.queue.push(id);
+    this.#event(task, "gateway", { status: task.status, executor: task.research.executor });
+    return publicTask(task);
+  }
+
   get(id, includeEvents = false) {
     const task = this.tasks.get(id);
     return task ? publicTask(task, includeEvents) : null;
@@ -269,6 +302,12 @@ export class TaskManager {
   cancel(id) {
     const task = this.tasks.get(id);
     if (!task) return null;
+    if (task.research?.transport === "local-pull" && task.research.localPull?.claim)
+      throw new Error("已领取研究须确认执行端停止，不能仅在平台取消或释放租约");
+    if (task.research?.transport === "local-pull" && ["draft","queued"].includes(task.status))
+      return this.researchTransition(id,{status:"cancelled",terminationReason:"cancelled",finishedAt:new Date().toISOString()});
+    if (task.research?.workbuddy?.dispatchPhase)
+      throw new Error("WorkBuddy 原生取消未核实，不能把本地取消当作研究已停止");
     if (task.status === "draft") {
       task.status = "cancelled";
       task.terminationReason = "cancelled";
@@ -296,6 +335,7 @@ export class TaskManager {
   update(id, patch = {}) {
     const task = this.tasks.get(id);
     if (!task) return null;
+    if (task.research) throw new Error("研究任务关联及执行配置只读；重新研究须创建新版本");
     if (typeof patch.label === "string") task.label = patch.label.trim().slice(0, 120);
     if (typeof patch.title === "string") task.label = patch.title.trim().slice(0, 120);
     if (patch.tags !== undefined) task.tags = normalizeTags(patch.tags);
@@ -320,6 +360,11 @@ export class TaskManager {
   archive(id, archived = true) {
     const task = this.tasks.get(id);
     if (!task) return null;
+    if (task.research) {
+      task.archivedAt = archived ? new Date().toISOString() : null;
+      this.#save(task);
+      return publicTask(task);
+    }
     if (archived) {
       task.archivedAt = new Date().toISOString();
       task.status = "archived";
@@ -338,6 +383,7 @@ export class TaskManager {
   dispatch(id) {
     const task = this.tasks.get(id);
     if (!task) return null;
+    if (task.research?.transport === "local-pull") throw new Error("本地领取任务不能派给通用 Runner");
     if (task.status !== "draft") return publicTask(task);
     task.status = "queued";
     task.updatedAt = new Date().toISOString();
@@ -356,6 +402,7 @@ export class TaskManager {
   rerun(id, { resume = false } = {}) {
     const task = this.tasks.get(id);
     if (!task) return null;
+    if (task.research) throw new Error("研究重试须经受理端创建新任务版本，不能覆盖原始版本");
     if (["queued", "running", "waiting_approval"].includes(task.status)) return publicTask(task);
     if (!resume) task.threadId = null;
     task.status = "queued";
@@ -484,6 +531,11 @@ export class TaskManager {
     try {
       this.persist(task, task.idempotencyKey);
     } catch (error) {
+      if (task.research) {
+        task.status = "interrupted";
+        task.terminationReason = "research_persistence_failed";
+        task.error = "RESEARCH_PERSISTENCE_FAILED";
+      }
       process.stderr.write(`[task-manager] persist failed: ${error?.message || error}\n`);
     }
   }
@@ -537,7 +589,9 @@ export class TaskManager {
 
   #schedule() {
     while (this.running < this.concurrency && this.queue.length) {
-      const id = this.queue.shift();
+      const index = this.queue.findIndex(id => this.tasks.get(id)?.research?.transport !== "local-pull");
+      if (index < 0) break;
+      const [id] = this.queue.splice(index, 1);
       const task = this.tasks.get(id);
       if (!task || task.status !== "queued") continue;
       this.#run(task);
@@ -553,6 +607,9 @@ export class TaskManager {
     task.currentRunId = runId;
     this.#event(task, "gateway", { status: "running", runId });
     this.#save(task);
+    if (task.research && task.status !== "running") {
+      this.running -= 1; this.#schedule(); return;
+    }
     try {
       const result = await this.runner(task, {
         signal: task.controller.signal,
@@ -632,8 +689,9 @@ export class TaskManager {
           artifactIds: (task.artifacts ?? []).map((item) => item.id),
         },
       ].slice(-20);
+      if (task.research) this.#save(task);
       this.#event(task, "gateway", { status: task.status, error: task.error, runId });
-      this.#save(task);
+      if (!task.research) this.#save(task);
       this.toolContexts.delete(task.id);
       this.running -= 1;
       this.#schedule();
@@ -643,6 +701,7 @@ export class TaskManager {
   #trim() {
     if (this.tasks.size <= this.maxTasks) return;
     for (const [id, task] of this.tasks) {
+      if (task.research) continue;
       if (["queued", "running", "waiting_approval"].includes(task.status)) continue;
       this.tasks.delete(id);
       if (this.tasks.size <= this.maxTasks) break;

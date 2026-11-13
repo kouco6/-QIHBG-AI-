@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Local Planning BG server with durable first-round WorkBuddy handoff."""
 import argparse
+import hmac
 import json
 import os
 import re
@@ -12,6 +13,9 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from round1_service import Round1Error, Round1Service
+from planning_ledger import LedgerError, ProjectLedger
+from planning_dashboard import dashboard_contract, query_dashboard
+from research_sync import import_working
 
 ROOT = Path(__file__).resolve().parent
 DB = ROOT / 'platform.sqlite3'
@@ -37,6 +41,8 @@ DIM_MULTI_SEEDS = {f'DIM-{number:02d}': ROOT / 'dimension-assets' / f'dim{number
 LOCK = threading.RLock()
 CSRF_TOKEN = secrets.token_urlsafe(32)
 ROUND1 = Round1Service(DB, ROOT, LOCK)
+LEDGER = ProjectLedger(business_timezone=os.getenv('PLATFORM_BUSINESS_TIMEZONE', 'Asia/Shanghai'),
+                       week_start=int(os.getenv('PLATFORM_BUSINESS_WEEK_START', '0')))
 
 
 def initial_state():
@@ -44,12 +50,20 @@ def initial_state():
 
 
 def connect():
-    db = sqlite3.connect(DB)
-    db.execute('PRAGMA journal_mode=WAL')
-    db.execute('CREATE TABLE IF NOT EXISTS app_state (id INTEGER PRIMARY KEY CHECK (id=1), revision INTEGER NOT NULL, value TEXT NOT NULL)')
-    db.execute('INSERT OR IGNORE INTO app_state VALUES (1, 0, ?)', (json.dumps(initial_state(), ensure_ascii=False),))
-    db.commit()
-    return db
+    db = sqlite3.connect(DB, timeout=8)
+    try:
+        db.execute('PRAGMA journal_mode=WAL')
+        db.execute('BEGIN IMMEDIATE')
+        db.execute('CREATE TABLE IF NOT EXISTS app_state (id INTEGER PRIMARY KEY CHECK (id=1), revision INTEGER NOT NULL, value TEXT NOT NULL)')
+        db.execute('INSERT OR IGNORE INTO app_state VALUES (1, 0, ?)', (json.dumps(initial_state(), ensure_ascii=False),))
+        revision, raw = db.execute('SELECT revision,value FROM app_state WHERE id=1').fetchone()
+        LEDGER.migrate(db, json.loads(raw), revision)
+        db.commit()
+        return db
+    except Exception:
+        db.rollback()
+        db.close()
+        raise
 
 
 def get_state():
@@ -589,7 +603,7 @@ def valid_state(new, old):
             for version in item['versions']:
                 prior_version = old_by_id.get(version['id'])
                 if prior_version is None:
-                    if version.get('kind') != 'draft':
+                    if version.get('kind') not in ('draft', 'working-backup'):
                         applied_updates.append(version)
                     continue
                 if version == prior_version:
@@ -668,8 +682,33 @@ class Handler(BaseHTTPRequestHandler):
         if not self.safe_local_request():
             return
         path = urlparse(self.path).path
+        if path == '/api/planning-dashboard/contract':
+            self.send_json(200, dashboard_contract())
+            return
+        if path == '/api/planning-dashboard':
+            try:
+                with LOCK, connect() as db:
+                    value = query_dashboard(db, LEDGER, urlparse(self.path).query)
+                self.send_json(200, value)
+            except LedgerError as exc:
+                self.send_json(exc.status, {'code': exc.code, 'error': str(exc)})
+            except sqlite3.Error:
+                self.send_json(503, {'code': 'DASHBOARD_STORAGE_UNAVAILABLE', 'error': '统计存储暂不可用，请重试。'})
+            except (ValueError, TypeError, KeyError):
+                self.send_json(503, {'code': 'DASHBOARD_DATA_UNAVAILABLE', 'error': '统计数据无法可靠读取，未返回替代数字。'})
+            return
+        if path.startswith('/api/planning-dashboard/'):
+            self.send_json(404, {'code': 'ENDPOINT_NOT_FOUND', 'error': '看板接口不存在。'})
+            return
         if path == '/api/state':
-            rev, state = get_state()
+            try:
+                rev, state = get_state()
+            except LedgerError as exc:
+                self.send_json(exc.status, {'code': exc.code, 'error': str(exc)})
+                return
+            except sqlite3.Error:
+                self.send_json(503, {'code': 'PROJECT_STORAGE_UNAVAILABLE', 'error': '项目存储暂不可用。'})
+                return
             self.send_json(200, {'revision': rev, 'state': state})
             return
         if path == '/api/session':
@@ -677,6 +716,16 @@ class Handler(BaseHTTPRequestHandler):
             return
         if path == '/api/health':
             self.send_json(200, {'storage': 'sqlite', 'workbuddy_api': 'configured' if os.getenv('WORKBUDDY_ACCESS_TOKEN') else 'not_configured', 'round1': 'DIM-01 manual handoff available'})
+            return
+        if path == '/dimension-assets/template-baseline.json':
+            payload = (ROOT / 'dimension-assets' / 'template-baseline.json').read_bytes()
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.send_header('Cache-Control', 'no-store')
+            self.send_header('Content-Length', str(len(payload)))
+            self.end_headers()
+            if self.command != 'HEAD':
+                self.wfile.write(payload)
             return
         if path == '/dimension-assets/platform-shell.css':
             payload = (ROOT / 'dimension-assets' / 'platform-shell.css').read_bytes()
@@ -686,6 +735,16 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header('Cache-Control', 'no-store')
             self.end_headers()
             self.wfile.write(payload)
+            return
+        if path in ('/dimension-assets/theme-a.css', '/dimension-assets/theme-a-chrome.css'):
+            payload = (ROOT / 'dimension-assets' / path.rsplit('/', 1)[-1]).read_bytes()
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/css; charset=utf-8')
+            self.send_header('Content-Length', str(len(payload)))
+            self.send_header('Cache-Control', 'no-store')
+            self.end_headers()
+            if self.command != 'HEAD':
+                self.wfile.write(payload)
             return
         if path in ('/dimension-assets/dim01-core.html', '/dimension-assets/dim01-v7.html'):
             source = DIM01_CORE if path.endswith('dim01-core.html') else DIM01_CORE.with_name('dim01-v7.html')
@@ -783,7 +842,11 @@ class Handler(BaseHTTPRequestHandler):
         if path not in ('/', '/index.html'):
             self.send_error(404)
             return
-        rev, state = get_state()
+        try:
+            rev, state = get_state()
+        except (LedgerError, sqlite3.Error):
+            self.send_json(503, {'code': 'PROJECT_STORAGE_UNAVAILABLE', 'error': '项目存储或事件配置暂不可用。'})
+            return
         boot = json.dumps({'revision': rev, 'state': state, 'csrfToken': CSRF_TOKEN}, ensure_ascii=False).replace('<', '\\u003c')
         html = INDEX.read_text(encoding='utf-8').replace('/*__BOOT__*/', 'window.__BOOT__=' + boot + ';')
         data = html.encode('utf-8')
@@ -797,6 +860,9 @@ class Handler(BaseHTTPRequestHandler):
     def do_PUT(self):
         if not self.safe_local_request(mutation=True):
             return
+        if urlparse(self.path).path.startswith('/api/planning-dashboard'):
+            self.send_json(405, {'code': 'METHOD_NOT_ALLOWED', 'error': '看板统计接口只读。'})
+            return
         if urlparse(self.path).path != '/api/state':
             self.send_error(404)
             return
@@ -804,18 +870,12 @@ class Handler(BaseHTTPRequestHandler):
             payload = self.read_json()
             expected, new_state = payload['revision'], payload['state']
             with LOCK, connect() as db:
-                revision, raw = db.execute('SELECT revision,value FROM app_state WHERE id=1').fetchone()
-                old_state = json.loads(raw)
-                if expected != revision:
-                    self.send_json(409, {'error': 'State changed in another window', 'revision': revision})
-                    return
-                ok, reason = valid_state(new_state, old_state)
-                if not ok:
-                    self.send_json(400, {'error': reason})
-                    return
-                db.execute('UPDATE app_state SET revision=?,value=? WHERE id=1', (revision + 1, json.dumps(new_state, ensure_ascii=False)))
-                db.commit()
-            self.send_json(200, {'revision': revision + 1})
+                result = LEDGER.save(db, expected, new_state, valid_state, self.headers.get('X-Idempotency-Key'))
+            self.send_json(200, result)
+        except LedgerError as exc:
+            self.send_json(exc.status, {'code': exc.code, 'error': str(exc)})
+        except sqlite3.Error:
+            self.send_json(503, {'code': 'PROJECT_SAVE_UNAVAILABLE', 'error': '项目未可靠保存，未报告成功。请重试或核对存储。'})
         except Round1Error as exc:
             self.send_json(exc.status, {'error': str(exc)})
         except (ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
@@ -825,6 +885,26 @@ class Handler(BaseHTTPRequestHandler):
         if not self.safe_local_request(mutation=True):
             return
         path = urlparse(self.path).path
+        if path == '/api/research/internal/import':
+            expected = os.getenv('BG_INTEGRATION_KEY', '')
+            if not expected or not hmac.compare_digest(self.headers.get('X-Research-Sync', ''), expected):
+                self.send_json(403, {'code': 'RESEARCH_SERVICE_FORBIDDEN', 'error': '仅接受平台验证后的研究成果。'})
+                return
+            try:
+                payload = self.read_json()
+                with LOCK, connect() as db:
+                    result = import_working(db, LEDGER, payload, valid_state)
+                self.send_json(200, result)
+            except LedgerError as exc:
+                self.send_json(exc.status, {'code': exc.code, 'error': str(exc)})
+            except sqlite3.Error:
+                self.send_json(503, {'code': 'RESEARCH_IMPORT_UNCONFIRMED', 'error': '同步未可靠确认，请核对后重试同一任务版本。'})
+            except (ValueError, KeyError, TypeError):
+                self.send_json(422, {'code': 'INVALID_RESEARCH_IMPORT', 'error': '研究成果或同步请求格式无效。'})
+            return
+        if path.startswith('/api/planning-dashboard'):
+            self.send_json(405, {'code': 'METHOD_NOT_ALLOWED', 'error': '看板统计接口只读。'})
+            return
         if not path.startswith('/api/workbuddy/round1/'):
             self.send_error(404)
             return

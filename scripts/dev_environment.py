@@ -150,7 +150,17 @@ def build(args, workspace):
     require(deps['python_lock_sha256'] == sha(TOOL_ROOT / 'config/dev-python-macos-arm64.lock'),
             'Python lock changed; install fresh dependencies')
     dest = fresh(base, 'builds')
-    names = [n.decode() for n in git(workspace, 'ls-files', '-z').split(b'\0') if n]
+    # Freeze blob IDs in one read so parallel unstaged work cannot enter this
+    # build, and later index updates cannot mix two source versions mid-copy.
+    staged = {}
+    if getattr(args, 'staged', False):
+        for entry in git(workspace, 'ls-files', '--stage', '-z').split(b'\0'):
+            if not entry: continue
+            metadata, raw_name = entry.split(b'\t', 1)
+            mode, blob, stage = metadata.decode().split()
+            require(stage == '0', 'Resolve index conflicts before building')
+            staged[raw_name.decode()] = (mode, blob)
+    names = list(staged) if staged else [n.decode() for n in git(workspace, 'ls-files', '-z').split(b'\0') if n]
     inputs = {}
     for name in names:
         if not name.startswith(('modules/', 'scripts/', 'portal/')):
@@ -158,9 +168,11 @@ def build(args, workspace):
         if name == 'scripts/platform_identity.py':
             raise RuntimeError('Real identity module must never be a build input')
         source = workspace / name
-        if source.is_symlink() or not source.is_file():
+        if staged and staged[name][0] not in {'100644', '100755'}:
+            raise RuntimeError('Staged build input must be a regular file: ' + name)
+        if not staged and (source.is_symlink() or not source.is_file()):
             raise RuntimeError('Build input must be a regular tracked file: ' + name)
-        content = source.read_bytes()
+        content = git(workspace, 'cat-file', 'blob', staged[name][1]) if staged else source.read_bytes()
         if content.startswith(b'SQLite format 3\0'):
             raise RuntimeError('Refusing database as source input')
         inputs[name] = hashlib.sha256(content).hexdigest()
@@ -168,7 +180,48 @@ def build(args, workspace):
         target = dest / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(content)
+    for theme_name in ('modules/bg/dimension-assets/theme-a.css',
+                       'modules/bg/dimension-assets/theme-a-chrome.css'):
+        theme_file = workspace / theme_name
+        if theme_file.is_file() and theme_name not in inputs:
+            content = theme_file.read_bytes()
+            inputs[theme_name] = hashlib.sha256(content).hexdigest()
+            target = dest / ('runtime/' + theme_name[len('modules/'):])
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(content)
     # Public credential-free template and tool may be newer than workspace HEAD.
+    frontend_workspace = getattr(args, 'frontend_workspace', None)
+    frontend_source = None
+    if frontend_workspace:
+        frontend_workspace = frontend_workspace.resolve()
+        require(Path(git(frontend_workspace, 'rev-parse', '--show-toplevel').decode().strip()).resolve() == frontend_workspace,
+                'Frontend overlay must be an explicit Git workspace')
+        frontend_source = {'workspace': str(frontend_workspace),
+                           'git_head': git(frontend_workspace, 'rev-parse', 'HEAD').decode().strip(), 'files': {}}
+        frontend_names = [n.decode() for n in git(frontend_workspace, 'ls-files', '-z').split(b'\0') if n]
+        def is_frontend(name):
+            return name == 'modules/bg/index.html' or name.startswith((
+                'portal/', 'modules/bg/dimension-assets/', 'modules/ai-gateway/public/',
+                'modules/experience/frontend/'))
+        frontend_names = sorted(name for name in frontend_names if is_frontend(name))
+        for extra in ('modules/bg/dimension-assets/template-baseline.json',
+                      'modules/bg/dimension-assets/theme-a.css',
+                      'modules/bg/dimension-assets/theme-a-chrome.css'):
+            if (frontend_workspace / extra).is_file() and extra not in frontend_names:
+                frontend_names.append(extra)
+        for name in frontend_names:
+            source = frontend_workspace / name
+            require(source.is_file() and not source.is_symlink(), 'Invalid frontend source overlay')
+            content = source.read_bytes()
+            target = dest / ('runtime/' + name[len('modules/'):] if name.startswith('modules/') else name)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(content)
+            inputs[name] = hashlib.sha256(content).hexdigest()
+            inputs['frontend-workspace/' + name] = hashlib.sha256(content).hexdigest()
+            frontend_source['files'][name] = hashlib.sha256(content).hexdigest()
+            if name == 'modules/bg/index.html':
+                target.write_bytes(content.replace(b'</head>', ('<meta name="platform-frontend-source" content="' +
+                                   frontend_source['files'][name] + '"></head>').encode(), 1))
     template = TOOL_ROOT / 'scripts/dev_support/identity.py'
     target = dest / 'scripts/dev_support/identity.py'
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -192,8 +245,9 @@ def build(args, workspace):
     # Reuse existing integration transforms without invoking their ZIP rebuild.
     old_path = list(sys.path)
     try:
-        sys.path.insert(0, str(workspace / 'scripts'))
-        spec = importlib.util.spec_from_file_location('dev001_adapters', workspace / 'scripts/adapt_sources.py')
+        script_source = dest / 'scripts' if staged else workspace / 'scripts'
+        sys.path.insert(0, str(script_source))
+        spec = importlib.util.spec_from_file_location('dev001_adapters', script_source / 'adapt_sources.py')
         adapters = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(adapters)
         for module, transform in [('bg', adapters.bg), ('ai-gateway', adapters.ai), ('experience', adapters.experience)]:
@@ -215,7 +269,8 @@ def build(args, workspace):
     record = {'status': 'PASS', 'workspace': str(workspace), 'build_dir': str(dest),
               'git_head': git(workspace, 'rev-parse', 'HEAD').decode().strip(),
               'source_fingerprint': fingerprint, 'inputs': inputs, 'outputs': outputs,
-              'dependencies': deps, 'test_only_probe': probe}
+              'dependencies': deps, 'test_only_probe': probe, 'frontend_source': frontend_source,
+              'source_mode': 'git-index' if staged else 'working-tree'}
     dump(dest / 'manifest.json', record)
     return {k: v for k, v in record.items() if k not in ('inputs', 'outputs', 'dependencies')}
 
@@ -410,6 +465,8 @@ def main():
     p.add_argument('--npm-cache', type=Path, required=True)
     p = commands.add_parser('build')
     p.add_argument('--deps', type=Path, required=True)
+    p.add_argument('--staged', action='store_true', help='Build immutable staged blobs; exclude parallel unstaged changes')
+    p.add_argument('--frontend-workspace', type=Path, help='Explicit read-only frontend overlay for joint isolated integration; never merges branches')
     p.add_argument('--probe', action='store_true', help='Add a declared source overlay in the NEW test snapshot only')
     for name in ('smoke', 'worker', 'start'):
         p = commands.add_parser(name)

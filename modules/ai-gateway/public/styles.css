@@ -4448,8 +4448,8 @@ body.wb-dlg-open { overflow: hidden; overscroll-behavior: contain; }
 .sidebar .nav { flex: 1; min-height: 0; overflow: auto; scrollbar-width: thin; gap: 8px; padding: 0 10px 8px; }
 .sidebar .nav-item { height: 44px; padding: 0 12px 0 14px; border: 0; border-radius: 12px; color: #566f8c; font-size: 13px; font-weight: 600; transform: none; box-shadow: none; }
 .sidebar .nav-item:hover { background: #f3f8fe; color: #173655; transform: none; }
-.sidebar .nav-item.active { background: #e9f3ff; color: #1376d1; font-weight: 700; border-color: transparent; box-shadow: none; }
-.sidebar .nav-item.active:hover { background: #e9f3ff; color: #1376d1; }
+.sidebar .nav-item.active { background: #eaf2fb; color: #2462a8; font-weight: 700; border-color: transparent; box-shadow: none; }
+.sidebar .nav-item.active:hover { background: #eaf2fb; color: #2462a8; }
 .sidebar .nav-item.active::before { left: 0; top: 10px; bottom: 10px; width: 3px; border-radius: 4px; background: #1877d8; box-shadow: none; }
 .sidebar .nav-icon, .sidebar .nav-icon svg { width: 18px; height: 18px; }
 .side-toggle { display: flex; align-items: center; gap: 8px; width: calc(100% - 20px); min-height: 36px; margin: 8px 10px; padding: 0 10px; border: 1px solid #dce5f0; border-radius: 8px; background: #fff; color: #536a85; font-size: 13px; }

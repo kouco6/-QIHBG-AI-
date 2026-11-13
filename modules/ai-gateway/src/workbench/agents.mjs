@@ -34,23 +34,13 @@ export const AGENTS = [
     limits: "依赖本机 Claude Code 与它配置的上游（代理没开就不可用）",
     available: false,
   },
-  // WorkBuddy 暂不在册（2026-11-02 龙斌决定先拿下，等 API 到手再加回）。
-  // 它走的是标准 OpenAI 兼容通道，加回来不需要改代码：员工页「新建员工」填
-  // Base URL + 模型名 + Key 即可。若要恢复成内置位，把下面这段放回 AGENTS：
-  //
-  // {
-  //   id: "workbuddy",
-  //   name: "WorkBuddy",
-  //   summary: "带工具链的全能执行：读写文件、跑命令、联网、出文档",
-  //   provider: "cloud",
-  //   transport: "workbuddy-api",
-  //   // 刻意不挂 longform / long-context / summarize：那是豆包、Kimi 的定位。
-  //   // 否则能力集最大的员工会在自动路由里通吃，其它员工变成摆设。
-  //   capabilities: ["code", "files", "shell", "office-files", "web"],
-  //   strengths: "读写本地文件、执行命令、联网检索，并直接产出 Word/PPT/Excel",
-  //   limits: "需要填写 WorkBuddy 的 API 地址与 Key；没填时不可派活",
-  //   available: false,
-  // },
+  {
+    id: "workbuddy", name: "WorkBuddy", provider: "workbuddy-localassistant",
+    transport: "workbuddy-localassistant-oauth",
+    summary: "员工本地原生 Skill 专业研究；需独立 OAuth 接入",
+    capabilities: [], strengths: "原生专业 Skill 与真实研究",
+    limits: "须核实授权、在线、指定 Skill 执行与完整双成果回传", available: false,
+  },
   {
     id: "doubao",
     name: "豆包",

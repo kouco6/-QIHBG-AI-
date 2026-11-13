@@ -66,6 +66,17 @@ export function probeLocalCli(cli) {
 
 /** Browser-safe view of one agent's configuration. */
 export function describeAgent(config, id) {
+  if (id === "workbuddy") {
+    const entry = config.agents?.workbuddy;
+    return { id, name: "WorkBuddy", summary: "员工本地原生 Skill 研究；OAuth 专用接入",
+      provider: "workbuddy-localassistant", transport: "workbuddy-localassistant-oauth",
+      local: false, editable: false, deletable: false, builtin: true,
+      enabled: entry?.enabled === true, configured: entry?.configured === true,
+      available: false, availabilityReason: "workbuddy_connection_verification_required",
+      authorizationType: "oauth2", connectionEndpoint: "/platform/research/workbuddy",
+      capabilities: [], model: "", baseUrl: "", apiKeyMasked: "", secretsFile: null,
+      maxOutputTokens: 0, pricing: null, avatar: null };
+  }
   if (id === "codex") {
     const entry = config.agents?.[id] ?? {};
     return {
@@ -235,6 +246,7 @@ const writeSecret = (config, id, apiKey) => {
  * @param {object} patch editable fields + optional apiKey / clearApiKey
  */
 export function updateAgentConfig(config, id, patch = {}) {
+  if (id === "workbuddy") throw new Error("WorkBuddy 使用专用 OAuth 接入，不能填写通用模型地址或 API Key");
   if (id === "codex") throw new Error("Codex 是本机执行器，请到设置页调整运行参数");
   const entry = config.agents?.[id];
   if (!entry) throw new Error(`未知员工：${id}`);
@@ -279,6 +291,7 @@ const describeAvailability = (entry) => {
 
 /** 新增一个 OpenAI 兼容的云端员工；id 由服务端生成，前端不需要关心。 */
 export function createAgent(config, patch = {}) {
+  if (patch.provider === "workbuddy-localassistant") throw new Error("请配置既有 WorkBuddy 员工的专用 OAuth 接入");
   if (patch.provider === "local") return createLocalAgent(config, patch);
   if (!config.configPath) throw new Error("网关没有配置文件，无法新增员工");
 
@@ -375,6 +388,7 @@ export function createLocalAgent(config, patch = {}) {
 
 /** 只允许删除自定义员工；内置位可以停用，但不该被移除。 */
 export function deleteAgent(config, id) {
+  if (id === "workbuddy") throw new Error("WorkBuddy 专业研究员工不能通过通用员工接口删除");
   if (id === "codex") throw new Error("Codex 是本机执行器，不能删除");
   if (BUILTIN_AGENT_IDS.includes(id)) throw new Error("内置员工不能删除，可以改成停用");
   const entry = config.agents?.[id];

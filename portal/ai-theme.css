@@ -12,8 +12,8 @@
   --text-primary: #172d4b;
   --text-secondary: #395473;
   --text-muted: #526985;
-  --accent: #235f9e;
-  --accent-2: #246abd;
+  --accent: #2462a8;
+  --accent-2: #2462a8;
   --accent-soft: #eaf2fb;
   --accent-line: #bad1ed;
   --status-info: #235f9e;
@@ -38,12 +38,20 @@ body::before { display: none; }
 .nav-item.active, .nav-item.active:hover { color: #1376d1; background: #e9f3ff; }
 .score, .gw-status, .emp-card, .adhoc-shell, .adhoc-card, .fact-hero, .view .panel,
 .view .card, .view .chart-card, .view .set-group, .view .set-overview,
-.view .agent-card, .drawer, .team-menu, #composer, dialog {
+.view .agent-card, .team-menu, #composer {
   background: var(--panel);
   color: var(--text-primary);
   border-color: var(--border-default);
   box-shadow: none;
 }
+.drawer, dialog {
+  background: linear-gradient(180deg, #fffffffa, #fff);
+  color: var(--text-primary);
+  border-color: #ffffffc9;
+  box-shadow: -12px 0 40px #142d4c24;
+  backdrop-filter: blur(20px);
+}
+dialog::backdrop { background: #142d4c29; backdrop-filter: blur(4px); }
 input:not([type="checkbox"]):not([type="radio"]), select, textarea {
   background: #f8fafd;
   color: var(--text-primary);
@@ -73,3 +81,199 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .adhoc-recent .section-head h2, .score b, .score-title { color: var(--text-primary); }
 .gw-status.ok span { color: #13734c; }
 .gw-status.bad span { color: #a52a47; }
+
+/* The source sheet still paints hover, active, and popup surfaces in the old dark palette. */
+.employee-strip .emp-card,
+.employee-strip .emp-card:hover,
+.employee-strip .emp-card.active,
+.qa-card,
+.qa-card:hover,
+.method-card,
+.method-card:hover,
+.lib-panel,
+.assign-box,
+.dispatch-dock .assign-box,
+.ops-overview,
+.mission-panel,
+.side-card,
+.flow-palette,
+.flow-node-card,
+.flow-node-card:hover,
+.more-menu,
+.employee-strip .team-menu,
+.kb-search-result,
+.kb-idea,
+.kb-idea:hover,
+.kb-capture,
+.wb-dlg,
+.dash-tip,
+.inspector-open,
+.inspector-open:hover,
+.lan-row,
+.kb-section,
+.kb-ask,
+.cb-body,
+.agent-card,
+.tpl-card,
+.set-card,
+#toast {
+  background: #fff;
+  color: #172d4b;
+}
+.employee-strip .emp-card:hover,
+.employee-strip .emp-card.active,
+.qa-card:hover,
+.method-card:hover,
+.flow-node-card:hover,
+.kb-idea:hover,
+.kb-table tbody tr:hover td,
+.dash-agents tbody tr:hover,
+.dash-backlog-item:hover,
+.dash-backlog-more:hover,
+.more-menu .menu-item:hover,
+.agent-card:hover,
+.skill-row:hover,
+.lib-row:hover,
+.flow-card:hover,
+.flow-agent-chip:hover,
+.set-fold > summary:hover,
+.fold-row > summary:hover,
+button.adhoc-row:hover,
+.run-file:hover,
+.kb-flow-item:hover,
+.inspector-open:hover {
+  background: #eaf2fb;
+  color: #142d4c;
+  border-color: #9db9d9;
+}
+.employee-strip .emp-card:hover .emp-main strong,
+.employee-strip .emp-card.active .emp-main strong,
+.attention-row:hover strong,
+.queue-row:hover strong,
+.mini-file:hover strong,
+.qa-card:hover strong {
+  color: #142d4c;
+}
+.employee-strip .emp-card:hover .emp-foot,
+.employee-strip .emp-card:hover .emp-state,
+.employee-strip .emp-card.active .emp-foot {
+  color: #526985;
+}
+.primary:hover,
+button.primary:hover {
+  background: #194d8c;
+  border-color: #194d8c;
+  color: #fff;
+}
+.kb-field input,
+.kb-field textarea,
+.kb-search input[type="search"],
+.kb-toolbar-right select,
+.kb-editor-props select,
+.kb-import-row select,
+.kb-move-row select,
+.kb-ask-bar input,
+.kb-vocab-input,
+.service-switch .svc-port input,
+.flow-mini select,
+.wb-dlg-input {
+  background: #fff;
+  color: #172d4b;
+  border-color: #c9d7e9;
+}
+
+/* 知识库和产出库仍有一批深蓝半透明底，浅色页上会盖成蒙版。拖放提示层仍只在拖入时出现。 */
+.knowledge .kb-stat-grid > div,
+.knowledge .kb-topic-row,
+.knowledge .kb-frag,
+.knowledge .kb-batchbar,
+.knowledge .kb-section,
+.knowledge .kb-cite,
+.knowledge .kb-preview .kb-md,
+.knowledge .kb-review-card,
+.knowledge .kb-import-way,
+.knowledge .kb-imp-item,
+.knowledge .kb-answer,
+.knowledge .kb-graph-wrap,
+.knowledge .kb-drop,
+.knowledge .kb-ask,
+.knowledge .kb-capture,
+.knowledge .kb-idea,
+.knowledge .kb-cp-file,
+.knowledge .kb-folders button,
+.knowledge .kb-scope,
+.knowledge .kb-toolbar-right select,
+.knowledge .kb-editor-props select,
+.knowledge .kb-import-row select,
+.knowledge .kb-move-row select,
+.knowledge .kb-search input[type="search"],
+.knowledge .kb-field input,
+.knowledge .kb-field textarea,
+.knowledge .kb-ask-bar input,
+.knowledge .kb-vocab-input,
+.knowledge .kb-idea-seg,
+.knowledge .kb-check,
+.knowledge .kb-graph-legend,
+.knowledge .kb-conflict-cols pre,
+#viewArtifacts .lib-ico,
+#viewArtifacts .fact-hero,
+#viewArtifacts .hero-cell {
+  background: #fff;
+  color: #172d4b;
+  border-color: #d5e2f1;
+}
+.knowledge .kb-stat-grid > div,
+.knowledge .kb-topic-row,
+.knowledge .kb-section,
+.knowledge .kb-import-way,
+.knowledge .kb-graph-wrap,
+.knowledge .kb-ask,
+.knowledge .kb-capture,
+#viewArtifacts .hero-cell {
+  background: #f7faff;
+}
+.knowledge .kb-stat-grid b { color: #2462a8; }
+.knowledge .kb-stat-grid span,
+.knowledge .kb-pending-card span,
+.knowledge .kb-space-card span { color: #526985; }
+.knowledge .kb-graph-legend {
+  background: #ffffffeb;
+  color: #395473;
+}
+.knowledge .kb-folders button.active,
+.knowledge .kb-view-switch button.active,
+.knowledge .kb-idea-seg button.active,
+.knowledge .kb-card.picked,
+.knowledge .kb-batchbar.has,
+.knowledge .kb-drop:hover,
+.knowledge .kb-drop.hot,
+.knowledge .kb-topic-row:hover,
+.knowledge .kb-idea:hover {
+  background: #eaf2fb;
+  color: #142d4c;
+  border-color: #9db9d9;
+}
+.knowledge .kb-check.on {
+  background: #2462a8;
+  border-color: #2462a8;
+}
+.knowledge .kb-check.on::after {
+  border-left-color: #fff;
+  border-bottom-color: #fff;
+}
+#viewArtifacts .lib-ico.t-doc,
+#viewArtifacts .lib-ico.t-sheet,
+#viewArtifacts .lib-ico.t-slide,
+#viewArtifacts .lib-ico.t-web,
+#viewArtifacts .lib-ico.t-img {
+  background: #eaf2fb;
+  color: #2462a8;
+  border-color: #bad1ed;
+}
+.knowledge .kb-import-way textarea,
+.knowledge .kb-import-way input[type="url"],
+.knowledge .kb-review-body {
+  background: #fff;
+  color: #172d4b;
+  border-color: #d5e2f1;
+}

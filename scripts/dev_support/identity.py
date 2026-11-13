@@ -10,6 +10,9 @@ from contextlib import contextmanager
 
 
 MODULES = ("bg", "ai", "experience")
+FIXED_LOGIN = "bg"
+FIXED_NAME = "BG"
+FIXED_PASSWORD = "123"
 SESSION_AGE = 8 * 60 * 60
 REMEMBER_AGE = 7 * 24 * 60 * 60
 
@@ -29,8 +32,7 @@ class Identity:
                     account TEXT NOT NULL REFERENCES account(id), module TEXT NOT NULL,
                     PRIMARY KEY(account, module)
                 );
-                CREATE UNIQUE INDEX IF NOT EXISTS one_local_ai_owner
-                    ON grant_module(module) WHERE module = 'ai';
+                DROP INDEX IF EXISTS one_local_ai_owner;
                 CREATE TABLE IF NOT EXISTS session (
                     digest TEXT PRIMARY KEY, account TEXT NOT NULL REFERENCES account(id),
                     expires INTEGER NOT NULL
@@ -60,6 +62,26 @@ class Identity:
     @staticmethod
     def digest(token):
         return hashlib.sha256(token.encode()).hexdigest()
+
+    def ensure_fixed_operator(self, experience=None):
+        """Keep one local operator available after every fresh database."""
+        salt = secrets.token_hex(16)
+        digest = self.password_hash(FIXED_PASSWORD, salt)
+        with self.db() as db:
+            row = db.execute("SELECT id FROM account WHERE login=?", (FIXED_LOGIN,)).fetchone()
+            if row:
+                account = row["id"]
+                db.execute("UPDATE account SET name=?, salt=?, password=?, active=1 WHERE id=?",
+                           (FIXED_NAME, salt, digest, account))
+                if experience:
+                    db.execute("UPDATE account SET experience=? WHERE id=?", (experience, account))
+            else:
+                account = secrets.token_hex(16)
+                db.execute("INSERT INTO account VALUES (?, ?, ?, ?, ?, 1, ?)",
+                           (account, FIXED_LOGIN, FIXED_NAME, salt, digest, experience))
+            db.execute("DELETE FROM grant_module WHERE account=?", (account,))
+            db.executemany("INSERT INTO grant_module VALUES (?, ?)", [(account, module) for module in MODULES])
+        return account
 
     def add(self, login, name, password, modules, experience=None):
         login = login.strip().lower()

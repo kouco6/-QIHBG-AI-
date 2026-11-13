@@ -1,0 +1,6 @@
+/* Shared Theme A chrome for dimension documents. Field layouts stay in each document. */
+.overlay,.drawer-scrim{background:#142d4c29;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.modal{background:linear-gradient(135deg,#fffffffa,#ffffffeb);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid #ffffffc9;border-radius:16px}
+.drawer{background:linear-gradient(180deg,#fffffffa,#fff);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.btn.primary{background:#2462a8;border-color:#2462a8;color:#fff}
+.btn.primary:hover{background:#194d8c;border-color:#194d8c}

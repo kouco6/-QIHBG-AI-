@@ -9,6 +9,7 @@ import subprocess
 import sys
 import threading
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from adapt_sources import prepare_runtime
 from prepare_sources import ROOT
@@ -27,6 +28,11 @@ class Settings:
         self.data = self.path(config.get("data_dir", "data-dev/platform"))
         self.logs = self.path(config.get("log_dir", "logs/platform"))
         self.source_dir = self.path(config.get("source_dir", ".."))
+        self.business_timezone = config.get('business_timezone', 'Asia/Shanghai')
+        ZoneInfo(self.business_timezone)
+        self.business_week_start = config.get('business_week_start', 0)
+        if type(self.business_week_start) is not int or not 0 <= self.business_week_start <= 6:
+            raise ValueError('业务周起始日须为0（周一）至6（周日）。')
         self.ai_config = self.path(config["ai_config_file"]) if config.get("ai_config_file") else None
         if self.ai_config and not self.ai_config.is_relative_to(self.data):
             raise ValueError("请将 AI 网关配置及数据复制到平台数据目录后，再设置 ai_config_file。")
@@ -144,6 +150,8 @@ class Modules:
             data = cfg.data / "bg" / account
             data.mkdir(parents=True, exist_ok=True, mode=0o700)
             env.update(BG_DATA_DIR=str(data), BG_INTEGRATION_KEY=self.key)
+            env.update(PLATFORM_BUSINESS_TIMEZONE=cfg.business_timezone,
+                       PLATFORM_BUSINESS_WEEK_START=str(cfg.business_week_start))
             command = [sys.executable, "server.py", "--port", str(private_port)]
             health = "/api/health"
         elif service == "ai":
@@ -173,6 +181,10 @@ class Modules:
                 env["WORKBUDDY_ALLOWED_ROOTS"] = str(data)
             env.update(WORKBUDDY_CONFIG_FILE=str(conf), WORKBUDDY_HOST="127.0.0.1",
                        WORKBUDDY_PORT=str(private_port))
+            env.update(WORKBUDDY_RESEARCH_KEY=self.key, WORKBUDDY_RESEARCH_OWNER=account)
+            # Dedicated NEW OAuth grants are outside ordinary model working roots.
+            # Do not create/read/configure credentials merely by starting a module.
+            env["WORKBUDDY_RESEARCH_AUTH_DIR"] = str(cfg.data / "workbuddy-authorization" / account)
             for name in ("WORKBUDDY_STATE_FILE", "WORKBUDDY_EVENT_FILE", "WORKBUDDY_SKILL_DIR",
                          "WORKBUDDY_KNOWLEDGE_VAULT", "WORKBUDDY_KNOWLEDGE_BACKUP"):
                 env.pop(name, None)

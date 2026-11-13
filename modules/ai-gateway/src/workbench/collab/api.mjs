@@ -10,6 +10,8 @@
 
 import { extname } from "node:path";
 import { CollabService, KIND_NAME } from "./service.mjs";
+import { LocalResearch } from "../local-research.mjs";
+import { researchView } from "../research.mjs";
 
 const MAX_UPLOAD = 40 * 1024 * 1024;
 
@@ -23,15 +25,19 @@ const MIME = {
   ".zip": "application/zip",
 };
 
-export function createCollabApi({ stateDir, authorized, taskLabel }) {
+export function createCollabApi({ stateDir, authorized, taskLabel, manager, config, ownerId, nativeEvidenceVerifier }) {
   const service = new CollabService({ stateDir });
   service.boot();
+  const research = manager && config && ownerId ? new LocalResearch({manager,collab:service,config,ownerId,nativeEvidenceVerifier}) : null;
 
   const sseClients = new Set();
 
   const broadcast = (event, data) => {
     const payload = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
     for (const res of sseClients) {
+      const task = manager?.tasks.get(data?.taskId);
+      if (task?.research?.transport === "local-pull" && res.researchMemberId &&
+          task.research.memberId !== res.researchMemberId) continue;
       try { res.write(payload); } catch { sseClients.delete(res); }
     }
   };
@@ -61,11 +67,46 @@ export function createCollabApi({ stateDir, authorized, taskLabel }) {
 
   const handle = async (req, res, path, url) => {
     const method = req.method || "GET";
+    if (path.startsWith("/api/collab/research/")) {
+      if (!research) return json(res,503,{code:"LOCAL_RESEARCH_NOT_CONFIGURED",error:"本地研究领取未配置"});
+      const member = service.memberByToken(bearer(req));
+      if (!member) return json(res,401,{code:"COLLAB_MEMBER_REQUIRED",error:"协作成员身份无效"});
+      try {
+        if (path === "/api/collab/research/pending" && method === "GET")
+          return json(res,200,research.pending(member));
+        if (path === "/api/collab/research/info" && method === "GET")
+          return json(res,200,research.info());
+        const match=path.match(/^\/api\/collab\/research\/tasks\/([A-Za-z0-9._-]{1,120})\/(claim|heartbeat|status|complete|files\/md|files\/json)$/);
+        if (!match) return json(res,404,{code:"ENDPOINT_NOT_FOUND",error:"研究领取接口不存在"});
+        const [,id,action]=match;
+        if (method === "GET" && action === "status") {
+          const task=research.requireTask(id,member);research.expire(task);
+          return json(res,200,{...researchView(task),phase:task.research.localPull.phase});
+        }
+        if (method !== "POST") return json(res,405,{code:"METHOD_NOT_ALLOWED",error:"操作方法无效"});
+        if (action.startsWith("files/"))
+          return json(res,200,research.upload(id,member,req.headers,action.slice(6),await readRaw(req,8*1024*1024)));
+        if (!(req.headers["content-type"]??"").startsWith("application/json"))
+          return json(res,415,{code:"JSON_REQUIRED",error:"控制请求须使用 JSON"});
+        const body=JSON.parse((await readRaw(req,65536)).toString("utf8"));
+        if (!body || typeof body !== "object" || Array.isArray(body))
+          return json(res,422,{code:"INVALID_REQUEST",error:"请求字段无效"});
+        if(action === "claim") return json(res,200,research.claim(id,member,body));
+        if(action === "heartbeat") return json(res,200,research.heartbeat(id,member,req.headers));
+        if(action === "status") return json(res,200,research.report(id,member,req.headers,body));
+        const value=await research.complete(id,member,req.headers,body);
+        return json(res,value.verificationRequired?202:200,value);
+      } catch(error) {
+        return json(res,error.status??422,{code:error.code??"RESEARCH_REQUEST_INVALID",error:error.code?error.message:"研究请求无法处理"});
+      }
+    }
 
     // ---------- 成员推送（成员 Token） ----------
     if (path === "/api/collab/push" && method === "POST") {
       const member = service.memberByToken(bearer(req));
       if (!member) return fail(res, 401, "无效的成员 Token");
+      if (manager?.tasks.get(url.searchParams.get("task"))?.research?.transport === "local-pull")
+        return json(res,409,{code:"RESEARCH_UPLOAD_REQUIRES_LEASE",error:"研究原件须经租约绑定的文件接口上传"});
       const contentType = req.headers["content-type"] || "";
       let body = "";
       let file = null;
@@ -108,8 +149,11 @@ export function createCollabApi({ stateDir, authorized, taskLabel }) {
 
     // ---------- 成员视角任务列表（选「当前任务」用） ----------
     if (path === "/api/collab/tasks" && method === "GET") {
-      if (!service.memberByToken(bearer(req)) && !isAdmin(req)) return fail(res, 401, "Unauthorized");
-      return json(res, 200, { items: taskLabel?.() ?? [] });
+      const member=service.memberByToken(bearer(req));
+      if (!member && !isAdmin(req)) return fail(res, 401, "Unauthorized");
+      const items=(taskLabel?.()??[]).filter(item=>!member ||
+        manager?.tasks.get(item.id)?.research?.transport!=="local-pull" || research?.owned(manager.tasks.get(item.id),member));
+      return json(res, 200, { items });
     }
 
     // ---------- SSE 实时流（工作台页面，主 Token 或 query token） ----------
@@ -125,6 +169,7 @@ export function createCollabApi({ stateDir, authorized, taskLabel }) {
       });
       res.write(": connected\n\n");
       sseClients.add(res);
+      res.researchMemberId = qToken ? service.memberByToken(qToken)?.id ?? null : null;
       const ping = setInterval(() => { try { res.write(": ping\n\n"); } catch { /* 断开即清 */ } }, 25000);
       req.on("close", () => { clearInterval(ping); sseClients.delete(res); });
       return true;
@@ -133,7 +178,11 @@ export function createCollabApi({ stateDir, authorized, taskLabel }) {
     // ---------- 附件（工作台或成员都可读） ----------
     const fileMatch = path.match(/^\/api\/collab\/files\/([\w-]+)$/);
     if (fileMatch && method === "GET") {
-      if (!service.memberByToken(bearer(req)) && !isAdmin(req)) return fail(res, 401, "Unauthorized");
+      const member=service.memberByToken(bearer(req));
+      if (!member && !isAdmin(req)) return fail(res, 401, "Unauthorized");
+      const push=service.getPush(fileMatch[1]),task=manager?.tasks.get(push?.taskId);
+      if(member&&task?.research?.transport==="local-pull"&&!research?.owned(task,member))
+        return fail(res,404,"附件不存在或无权限");
       const got = service.readFile(fileMatch[1]);
       if (!got) return fail(res, 404, "附件不存在");
       res.writeHead(200, {
@@ -202,6 +251,9 @@ export function createCollabApi({ stateDir, authorized, taskLabel }) {
     }
 
     const pushMatch = path.match(/^\/api\/collab\/pushes\/([\w-]+)$/);
+    if(pushMatch && ["POST","DELETE"].includes(method) &&
+      manager?.tasks.get(service.getPush(pushMatch[1])?.taskId)?.research?.transport==="local-pull")
+      return fail(res,409,"研究原件不能移动或删除");
     if (pushMatch && method === "POST") {
       let body = {};
       try { body = JSON.parse((await readRaw(req, 65536)).toString("utf8") || "{}"); } catch { /* 空体 */ }
@@ -221,5 +273,5 @@ export function createCollabApi({ stateDir, authorized, taskLabel }) {
     return false;
   };
 
-  return { handle, service, broadcast, KIND_NAME };
+  return { handle, service, research, broadcast, KIND_NAME };
 }

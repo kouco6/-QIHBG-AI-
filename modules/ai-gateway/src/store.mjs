@@ -1,4 +1,4 @@
-import { appendFileSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
+import { appendFileSync, closeSync, existsSync, fsyncSync, mkdirSync, openSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
 /**
@@ -26,7 +26,7 @@ const toRecord = (task, idempotencyKey) => ({
   id: task.id,
   label: task.label ?? "",
   tags: task.tags ?? [],
-  prompt: clip(task.prompt, PROMPT_LIMIT),
+  prompt: task.research ? task.prompt : clip(task.prompt, PROMPT_LIMIT),
   cwd: task.cwd ?? null,
   mode: task.mode ?? null,
   model: task.model ?? null,
@@ -48,7 +48,9 @@ const toRecord = (task, idempotencyKey) => ({
   approvalWaitCount: task.approvalWaitCount ?? 0,
   runtimeMode: task.runtimeMode ?? null,
   turnId: task.turnId ?? null,
-  finalResponse: clip(task.finalResponse, RESPONSE_LIMIT),
+  finalResponse: task.research ? task.finalResponse : clip(task.finalResponse, RESPONSE_LIMIT),
+  research: task.research ?? null,
+  skills: task.skills ?? [],
   error: task.error ?? null,
   domain: task.domain ?? null,
   taskType: task.taskType ?? null,
@@ -126,11 +128,19 @@ export class TaskStore {
   }
 
   append(task, idempotencyKey) {
-    if (!this.enabled) return;
+    if (!this.enabled) {
+      if (task.research) throw new Error("Research persistence is required");
+      return;
+    }
     try {
-      appendFileSync(this.file, `${JSON.stringify(toRecord(task, idempotencyKey))}\n`, "utf8");
+      const body = `${JSON.stringify(toRecord(task, idempotencyKey))}\n`;
+      if (task.research) {
+        const fd = openSync(this.file, "a", 0o600);
+        try { writeFileSync(fd, body, "utf8"); fsyncSync(fd); } finally { closeSync(fd); }
+      } else appendFileSync(this.file, body, "utf8");
       this.lines += 1;
     } catch (error) {
+      if (task.research) throw new Error("RESEARCH_PERSISTENCE_FAILED");
       // Persistence must never take the gateway down: a full disk should degrade
       // to "memory only", not to "no dispatch at all".
       process.stderr.write(`[store] append failed: ${error?.message || error}\n`);

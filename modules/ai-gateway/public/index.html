@@ -79,7 +79,7 @@
 
           <section class="adhoc-card">
             <div class="adhoc-head">
-              <div><span class="panel-kicker">QUICK TASK</span><h2>要做什么？</h2></div>
+              <div><span class="panel-kicker">临时任务</span><h2>要做什么？</h2></div>
               <span class="adhoc-badge" id="adhocBadge">临时任务</span>
             </div>
             <textarea id="adhocPrompt" rows="4" spellcheck="false" placeholder="一句话说清你要的结果，例如：把这周的任务整理成一份周报，标出失败和卡住的原因"></textarea>
@@ -368,7 +368,7 @@
           <section class="lib-panel" id="skillPanel">
             <header class="lib-head">
               <div>
-                <p class="panel-kicker">SKILL HUB</p>
+                <p class="panel-kicker">技能库</p>
                 <h2>工作方法库</h2>
                 <p id="skillPanelSub">从 AI 能力平台下载工作方法到本机，派活或编排流程时挂上，AI 按它的步骤干活</p>
               </div>
@@ -419,7 +419,7 @@
   <div class="scrim" id="scrim"></div>
 
   <aside class="composer" id="composer" aria-hidden="true">
-    <header class="drawer-head"><div><p class="eyebrow">ASSIGN WORK</p><h2>给 AI 员工派活</h2></div><button class="icon-btn" id="closeComposer">✕</button></header>
+    <header class="drawer-head"><div><p class="eyebrow">派发任务</p><h2>给 AI 员工派活</h2></div><button class="icon-btn" id="closeComposer">✕</button></header>
     <div class="composer-body">
       <label class="field primary-field"><span>要做什么</span><textarea id="taskPrompt" rows="5" placeholder="写一句话说明你要的结果，例如：整理这份需求并输出实施清单"></textarea></label>
       <div class="route-box" id="routeBox"><span>输入需求后，将自动推荐合适的员工</span></div>
@@ -433,11 +433,11 @@
     <footer class="composer-foot"><p id="composerHint">可自动匹配员工，也可手动指定。</p><div class="foot-row"><button class="ghost" id="saveDraft">存草稿</button><button class="primary" id="dispatchTask">派发任务</button></div></footer>
   </aside>
 
-  <dialog id="tokenDialog"><form method="dialog" id="tokenForm"><p class="eyebrow">LOCAL GATEWAY</p><h2>连接本地网关</h2><p class="muted">Token 只保存在当前浏览器会话。</p><label class="field"><span>Token</span><input id="tokenInput" type="password" autocomplete="off" required></label><button class="primary" value="connect">连接</button></form></dialog>
+  <dialog id="tokenDialog"><form method="dialog" id="tokenForm"><p class="eyebrow">本地网关</p><h2>连接本地网关</h2><p class="muted">Token 只保存在当前浏览器会话。</p><label class="field"><span>Token</span><input id="tokenInput" type="password" autocomplete="off" required></label><button class="primary" value="connect">连接</button></form></dialog>
 
   <dialog id="agentDialog">
     <form id="agentForm">
-      <p class="eyebrow">AGENT</p>
+      <p class="eyebrow">员工配置</p>
       <h2 id="agentDialogTitle">配置员工</h2>
       <p class="muted" id="agentDialogSub">模型与地址写入网关配置，密钥单独存放且不回传浏览器</p>
       <div class="preset-block" id="agentPresetBlock">
@@ -512,7 +512,7 @@
 
   <dialog id="hubDialog">
     <form id="hubForm">
-      <p class="eyebrow">SKILL HUB</p>
+      <p class="eyebrow">技能库</p>
       <h2>连接 AI 能力平台</h2>
       <p class="muted">账号只存在本机网关的密钥文件里，不会写进页面或日志</p>
       <label class="field"><span>平台地址</span><input id="hubBaseUrl" placeholder="http://8.138.91.205/hub/" autocomplete="off"></label>
@@ -530,7 +530,7 @@
   <dialog id="skillDialog">
     <div class="skilldlg">
       <header class="skilldlg-head">
-        <div><p class="eyebrow" id="skillDlgMeta">SKILL</p><h2 id="skillDlgTitle">技能</h2></div>
+        <div><p class="eyebrow" id="skillDlgMeta">技能</p><h2 id="skillDlgTitle">技能</h2></div>
         <button type="button" class="icon-btn" id="skillDlgClose">✕</button>
       </header>
 

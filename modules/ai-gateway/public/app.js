@@ -8294,6 +8294,11 @@ async function start() {
   try {
     await bootstrap();
     setView("dashboard");
+    const pendingTask = new URLSearchParams(location.search).get("task");
+    if (pendingTask && /^[A-Za-z0-9._:-]{1,160}$/.test(pendingTask)) {
+      history.replaceState(null, "", location.pathname + location.hash);
+      await openDrawer(pendingTask);
+    }
     checkHealth();
     loadFlows();
     // 平台已配置时顺手把云端目录拉一次：用户切到「工作方法」就能看到有货没货

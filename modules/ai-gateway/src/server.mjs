@@ -23,8 +23,13 @@ import { FlowStore } from "./workbench/flows.mjs";
 import { skillStoreFor } from "./workbench/skill-mount.mjs";
 import { Updater } from "./workbench/updater.mjs";
 import { agentName, listAgents } from "./workbench/agents.mjs";
+import { bindResearchService, bindLocalResearch, bindCodexResearch, researchOwner, prepareResearch, researchRunner, ResearchFailure } from "./workbench/research.mjs";
+import { CodexResearch } from "./workbench/codex-research.mjs";
+import { ExecutorError } from "./workbench/research-executors.mjs";
+import { WorkBuddyError } from "./workbench/workbuddy-client.mjs";
 
 const config = loadConfig();
+bindResearchService(config);
 applyProxyPolicy(config.codexUseSystemProxy);
 applySilencePolicy(config.codexSilenceWarnMs);
 applyCodexCommand(config.codexCommand);
@@ -49,6 +54,7 @@ const refreshAgentRunners = () => {
   // Codex 是独立执行器（app-server），不在下面的循环里重建
   const keep = new Set(["codex"]);
   for (const [id, agentConfig] of Object.entries(config.agents ?? {})) {
+    if (id === "workbuddy" || agentConfig?.provider === "workbuddy-localassistant") continue;
     // 本机 CLI 员工（内置 claude + 界面新建的自定义位）：
     // 可用性只看「CLI 装没装」，跟 API Key 无关，不能混进云端循环；
     // 目前统一由 Claude Code 执行器承载。
@@ -118,13 +124,14 @@ const store = new TaskStore({ file: config.stateFile, eventFile: config.eventFil
 const manager = new TaskManager({
   concurrency: config.maxConcurrency,
   timeoutMs: config.taskTimeoutMs,
-  runner: selectedRunner,
+  runner: researchRunner(config, selectedRunner),
   persist: (task, idempotencyKey) => store.append(task, idempotencyKey),
   persistEvent: (taskId, event) => store.appendEvent(taskId, event),
   approvalResolver: (taskId, approvalId, decision) => appRunner.resolveApproval(taskId, approvalId, decision),
 });
 
 const persisted = store.load();
+bindCodexResearch(config,new CodexResearch({config,manager,client:appServer,runner:appRunner,ownerId:researchOwner(config)}));
 const recovery = manager.restore(persisted.latest, persisted.idempotency, persisted.eventsByTask);
 // 流程模板与运行实例；任务先恢复完再恢复流程，重启恢复为暂停（决策 10）。
 const flowStore = new FlowStore({ file: join(dirname(config.stateFile), "flows.json") });
@@ -137,11 +144,13 @@ const knowledgeApi = createKnowledgeApi({
 // 任务协作：成员推送走独立 Token，路由必须在主鉴权闸门之前接管 /api/collab/*
 const collabApi = createCollabApi({
   stateDir: dirname(config.stateFile),
+  manager,config,ownerId:researchOwner(config),
   authorized: (req) => authorized(req),
   taskLabel: () => manager.list()
     .filter((t) => t.status !== "archived")
     .map((t) => ({ id: t.id, label: t.label || "未命名任务", status: t.status })),
 });
+bindLocalResearch(config,collabApi.research);
 // 问答通道类型（cloud/local）在选型时就确定，供「机密不上云」的边界判断
 knowledgeApi.service.modelKind = knowledgeApi.service.askModel?.kind?.() ?? "local";
 // 流程事件总线：只推步骤状态与产物清单，替代前端 3 秒全量轮询。
@@ -437,7 +446,10 @@ const server = createServer(async (req, res) => {
     }
 
     if (req.method === "POST" && path === "/v1/tasks") {
-      const input = validateTaskInput(await readJson(req), config);
+      const body = await readJson(req);
+      if (Object.hasOwn(body, "research") || body.taskType === "planning_research")
+        { const result=await prepareResearch(req, body, config, manager); return json(res,result.status,result.value); }
+      const input = validateTaskInput(body, config);
       if (!selectedRunner.has(input.agent)) {
         throw new Error(`AI 员工 ${input.agent} 尚未配置 API Key 或已被禁用`);
       }
@@ -512,6 +524,8 @@ const server = createServer(async (req, res) => {
     if (req.method === "GET" && serveStatic(path, res)) return;
     json(res, 404, { error: "Not found" });
   } catch (error) {
+    if (error instanceof ResearchFailure || error instanceof WorkBuddyError || error instanceof ExecutorError)
+      return json(res, error.status, { code: error.code, error: error.message });
     json(res, 400, { error: error instanceof Error ? error.message : String(error) });
   }
 });

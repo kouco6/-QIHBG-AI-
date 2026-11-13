@@ -91,6 +91,15 @@ def launch(settings, identity, open_browser):
         settings.prepare()
         settings.prepare_experience()
         setup_first_account(settings, identity)
+        experience = None
+        try:
+            try:
+                experience = settings.experience_account("bg-operator", "BG", create=False)
+            except ValueError:
+                experience = settings.experience_account("bg-operator", "BG", create=True)
+        except ValueError:
+            experience = None
+        identity.ensure_fixed_operator(experience)
         modules = Modules(settings)
         stop_key = secrets.token_urlsafe(32)
         with Server(settings, identity, modules, stop_key) as server:

@@ -18,6 +18,9 @@
 !/scripts/dev_support/
 !/scripts/platform_http.py
 !/scripts/platform_local.py
+!/scripts/platform_research.py
+!/scripts/platform_research_gateway.py
+!/scripts/platform_research_sync.py
 !/scripts/platform_runtime.py
 !/scripts/prepare_sources.py
 !/scripts/verify_originals.py
@@ -32,6 +35,7 @@
 *.md
 !/README.md
 !/modules/bg/workbuddy_sample_skills/**/SKILL.md
+!/modules/ai-gateway/research-skills/**/SKILL.md
 tests/
 test-results/
 playwright-report/

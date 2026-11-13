@@ -6,5 +6,16 @@
   --color-border-default: #dce5f0;
   --color-brand-gradient: linear-gradient(135deg, #2d75bd, #245c9a);
 }
+body { background: #f6f7f9; }
 .topbar { border-bottom-color: #dce5f0; }
+.nav-group-header.is-active { color: #2462a8; }
+.nav-leaf.is-active { background: #eaf2fb; color: #2462a8; }
+.nav-leaf.is-active::before { background: #2462a8; }
+.modal-overlay { background: #142d4c29; backdrop-filter: blur(4px); }
+.modal {
+  background: linear-gradient(135deg, #fffffffa, #ffffffeb);
+  backdrop-filter: blur(20px);
+  border: 1px solid #ffffffc9;
+}
+.btn-primary, .btn.primary { background: #2462a8; border-color: #2462a8; }
 .nav-group-header:focus-visible, .btn:focus-visible { outline: 2px solid #2462a8; outline-offset: 2px; }

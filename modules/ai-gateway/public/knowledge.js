@@ -2014,7 +2014,7 @@ function drawGraph(graph) {
   // 没节点的兜底（空库）：中心提示
   ctx.clearRect(0, 0, W, H);
   if (!nodes.length) {
-    ctx.fillStyle = "rgba(200,215,235,.55)";
+    ctx.fillStyle = "#526985";
     ctx.font = "14px sans-serif";
     ctx.textAlign = "center";
     ctx.fillText("还没有主题，先去导入资料或新建主题", cx, cy);

@@ -1,6 +1,6 @@
 import { spawn, spawnSync } from "node:child_process";
 import { createInterface } from "node:readline";
-import { dirname } from "node:path";
+import { delimiter, dirname } from "node:path";
 
 const PROXY_KEYS = new Set(["http_proxy", "https_proxy", "all_proxy", "no_proxy"]);
 // Belt and braces: even with the proxy vars stripped, an intermediate layer
@@ -56,6 +56,9 @@ export const applySilencePolicy = (ms) => {
 export function buildCodexEnv(base = process.env) {
   const env = {};
   for (const [key, value] of Object.entries(base)) {
+    // Service authorization belongs to the gateway, not the model's process.
+    if (["WORKBUDDY_GATEWAY_TOKEN", "WORKBUDDY_RESEARCH_KEY", "WORKBUDDY_CONFIG_FILE",
+      "WORKBUDDY_RESEARCH_OWNER"].includes(key.toUpperCase())) continue;
     // Windows env keys are case-insensitive, but they can arrive in any casing.
     if (!useSystemProxy && PROXY_KEYS.has(key.toLowerCase())) continue;
     env[key] = value;
@@ -67,7 +70,7 @@ export function buildCodexEnv(base = process.env) {
   // Codex expects codex-code-mode-host.exe next to itself; prepending its dir
   // keeps that lookup working even when the gateway inherited a bare PATH.
   const pathKey = Object.keys(env).find((key) => key.toLowerCase() === "path") ?? "Path";
-  env[pathKey] = `${dirname(codexCommand)};${env[pathKey] ?? ""}`;
+  env[pathKey] = `${dirname(codexCommand)}${delimiter}${env[pathKey] ?? ""}`;
   return env;
 }
 
@@ -83,7 +86,7 @@ function appendTuning(args, task) {
   if (task.reasoningEffort) args.push("-c", `model_reasoning_effort="${task.reasoningEffort}"`);
 }
 
-function buildArgs(task) {
+export function buildArgs(task) {
   if (task.threadId) {
     // `codex exec resume` has no --sandbox / --approve-for-me flags, so without
     // these overrides the requested mode is silently dropped and Codex falls
@@ -91,6 +94,7 @@ function buildArgs(task) {
     // workspace-write could not write a single file. Restore the mode via -c.
     const mode = task.mode === "workspace-write" ? "workspace-write" : "read-only";
     const args = [
+      ...(task.mode === "web" ? ["--search"] : []),
       "exec", "resume", "--json", "--skip-git-repo-check",
       "-c", `sandbox_mode="${mode}"`,
     ];
@@ -106,6 +110,7 @@ function buildArgs(task) {
   // through -c instead, which works for both exec and exec resume.
   const mode = task.mode === "workspace-write" ? "workspace-write" : "read-only";
   const args = [
+    ...(task.mode === "web" ? ["--search"] : []),
     "exec",
     "--json",
     "--color", "never",
@@ -113,7 +118,6 @@ function buildArgs(task) {
     "-c", `sandbox_mode="${mode}"`,
   ];
   // mode "web"（查价等旁路任务）：只读沙箱 + 放行联网检索
-  if (task.mode === "web") args.push("--search");
   if (mode === "workspace-write") args.push("-c", 'approval_policy="never"');
   appendTuning(args, task);
   args.push("-");
