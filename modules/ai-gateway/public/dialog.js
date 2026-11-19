@@ -11,7 +11,7 @@
 let root = null;
 let activeClose = null;
 /** 宽度只走 CSS class：站点 CSP 是 style-src 'self'，内联样式会被直接拦掉。 */
-const DLG_WIDTHS = [420, 440, 460, 520, 560];
+const DLG_WIDTHS = [420, 440, 460, 520, 560, 640];
 
 function ensureRoot() {
   if (root) return root;
@@ -28,9 +28,9 @@ function escHtml(value) {
 
 /**
  * 底层：渲染一个弹窗。body 为 HTML 字符串，返回 DOM 供调用方绑定自己的逻辑；
- * resolve 由调用方在合适的时机调用。
+ * resolve 由调用方在合适的时机调用。导出给需要自定义表单交互的模块复用。
  */
-function openDialog({ title, subtitle = "", body = "", footer, tone = "normal", onMount, width = 460 }) {
+export function openDialog({ title, subtitle = "", body = "", footer, tone = "normal", onMount, width = 460 }) {
   const host = ensureRoot();
   const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
 
@@ -154,6 +154,7 @@ export function promptDialog({
   placeholder = "",
   hint = "",
   multiline = false,
+  type = "text",
   okText = "确定",
   cancelText = "取消",
   required = true,
@@ -166,7 +167,7 @@ export function promptDialog({
       ${label ? `<label class="wb-dlg-label">${escHtml(label)}</label>` : ""}
       ${multiline
         ? `<textarea class="wb-dlg-input" data-dlg-input rows="5" maxlength="2000" placeholder="${escHtml(placeholder)}">${escHtml(value)}</textarea>`
-        : `<input class="wb-dlg-input" data-dlg-input type="text" maxlength="${maxlength}" value="${escHtml(value)}" placeholder="${escHtml(placeholder)}">`}
+        : `<input class="wb-dlg-input" data-dlg-input type="${escHtml(type)}" maxlength="${maxlength}" value="${escHtml(value)}" placeholder="${escHtml(placeholder)}">`}
       <p class="wb-dlg-hint" data-dlg-hint>${escHtml(hint || (multiline ? "Ctrl + Enter 提交" : ""))}</p>`,
     footer: `
       <button type="button" class="btn ghost" data-dlg-cancel>${escHtml(cancelText)}</button>
@@ -217,7 +218,8 @@ export function formDialog({
     if (f.type === "textarea") {
       return `<textarea class="wb-dlg-input" ${common} rows="${f.rows ?? 4}" placeholder="${escHtml(f.placeholder ?? "")}">${escHtml(f.value ?? "")}</textarea>`;
     }
-    return `<input class="wb-dlg-input" type="${f.type === "number" ? "number" : "text"}" ${common} value="${escHtml(f.value ?? "")}" placeholder="${escHtml(f.placeholder ?? "")}">`;
+    const inputType = f.type === "number" ? "number" : f.type === "password" ? "password" : "text";
+    return `<input class="wb-dlg-input" type="${inputType}" ${common} value="${escHtml(f.value ?? "")}" placeholder="${escHtml(f.placeholder ?? "")}">`;
   };
 
   return openDialog({

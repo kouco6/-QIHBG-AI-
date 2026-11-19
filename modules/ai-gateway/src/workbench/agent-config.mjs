@@ -11,6 +11,7 @@
  */
 
 import { chmodSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
 import { dirname } from "node:path";
 
 import { findClaudeBinary } from "../claude-runner.mjs";
@@ -25,7 +26,9 @@ const MIN_TOKENS = 256;
 const MAX_TOKENS = 65_536;
 const MIN_KEY = 8;
 const MAX_KEY = 512;
-const MODEL_PATTERN = /^[A-Za-z0-9._:/-]{1,120}$/;
+// 模型名放宽带符号：各家网关的 id 常见大写、下划线、@ 等（如 Claude-Fable-5.1），
+// 只挡空格 / 反斜杠 / 换行，别让校验挡住真实模型名。
+const MODEL_PATTERN = /^[\p{L}\p{N}][\p{L}\p{N}._:@+#/-]{0,199}$/u;
 
 const readJson = (file) => {
   if (!file || !existsSync(file)) return {};
@@ -56,6 +59,8 @@ export function maskApiKey(key) {
 /** 本机 CLI 执行器注册表：cli 字段 → 探测安装状态的函数。 */
 const LOCAL_CLI_DETECTORS = {
   claude: () => existsSync(findClaudeBinary(process.env)),
+  // dsh（DeepSeek Harness）：npm 全局包是 .cmd 垫片，Windows 上要走 shell 才能探测到
+  dsh: () => spawnSync("dsh", ["--version"], { encoding: "utf8", windowsHide: true, shell: process.platform === "win32" }).status === 0,
 };
 const isLocalCli = (cli) => typeof cli === "string" && cli in LOCAL_CLI_DETECTORS;
 
@@ -66,17 +71,6 @@ export function probeLocalCli(cli) {
 
 /** Browser-safe view of one agent's configuration. */
 export function describeAgent(config, id) {
-  if (id === "workbuddy") {
-    const entry = config.agents?.workbuddy;
-    return { id, name: "WorkBuddy", summary: "员工本地原生 Skill 研究；OAuth 专用接入",
-      provider: "workbuddy-localassistant", transport: "workbuddy-localassistant-oauth",
-      local: false, editable: false, deletable: false, builtin: true,
-      enabled: entry?.enabled === true, configured: entry?.configured === true,
-      available: false, availabilityReason: "workbuddy_connection_verification_required",
-      authorizationType: "oauth2", connectionEndpoint: "/platform/research/workbuddy",
-      capabilities: [], model: "", baseUrl: "", apiKeyMasked: "", secretsFile: null,
-      maxOutputTokens: 0, pricing: null, avatar: null };
-  }
   if (id === "codex") {
     const entry = config.agents?.[id] ?? {};
     return {
@@ -185,7 +179,7 @@ const buildPatch = (patch = {}) => {
   if ("model" in patch) {
     const model = String(patch.model ?? "").trim();
     if (!model) throw new Error("先填写模型名");
-    if (!MODEL_PATTERN.test(model)) throw new Error("模型名只能包含字母、数字与 . _ : / -");
+    if (!MODEL_PATTERN.test(model)) throw new Error("模型名含不支持的特殊符号（不能用空格 / \\ / 换行）");
     next.model = model;
   }
   if ("baseUrl" in patch) {
@@ -246,7 +240,6 @@ const writeSecret = (config, id, apiKey) => {
  * @param {object} patch editable fields + optional apiKey / clearApiKey
  */
 export function updateAgentConfig(config, id, patch = {}) {
-  if (id === "workbuddy") throw new Error("WorkBuddy 使用专用 OAuth 接入，不能填写通用模型地址或 API Key");
   if (id === "codex") throw new Error("Codex 是本机执行器，请到设置页调整运行参数");
   const entry = config.agents?.[id];
   if (!entry) throw new Error(`未知员工：${id}`);
@@ -291,7 +284,6 @@ const describeAvailability = (entry) => {
 
 /** 新增一个 OpenAI 兼容的云端员工；id 由服务端生成，前端不需要关心。 */
 export function createAgent(config, patch = {}) {
-  if (patch.provider === "workbuddy-localassistant") throw new Error("请配置既有 WorkBuddy 员工的专用 OAuth 接入");
   if (patch.provider === "local") return createLocalAgent(config, patch);
   if (!config.configPath) throw new Error("网关没有配置文件，无法新增员工");
 
@@ -388,7 +380,6 @@ export function createLocalAgent(config, patch = {}) {
 
 /** 只允许删除自定义员工；内置位可以停用，但不该被移除。 */
 export function deleteAgent(config, id) {
-  if (id === "workbuddy") throw new Error("WorkBuddy 专业研究员工不能通过通用员工接口删除");
   if (id === "codex") throw new Error("Codex 是本机执行器，不能删除");
   if (BUILTIN_AGENT_IDS.includes(id)) throw new Error("内置员工不能删除，可以改成停用");
   const entry = config.agents?.[id];

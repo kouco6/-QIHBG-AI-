@@ -53,6 +53,13 @@ export function onPush(fn) {
 
 // ---------- 渲染 ----------
 
+/** 当前登录账号（模块级缓存，登录页保证有会话）。 */
+let currentUser = null;
+export async function initViewer() {
+  if (currentUser === null) currentUser = await me().catch(() => null);
+  return currentUser;
+}
+
 export const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) =>
   ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -82,6 +89,7 @@ function pushCard(p) {
   const card = document.createElement("article");
   card.className = `cb-card kind-${p.kind}`;
   card.dataset.pushId = p.id;
+  const admin = currentUser?.role === "admin";
   const fileChip = p.fileName
     ? (isImage(p)
       ? `<img class="cb-img" src="/api/collab/files/${p.id}" alt="${esc(p.fileName)}" loading="lazy">`
@@ -101,29 +109,33 @@ function pushCard(p) {
       ${p.body && p.kind === "artifact" ? `<pre class="cb-body">${esc(p.body.length > 600 ? p.body.slice(0, 600) + "…" : p.body)}</pre>` : ""}
       ${fileChip}
     </div>
-    <div class="cb-actions">
-      <button class="cb-move" title="挪到别的任务窗">移动</button>
-      <button class="cb-del" title="删除这条推送">删除</button>
-    </div>`;
-  card.querySelector(".cb-del").onclick = async () => {
-    const { confirmDialog } = await import("./dialog.js");
-    if (!(await confirmDialog({ title: "删除这条推送", message: `「${p.title}」将从协作流中删除，不可恢复。`, tone: "danger" }))) return;
-    await cApi(`/api/collab/pushes/${p.id}`, { method: "DELETE" });
-    card.remove();
-  };
-  card.querySelector(".cb-move").onclick = async () => {
-    const { promptDialog } = await import("./dialog.js");
-    const target = await promptDialog({
-      title: "挪到别的任务窗", message: "粘贴目标任务 ID（可从任务地址栏或任务卡复制）：",
-      placeholder: "任务 ID", value: "", okText: "挪过去",
-    });
-    if (!target) return;
-    try {
-      const moved = await cApi(`/api/collab/pushes/${p.id}`, { method: "POST", body: { task: target.trim() } });
+    ${admin
+      ? `<div class="cb-actions">
+          <button class="cb-move" title="挪到别的任务窗">移动</button>
+          <button class="cb-del" title="删除这条推送">删除</button>
+        </div>`
+      : ""}`;
+  if (admin) {
+    card.querySelector(".cb-del").onclick = async () => {
+      const { confirmDialog } = await import("./dialog.js");
+      if (!(await confirmDialog({ title: "删除这条推送", message: `「${p.title}」将从协作流中删除，不可恢复。`, tone: "danger" }))) return;
+      await cApi(`/api/collab/pushes/${p.id}`, { method: "DELETE" });
       card.remove();
-      document.dispatchEvent(new CustomEvent("collab-external-push", { detail: moved }));
-    } catch (err) { alertPop(err.message); }
-  };
+    };
+    card.querySelector(".cb-move").onclick = async () => {
+      const { promptDialog } = await import("./dialog.js");
+      const target = await promptDialog({
+        title: "挪到别的任务窗", message: "粘贴目标任务 ID（可从任务地址栏或任务卡复制）：",
+        placeholder: "任务 ID", value: "", okText: "挪过去",
+      });
+      if (!target) return;
+      try {
+        const moved = await cApi(`/api/collab/pushes/${p.id}`, { method: "POST", body: { task: target.trim() } });
+        card.remove();
+        document.dispatchEvent(new CustomEvent("collab-external-push", { detail: moved }));
+      } catch (err) { alertPop(err.message); }
+    };
+  }
   return card;
 }
 
@@ -143,10 +155,9 @@ export function renderCollabPanel(task) {
       <span class="cb-counts" id="cbCounts"></span>
       <div class="cb-head-actions">
         <button class="cb-refresh" title="重新拉取">刷新</button>
-        <button class="cb-members">成员与 Token</button>
       </div>
     </header>
-    <p class="cb-hint">成员在本机智能体里推送的产物和动态会实时出现在这里。接入方法见「成员与 Token」。</p>
+    <p class="cb-hint">成员在本机智能体里推送的产物和动态会实时出现在这里。账号、角色与推送 Token 在「设置 → 人员与账号」里维护。</p>
     <div class="cb-feed" id="cbFeed"><div class="cb-empty">还没有推送。</div></div>
     <details class="cb-notes" id="cbNotes" hidden>
       <summary>动态 <span id="cbNotesCount"></span></summary>
@@ -173,6 +184,7 @@ export function renderCollabPanel(task) {
 
   const load = async () => {
     try {
+      await initViewer();
       const data = await cApi(`/api/collab/tasks/${task.id}/pushes?limit=200`);
       pushes = data.items;
       paint();
@@ -192,77 +204,19 @@ export function renderCollabPanel(task) {
   document.addEventListener("collab-external-push", () => load());
 
   box.querySelector(".cb-refresh").onclick = load;
-  box.querySelector(".cb-members").onclick = () => openMemberAdmin();
   load();
   return box;
 }
 
-// ---------- 成员管理 ----------
+// ---------- 角色与当前登录者 ----------
 
-export async function openMemberAdmin() {
-  const { infoDialog } = await import("./dialog.js");
-  while (true) {
-    const members = await cApi("/api/collab/members").then((d) => d.items).catch(() => []);
-    const rows = members.map((m) => `
-      <div class="cb-member-row" data-id="${m.id}">
-        <b>${esc(m.name)}</b>
-        <code class="cb-token-hint">${esc(m.token_hint)}</code>
-        <small>${m.push_count} 条推送</small>
-        <button type="button" class="cb-relink" data-act="reissue" data-id="${m.id}" data-name="${esc(m.name)}">换 Token</button>
-        <button type="button" class="cb-remove" data-act="remove" data-id="${m.id}">移除</button>
-      </div>`).join("");
-    const name = await infoDialog({
-      title: "协作成员与 Token",
-      subtitle: "新成员的 Token 只显示一次，发给对方填进推送脚本即可。成员在本机智能体里推送的内容会实时出现在任务协作窗。",
-      bodyHtml: `
-        <div class="cb-member-list">${rows || '<p class="cb-hint">还没有成员，在下面输入姓名添加第一个。</p>'}</div>
-        <div class="cb-add-row">
-          <input class="wb-dlg-input" data-dlg-value placeholder="新成员姓名，如：小李" maxlength="24">
-        </div>`,
-      okText: "添加成员",
-      onMount: ({ panel, close }) => {
-        panel.querySelectorAll("[data-act]").forEach((btn) => {
-          btn.onclick = async () => {
-            const { id, act, name: mName } = btn.dataset;
-            try {
-              if (act === "reissue") {
-                const reissued = await cApi(`/api/collab/members/${id}/token`, { method: "POST" });
-                close(null);
-                await showTokenOnce(reissued);
-              } else if (act === "remove") {
-                await cApi(`/api/collab/members/${id}`, { method: "DELETE" });
-                btn.closest(".cb-member-row")?.remove();
-              }
-            } catch (err) { alertPop(err.message); }
-          };
-        });
-      },
-    });
-    if (name === null) return; // 关闭弹窗退出
-    const clean = (name || "").trim();
-    if (!clean) continue;
-    try {
-      const created = await cApi("/api/collab/members", { method: "POST", body: { name: clean } });
-      await showTokenOnce(created);
-    } catch (err) { await alertPop(err.message); }
-  }
-}
+export const ROLES = {
+  planner: "企划人员", product: "产品人员", ux: "体验人员",
+  ui: "UI人员", other: "其他人员", admin: "管理人员",
+};
 
-async function showTokenOnce({ name, token }) {
-  const { infoDialog } = await import("./dialog.js");
-  await infoDialog({
-    title: `${name} 的推送 Token`,
-    subtitle: "只显示这一次，请立即复制发给成员。",
-    bodyHtml: `
-      <div class="cb-token-show"><code id="cbTokenText">${esc(token)}</code>
-      <button type="button" class="cb-copy">复制 Token</button></div>
-      <p class="cb-hint">成员端使用：在本机智能体目录运行 node push-agent.mjs init，填工作台地址和这个 Token。</p>`,
-    okText: "完成",
-    onMount: ({ panel }) => {
-      panel.querySelector(".cb-copy").onclick = async (e) => {
-        await navigator.clipboard.writeText(token).catch(() => {});
-        e.target.textContent = "已复制";
-      };
-    },
-  });
+/** 当前登录账号（登录页已保证有会话）。 */
+export async function me() {
+  const r = await fetch("/api/auth/me");
+  return r.ok ? (await r.json()).account : null;
 }

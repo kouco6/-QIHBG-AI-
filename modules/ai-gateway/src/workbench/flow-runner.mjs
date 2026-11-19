@@ -194,10 +194,13 @@ const pickSummary = (parsed, fallbackText) => {
     .join("\n");
 
 export class FlowRunner {
-  constructor({ store, manager, config, skillStore = null, events = null }) {
+  constructor({ store, manager, config, skillStore = null, events = null, userAgents = null, accounts = null }) {
     this.store = store;
     this.manager = manager;
     this.config = config;
+    this.userAgents = userAgents;
+    // 账号服务：远程任务的「人」要记成人名，不是员工名（统计页按人汇总）
+    this.accounts = accounts;
     // 本地技能库（工作方法库）。为空时流程照旧跑，只是不挂技能。
     this.skillStore = skillStore;
     // 流程事件总线：只推步骤状态与产物清单，用来替代前端 3 秒全量轮询。
@@ -274,10 +277,12 @@ export class FlowRunner {
   }
 
   /** 校验输入、冻结流程快照，然后异步开跑。立即返回 run 供前端渲染。 */
-  start(flowId, { input = "", variables = {}, cwd: cwdOverride, mode: rawMode } = {}) {
+  start(flowId, { input = "", variables = {}, cwd: cwdOverride, mode: rawMode, owner = null, projectId = null } = {}) {
     const flow = this.store.getFlow(flowId);
     if (!flow) throw new Error(`未知流程：${flowId}`);
     if (flow.status === "disabled") throw new Error(`流程「${flow.name}」已停用，先到流程编辑里启用`);
+    // 归属：发起人优先，其次流程的主人；两者都没有（存量数据）就留空 = 只有管理员看得到
+    const ownerAccountId = owner?.id ?? flow.ownerAccountId ?? null;
 
     const task = String(input ?? "").trim();
     if (!task) throw new Error("先写一句流程输入，告诉员工们要做什么");
@@ -320,6 +325,10 @@ export class FlowRunner {
       skillsSnapshot: [...(flow.skills ?? [])],
       input: task,
       variables: resolvedVariables,
+      ownerAccountId,
+      ownerName: owner?.name ?? owner?.username ?? flow.ownerName ?? null,
+      // 协作归属：流程运行产出的任务，完成后自动归档进该项目
+      projectId: projectId ? String(projectId).slice(0, 64) : null,
       cwd,
       runDir,
       workspace,
@@ -1053,6 +1062,7 @@ export class FlowRunner {
     const total = run.stepStates.length;
     let created;
     try {
+      const remote = this.#remoteFor(agentId);
       created = this.manager.create({
         prompt,
         cwd: run.cwd,
@@ -1066,6 +1076,7 @@ export class FlowRunner {
         outputTypes: ["text"],
         agent: agentId,
         agentChoice: "manual",
+        ...this.#ownership(run, remote),
       });
     } catch (error) {
       return { status: "failed", error: error?.message || "创建判断任务失败", step };
@@ -1140,6 +1151,7 @@ export class FlowRunner {
     const prompt = this.#checkpointPrompt(run, step, index, definition);
     let created;
     try {
+      const remote = this.#remoteFor(inspector);
       created = this.manager.create({
         prompt,
         cwd: run.cwd,
@@ -1154,6 +1166,7 @@ export class FlowRunner {
         outputTypes: ["markdown"],
         agent: inspector,
         agentChoice: "manual",
+        ...this.#ownership(run, remote),
       });
     } catch (error) {
       step.check.status = "failed";
@@ -1185,7 +1198,41 @@ export class FlowRunner {
 
   #agentName(agentId) {
     if (!agentId) return "系统";
+    if (String(agentId).startsWith("ua-")) {
+      const agent = this.userAgents?.getForDispatch(agentId);
+      return agent?.name ?? agentId;
+    }
     return this.config?.agents?.[agentId]?.name ?? (agentId === "codex" ? "codex" : agentId);
+  }
+
+  /**
+   * 个人员工（ua- 前缀）→ 远程执行字段：任务归属员工主人，由其执行器领走。
+   * 员工不存在/停用时抛错，让步骤直接失败并给出原因。
+   */
+  #remoteFor(agentId) {
+    if (!String(agentId ?? "").startsWith("ua-")) return null;
+    const agent = this.userAgents?.getForDispatch(agentId);
+    if (!agent) throw new Error(`AI 员工 ${agentId} 不存在或已停用`);
+    const owner = this.accounts?.listAccounts?.().find((item) => item.id === agent.accountId);
+    return {
+      runner: "remote",
+      ownerAccountId: agent.accountId,
+      ownerName: owner?.name ?? agent.name,
+      // 模型池：流程步骤任务同样占模型名额，排队统计才对得上
+      modelId: agent.model?.id ?? null,
+      modelName: agent.model?.name ?? null,
+    };
+  }
+
+  /**
+   * 任务归属字段。
+   * 远程员工已经把 ownerAccountId 指向员工主人，直接用；本机 CLI 员工则由流程发起人认领，
+   * 这样「产出库只能看自己的」对流程产出同样成立。
+   */
+  #ownership(run, remote) {
+    if (remote) return { ...remote, projectId: run.projectId ?? null };
+    const base = run?.ownerAccountId ? { ownerAccountId: run.ownerAccountId, ownerName: run.ownerName ?? null } : {};
+    return { ...base, projectId: run.projectId ?? null };
   }
 
   #checkpointPrompt(run, step, index, definition) {
@@ -1339,10 +1386,20 @@ export class FlowRunner {
       const recommendation = recommendAgent({ domain: "flow", prompt, outputTypes: [definition.outputType] }, this.config.agents);
       agentId = recommendation.recommendedAgent;
     }
-    try {
-      assertAgentUsable(agentId, this.config.agents);
-    } catch (error) {
-      return { status: "failed", error: `员工不可用：${error?.message || error}` };
+    if (!String(agentId).startsWith("ua-")) {
+      // 个人员工不在系统员工表里，别让系统校验把它拦下
+      try {
+        assertAgentUsable(agentId, this.config.agents);
+      } catch (error) {
+        return { status: "failed", error: `员工不可用：${error?.message || error}` };
+      }
+    } else if (!mountedSkills.length) {
+      // 流程没显式挂技能时，带上员工自己挂的工作方法（员工专业度跟着人走，不跟着流程走）
+      const employeeSkills = this.userAgents?.getForDispatch(agentId)?.skills ?? [];
+      const mount = employeeSkills.length && this.skillStore
+        ? this.skillStore.mountBlock(employeeSkills, { budget: 6000 })
+        : "";
+      if (mount && prompt.length + mount.length <= this.config.maxPromptChars) prompt = `${prompt}\n\n${mount}`;
     }
     step.agentId = agentId;
 
@@ -1359,6 +1416,7 @@ export class FlowRunner {
     if (isFinal) tags.push("最终产出");
     let created;
     try {
+      const remote = this.#remoteFor(agentId);
       created = this.manager.create({
         prompt,
         cwd: run.cwd,
@@ -1372,6 +1430,7 @@ export class FlowRunner {
         outputTypes: [definition.outputType],
         agent: agentId,
         agentChoice: definition.agentMode === "auto" ? "auto" : "manual",
+        ...this.#ownership(run, remote),
       }, null, sandbox ? { toolContext: { sandbox } } : {});
     } catch (error) {
       return { status: "failed", error: error?.message || "创建任务失败" };

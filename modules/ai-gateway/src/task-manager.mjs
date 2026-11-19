@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { collectArtifacts } from "./workbench/artifacts.mjs";
 import { parseResult, summarize } from "./workbench/parse.mjs";
 import { mergeUsage, normalizeUsage } from "./workbench/pricing.mjs";
@@ -13,8 +14,14 @@ const PUBLIC_FIELDS = [
   "domain", "taskType", "priority", "outputTypes", "agent", "agentChoice", "skills",
   "summary", "conclusions", "risks", "nextActions", "structured",
   "artifacts", "runs", "readAt", "archivedAt", "preview",
+  // 协作归属：任务产出要自动归档进哪个项目（null = 不归档）
+  "projectId",
   // 成本观测：这次派活到底烧了多少 token（钱由单价算出，不落库）
-  "usage", "research",
+  "usage",
+  // 多人模式：谁的活、在哪跑（local = 网关本机，remote = 派给执行器）
+  "ownerAccountId", "ownerName", "runner",
+  // 模型池：任务记住用的是哪个模型（排队统计与页面展示都要）
+  "modelId", "modelName",
 ];
 
 /**
@@ -86,7 +93,7 @@ const publicTask = (task, includeEvents = false) => {
 };
 
 export class TaskManager {
-  constructor({ concurrency, timeoutMs, runner, maxTasks = 200, persist = null, persistEvent = null, approvalResolver = null }) {
+  constructor({ concurrency, timeoutMs, runner, maxTasks = 200, persist = null, persistEvent = null, approvalResolver = null, collab = null, collabServerToken = null }) {
     this.concurrency = concurrency;
     this.timeoutMs = timeoutMs;
     this.runner = runner;
@@ -94,6 +101,9 @@ export class TaskManager {
     this.persist = persist;
     this.persistEvent = persistEvent;
     this.approvalResolver = approvalResolver;
+    // 协作服务 + 服务器侧推送 Token：任务产物自动归档进项目用
+    this.collab = collab;
+    this.collabServerToken = collabServerToken;
     this.tasks = new Map();
     this.queue = [];
     this.running = 0;
@@ -113,7 +123,7 @@ export class TaskManager {
     let restored = 0;
     let interrupted = 0;
     for (const record of records) {
-      if (this.tasks.size >= this.maxTasks && !record?.research) continue;
+      if (this.tasks.size >= this.maxTasks) break;
       if (!record || typeof record.id !== "string" || this.tasks.has(record.id)) continue;
       const task = {
         id: record.id,
@@ -150,13 +160,13 @@ export class TaskManager {
         outputTypes: Array.isArray(record.outputTypes) ? record.outputTypes : [],
         agent: record.agent ?? "codex",
         agentChoice: record.agentChoice ?? "auto",
+        modelId: record.modelId ?? null,
+        modelName: record.modelName ?? null,
         summary: record.summary ?? null,
         conclusions: Array.isArray(record.conclusions) ? record.conclusions : [],
         risks: Array.isArray(record.risks) ? record.risks : [],
         nextActions: Array.isArray(record.nextActions) ? record.nextActions : [],
         structured: record.structured ?? false,
-        research: record.research ?? null,
-        skills: record.skills ?? [],
         artifacts: Array.isArray(record.artifacts) ? record.artifacts : [],
         runs: Array.isArray(record.runs) ? record.runs : [],
         usage: normalizeUsage(record.usage),
@@ -164,22 +174,37 @@ export class TaskManager {
         archivedAt: record.archivedAt ?? null,
         preview: record.preview ?? null,
         idempotencyKey: record.idempotencyKey ?? null,
+        ownerAccountId: record.ownerAccountId ?? null,
+        ownerName: record.ownerName ?? null,
+        runner: record.runner ?? "local",
         events: (eventsByTask.get(record.id) ?? []).slice(-500),
         nextSequence: ((eventsByTask.get(record.id) ?? []).at(-1)?.sequence ?? 0) + 1,
         subscribers: new Set(),
         controller: new AbortController(),
         restored: true,
       };
-      if (["queued", "running", "waiting_approval"].includes(task.status) &&
-          !(task.status === "queued" && task.research?.transport === "local-pull")) {
-        task.status = "interrupted";
-        task.error = "Gateway restarted before this task finished";
-        task.terminationReason = "gateway_restart";
-        task.finishedAt = task.finishedAt ?? new Date().toISOString();
-        interrupted += 1;
+      if (["queued", "running", "waiting_approval"].includes(task.status)) {
+        if (task.runner === "remote") {
+          // 远程任务：还没被领走的继续排队（执行器重启后会来领）；
+          // 已经在执行器上跑的只能算失败——本机进程跟着重启没了。
+          if (task.status === "queued") {
+            // 保持 queued，等执行器重新 claim
+          } else {
+            task.status = "failed";
+            task.error = "执行器在任务完成前掉线";
+            task.terminationReason = "runner_lost";
+            task.finishedAt = task.finishedAt ?? new Date().toISOString();
+            interrupted += 1;
+          }
+        } else {
+          task.status = "interrupted";
+          task.error = "Gateway restarted before this task finished";
+          task.terminationReason = "gateway_restart";
+          task.finishedAt = task.finishedAt ?? new Date().toISOString();
+          interrupted += 1;
+        }
       }
       this.tasks.set(task.id, task);
-      if (task.status === "queued" && task.research?.transport === "local-pull") this.queue.push(task.id);
       if (task.idempotencyKey) this.idempotency.set(task.idempotencyKey, task.id);
       restored += 1;
     }
@@ -225,6 +250,11 @@ export class TaskManager {
       outputTypes: Array.isArray(input.outputTypes) ? input.outputTypes : [],
       agent: input.agent ?? "codex",
       agentChoice: input.agentChoice ?? "auto",
+      // 模型池：这条任务用的是哪个模型（同模型并发排队按它统计）
+      modelId: input.modelId ?? null,
+      modelName: input.modelName ?? null,
+      // 协作归属：任务产出要自动归档进哪个项目（null = 不归档）
+      projectId: input.projectId ? String(input.projectId).slice(0, 64) : null,
       // 这次挂了哪些工作方法（技能）。只记名字，正文在提示词里。
       skills: Array.isArray(input.skills) ? input.skills.slice(0, 8) : [],
       summary: null,
@@ -244,16 +274,19 @@ export class TaskManager {
       subscribers: new Set(),
       controller: new AbortController(),
     };
-    // Research must have a durable draft before it is visible or dispatched.
-    if (task.research) {
-      if (!draft || !this.persist) throw new Error("Research requires a persistent draft");
-      this.persist(task, idempotencyKey);
-    }
     this.tasks.set(task.id, task);
     if (options?.toolContext) this.toolContexts.set(task.id, options.toolContext);
     if (idempotencyKey) this.idempotency.set(idempotencyKey, task.id);
     if (draft) {
       this.#event(task, "gateway", { status: "draft" });
+      this.#trim();
+      this.#save(task);
+      return { task: publicTask(task), duplicate: false };
+    }
+    // 远程任务不进本地队列：不占网关并发，由执行器通过 claim 领走。
+    // 台账、事件流、SSE 仍然全走 TaskManager，前端一套视图。
+    if (task.runner === "remote") {
+      this.#event(task, "gateway", { status: "queued", runner: "remote" });
       this.#trim();
       this.#save(task);
       return { task: publicTask(task), duplicate: false };
@@ -270,30 +303,6 @@ export class TaskManager {
     return [...this.tasks.values()].reverse().map((task) => publicTask(task));
   }
 
-  // Internal WorkBuddy transport journal, stored on the existing research task.
-  // Fail closed before any dispatch; never hide a failed durable checkpoint.
-  researchCheckpoint(id, transport) {
-    const task = this.tasks.get(id);
-    if (!task?.research || !this.persist) throw new Error("Durable research task required");
-    const previous = task.research.workbuddy;
-    task.research.workbuddy = { ...transport };
-    try { this.persist(task, task.idempotencyKey); }
-    catch (error) { task.research.workbuddy = previous; throw error; }
-  }
-
-  /** External executors share this task record and queue; persist before exposing a transition. */
-  researchTransition(id, patch) {
-    const task = this.tasks.get(id);
-    if (!task?.research || !this.persist) throw new Error("Durable research task required");
-    const candidate = { ...task, ...patch, updatedAt: new Date().toISOString() };
-    this.persist(candidate, candidate.idempotencyKey);
-    Object.assign(task, candidate);
-    if (task.status !== "queued") this.queue = this.queue.filter(value => value !== id);
-    else if (!this.queue.includes(id)) this.queue.push(id);
-    this.#event(task, "gateway", { status: task.status, executor: task.research.executor });
-    return publicTask(task);
-  }
-
   get(id, includeEvents = false) {
     const task = this.tasks.get(id);
     return task ? publicTask(task, includeEvents) : null;
@@ -302,12 +311,6 @@ export class TaskManager {
   cancel(id) {
     const task = this.tasks.get(id);
     if (!task) return null;
-    if (task.research?.transport === "local-pull" && task.research.localPull?.claim)
-      throw new Error("已领取研究须确认执行端停止，不能仅在平台取消或释放租约");
-    if (task.research?.transport === "local-pull" && ["draft","queued"].includes(task.status))
-      return this.researchTransition(id,{status:"cancelled",terminationReason:"cancelled",finishedAt:new Date().toISOString()});
-    if (task.research?.workbuddy?.dispatchPhase)
-      throw new Error("WorkBuddy 原生取消未核实，不能把本地取消当作研究已停止");
     if (task.status === "draft") {
       task.status = "cancelled";
       task.terminationReason = "cancelled";
@@ -318,6 +321,17 @@ export class TaskManager {
       return publicTask(task);
     }
     if (!["queued", "running", "waiting_approval"].includes(task.status)) return publicTask(task);
+    // 远程任务没有本地进程可 abort：直接标取消，执行器心跳时发现并收尾
+    if (task.runner === "remote") {
+      task.status = "cancelled";
+      task.terminationReason = "cancelled";
+      task.finishedAt = new Date().toISOString();
+      task.updatedAt = task.finishedAt;
+      task.pendingApprovals = [];
+      this.#event(task, "gateway", { status: "cancelled" });
+      this.#save(task);
+      return publicTask(task);
+    }
     task.controller.abort();
     if (task.status === "queued") {
       task.status = "cancelled";
@@ -335,7 +349,6 @@ export class TaskManager {
   update(id, patch = {}) {
     const task = this.tasks.get(id);
     if (!task) return null;
-    if (task.research) throw new Error("研究任务关联及执行配置只读；重新研究须创建新版本");
     if (typeof patch.label === "string") task.label = patch.label.trim().slice(0, 120);
     if (typeof patch.title === "string") task.label = patch.title.trim().slice(0, 120);
     if (patch.tags !== undefined) task.tags = normalizeTags(patch.tags);
@@ -360,11 +373,6 @@ export class TaskManager {
   archive(id, archived = true) {
     const task = this.tasks.get(id);
     if (!task) return null;
-    if (task.research) {
-      task.archivedAt = archived ? new Date().toISOString() : null;
-      this.#save(task);
-      return publicTask(task);
-    }
     if (archived) {
       task.archivedAt = new Date().toISOString();
       task.status = "archived";
@@ -383,12 +391,12 @@ export class TaskManager {
   dispatch(id) {
     const task = this.tasks.get(id);
     if (!task) return null;
-    if (task.research?.transport === "local-pull") throw new Error("本地领取任务不能派给通用 Runner");
     if (task.status !== "draft") return publicTask(task);
     task.status = "queued";
     task.updatedAt = new Date().toISOString();
     task.queuedAt = task.updatedAt;
-    this.queue.push(task.id);
+    // 远程任务不入本地队列，等执行器 claim；本地任务照旧
+    if (task.runner !== "remote") this.queue.push(task.id);
     this.#event(task, "gateway", { status: "queued" });
     this.#save(task);
     queueMicrotask(() => this.#schedule());
@@ -402,7 +410,6 @@ export class TaskManager {
   rerun(id, { resume = false } = {}) {
     const task = this.tasks.get(id);
     if (!task) return null;
-    if (task.research) throw new Error("研究重试须经受理端创建新任务版本，不能覆盖原始版本");
     if (["queued", "running", "waiting_approval"].includes(task.status)) return publicTask(task);
     if (!resume) task.threadId = null;
     task.status = "queued";
@@ -435,7 +442,9 @@ export class TaskManager {
     // Keep a single monotonic event sequence across reruns. Resetting it would
     // make persisted SSE cursors ambiguous after a gateway restart.
     task.controller = new AbortController();
-    this.queue.push(task.id);
+    task.runId = null;
+    // 远程任务重跑：回到 queued 等执行器再次领走，不进本地队列
+    if (task.runner !== "remote") this.queue.push(task.id);
     this.#event(task, "gateway", { status: "queued", resume });
     this.#save(task);
     queueMicrotask(() => this.#schedule());
@@ -446,6 +455,166 @@ export class TaskManager {
   queuePosition(id) {
     const index = this.queue.indexOf(id);
     return index === -1 ? null : index + 1;
+  }
+
+  /* --------------------------------------------------------------------
+     远程执行器（多机部署）：任务台账仍在 TaskManager，执行发生在执行器。
+     claim → 执行器拿走任务详情；progress → 流式回传输出；
+     finish → 结果走与本地 #run 相同的结构化解析，前端无感。
+     -------------------------------------------------------------------- */
+
+  /** 执行器领活：取该账号最早排队中的远程任务，标记 running。 */
+  /**
+   * 远程任务领取。canRun(task) 返回 false 的任务会被跳过（排到它后面），
+   * 用于「同一个模型被多个员工共用 → 按模型并发上限排队」。
+   */
+  claimRemote(accountId, { canRun = null } = {}) {
+    const candidates = [...this.tasks.values()]
+      .filter((item) => item.runner === "remote" && item.ownerAccountId === accountId && item.status === "queued")
+      .sort((a, b) => (a.createdAt || "").localeCompare(b.createdAt || ""));
+    const task = typeof canRun === "function" ? candidates.find((item) => canRun(item)) : candidates[0];
+    if (!task) return null;
+    const at = new Date().toISOString();
+    task.status = "running";
+    task.startedAt = at;
+    task.updatedAt = at;
+    task.runId = `${task.id.slice(0, 8)}-r${task.runs.length + 1}`;
+    this.#event(task, "gateway", { status: "running", runner: "remote", runId: task.runId });
+    this.#save(task);
+    // 返回内部完整对象（prompt/cwd/agent 等不下发之外的字段由 API 层过滤）
+    return task;
+  }
+
+  /** 执行器流式回传输出：只追加 stdout 事件，让任务卡实时长出内容。 */
+  remoteProgress(id, text) {
+    const task = this.tasks.get(id);
+    if (!task || task.runner !== "remote") return false;
+    if (!["running", "waiting_approval"].includes(task.status)) return false;
+    this.#event(task, "stdout", { text: String(text ?? "").slice(0, 4000) });
+    this.#save(task);
+    return true;
+  }
+
+  /** 执行器完工：走与本地执行相同的结果解析，前端看到的就是同一个任务卡。 */
+  finishRemote(id, result = {}) {
+    const task = this.tasks.get(id);
+    if (!task || task.runner !== "remote") return null;
+    // 已终态（比如执行器跑完前任务被取消）：不再覆盖结果，只确认收尾
+    if (!["running", "waiting_approval"].includes(task.status)) return publicTask(task);
+    const runId = task.runId || `${task.id.slice(0, 8)}-r${task.runs.length + 1}`;
+    task.runId = null;
+    if (result.usage) {
+      const delta = normalizeUsage(result.usage);
+      if (delta) task.usage = mergeUsage(task.usage, delta);
+    }
+    if (result.ok) {
+      task.finalResponse = String(result.finalResponse ?? "");
+      const parsed = parseResult(task.finalResponse);
+      task.summary = summarize(parsed);
+      task.conclusions = parsed.conclusions;
+      task.risks = parsed.risks;
+      task.nextActions = parsed.nextActions;
+      task.structured = parsed.structured;
+      task.threadId = result.threadId || task.threadId;
+      task.status = "completed";
+      task.terminationReason = "completed";
+      task.pendingApprovals = [];
+    } else {
+      task.status = result.cancelled === true ? "cancelled" : "failed";
+      task.error = String(result.error ?? "执行器未返回原因");
+      task.terminationReason = result.cancelled === true ? "cancelled" : "error";
+      task.summary = task.summary || task.error;
+      task.pendingApprovals = [];
+    }
+    task.finishedAt = new Date().toISOString();
+    task.updatedAt = task.finishedAt;
+    task.runs = [
+      ...(task.runs ?? []),
+      {
+        runId,
+        startedAt: task.startedAt,
+        finishedAt: task.finishedAt,
+        status: task.status,
+        terminationReason: task.terminationReason,
+        threadId: task.threadId,
+        error: task.error,
+        summary: task.summary,
+        metrics: taskMetrics(task, task.finishedAt),
+        usage: task.usage ?? null,
+        artifactIds: [],
+      },
+    ].slice(-20);
+    this.#event(task, "gateway", { status: task.status, error: task.error, runId });
+    this.#archiveToProject(task);
+    this.#save(task);
+    return publicTask(task);
+  }
+
+  /**
+   * 任务完成后把产物自动归档进协作项目。
+   *
+   * 协作的意义就在于「大家的执行器跑完，项目里立刻能看到文件」——所以归档在
+   * 服务器侧做，不依赖执行器主动推送：任务带 projectId、成功、有产物，就投递。
+   * 归档失败只记日志，绝不能让任务状态跟着翻车。
+   */
+  #archiveToProject(task) {
+    if (!task.projectId || task.status !== "completed") return;
+    if (!this.collab) return;
+    try {
+      // 项目不存在或已被删：归档目标无效，跳过并留痕
+      if (!this.collab.getProject(task.projectId)) {
+        this.#event(task, "gateway", { status: "archive_skip", error: "协作项目不存在", projectId: task.projectId });
+        return;
+      }
+      const items = task.artifacts ?? [];
+      const text = String(task.finalResponse ?? "").trim();
+      if (!items.length && !text) return;
+      // 至少投一条：有产物带产物，纯文本任务带结论文本
+      this.collab.ingest({
+        token: this.collabServerToken,
+        taskId: task.id,
+        projectId: task.projectId,
+        agent: this.#agentDisplay(task),
+        kind: "artifact",
+        title: task.label || task.summary?.slice(0, 80) || "任务产出",
+        body: text.slice(0, 20_000),
+        file: items.length ? undefined : null,
+      });
+      for (const item of items) {
+        try {
+          const data = readFileSync(item.path);
+          this.collab.ingest({
+            token: this.collabServerToken,
+            taskId: task.id,
+            projectId: task.projectId,
+            agent: this.#agentDisplay(task),
+            kind: "artifact",
+            title: item.name || item.path.split(/[\\/]/).pop(),
+            body: `来自任务「${task.label || task.id.slice(0, 8)}」的产出文件。`,
+            file: { data, name: item.name || item.path.split(/[\\/]/).pop(), mime: item.mime || "" },
+          });
+        } catch (error) {
+          this.#event(task, "gateway", { status: "archive_skip", path: item.path, error: String(error.message ?? error).slice(0, 200) });
+        }
+      }
+      this.#event(task, "gateway", { status: "archived_to_project", projectId: task.projectId, files: items.length });
+    } catch (error) {
+      console.error("[task-manager] 归档到协作项目失败：", error.message);
+    }
+  }
+
+  /** 任务卡上显示用的员工名：ua- 员工查不到就给个友好称呼。 */
+  #agentDisplay(task) {
+    const id = task.agent || "codex";
+    if (!id.startsWith("ua-")) return id;
+    return task.ownerName ? `${task.ownerName} 的员工` : "已删除的员工";
+  }
+
+  /** 执行器每轮心跳时顺带问一句「这个任务还让跑吗」，取消即时生效。 */
+  remoteCancelPending(id) {
+    const task = this.tasks.get(id);
+    if (!task || task.runner !== "remote") return false;
+    return !["queued", "running", "waiting_approval"].includes(task.status);
   }
 
   subscribe(id, listener) {
@@ -531,11 +700,6 @@ export class TaskManager {
     try {
       this.persist(task, task.idempotencyKey);
     } catch (error) {
-      if (task.research) {
-        task.status = "interrupted";
-        task.terminationReason = "research_persistence_failed";
-        task.error = "RESEARCH_PERSISTENCE_FAILED";
-      }
       process.stderr.write(`[task-manager] persist failed: ${error?.message || error}\n`);
     }
   }
@@ -589,11 +753,10 @@ export class TaskManager {
 
   #schedule() {
     while (this.running < this.concurrency && this.queue.length) {
-      const index = this.queue.findIndex(id => this.tasks.get(id)?.research?.transport !== "local-pull");
-      if (index < 0) break;
-      const [id] = this.queue.splice(index, 1);
+      const id = this.queue.shift();
       const task = this.tasks.get(id);
       if (!task || task.status !== "queued") continue;
+      if (task.runner === "remote") continue; // 远程任务等执行器领走，本地不执行
       this.#run(task);
     }
   }
@@ -607,9 +770,6 @@ export class TaskManager {
     task.currentRunId = runId;
     this.#event(task, "gateway", { status: "running", runId });
     this.#save(task);
-    if (task.research && task.status !== "running") {
-      this.running -= 1; this.#schedule(); return;
-    }
     try {
       const result = await this.runner(task, {
         signal: task.controller.signal,
@@ -689,9 +849,8 @@ export class TaskManager {
           artifactIds: (task.artifacts ?? []).map((item) => item.id),
         },
       ].slice(-20);
-      if (task.research) this.#save(task);
       this.#event(task, "gateway", { status: task.status, error: task.error, runId });
-      if (!task.research) this.#save(task);
+      this.#save(task);
       this.toolContexts.delete(task.id);
       this.running -= 1;
       this.#schedule();
@@ -701,7 +860,6 @@ export class TaskManager {
   #trim() {
     if (this.tasks.size <= this.maxTasks) return;
     for (const [id, task] of this.tasks) {
-      if (task.research) continue;
       if (["queued", "running", "waiting_approval"].includes(task.status)) continue;
       this.tasks.delete(id);
       if (this.tasks.size <= this.maxTasks) break;

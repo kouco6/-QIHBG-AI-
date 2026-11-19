@@ -49,15 +49,20 @@ const ok = (msg) => console.log(`✓ ${msg}`);
 function requireConfig(cfg) {
   if (!cfg.server) die("还没配置工作台地址，先运行：node push-agent.mjs init");
   if (!cfg.token) die("还没配置成员 Token，先运行：node push-agent.mjs init");
-  if (!cfg.task) die("还没选当前任务，先运行：node push-agent.mjs use <任务ID>（tasks 子命令可列出任务）");
+  if (!cfg.task && !cfg.project) die("还没选当前任务或项目：node push-agent.mjs use <任务ID> 或 project <项目ID>");
   return cfg;
 }
 
 async function api(cfg, path, options = {}) {
-  const resp = await fetch(`${cfg.server.replace(/\/$/, "")}${path}`, {
-    ...options,
-    headers: { authorization: `Bearer ${cfg.token}`, ...(options.headers || {}) },
-  });
+  let resp;
+  try {
+    resp = await fetch(`${cfg.server.replace(/\/$/, "")}${path}`, {
+      ...options,
+      headers: { authorization: `Bearer ${cfg.token}`, ...(options.headers || {}) },
+    });
+  } catch (e) {
+    die(`连不上工作台 ${cfg.server}：${e.cause?.code || e.message}（检查地址和网络）`);
+  }
   const data = await resp.json().catch(() => ({}));
   if (!resp.ok) die(data.error || `请求失败 ${resp.status}`);
   return data;
@@ -71,8 +76,10 @@ function readClipboard() {
   } catch { die("读不到剪贴板内容"); }
 }
 
-async function push({ server, token, task }, { kind, agent, title, file, text }) {
-  const params = new URLSearchParams({ task, kind, agent: agent || "workbuddy" });
+async function push(cfg, { kind, agent, title, file, text }) {
+  const params = new URLSearchParams({ kind, agent: agent || "workbuddy" });
+  if (cfg.project) params.set("project", cfg.project);
+  else params.set("task", cfg.task);
   if (title) params.set("title", title);
   let headers = {};
   let body;
@@ -93,12 +100,12 @@ async function push({ server, token, task }, { kind, agent, title, file, text })
     headers["content-type"] = "application/json; charset=utf-8";
     body = JSON.stringify({ text: text ?? "" });
   }
-  const resp = await fetch(`${server.replace(/\/$/, "")}/api/collab/push?${params}`, {
-    method: "POST", headers: { authorization: `Bearer ${token}`, ...headers }, body,
+  const resp = await fetch(`${cfg.server.replace(/\/$/, "")}/api/collab/push?${params}`, {
+    method: "POST", headers: { authorization: `Bearer ${cfg.token}`, ...headers }, body,
   });
   const data = await resp.json().catch(() => ({}));
   if (!resp.ok) die(data.error || `推送失败 ${resp.status}`);
-  ok(`已推送到任务窗（${kind === "note" ? "动态" : "产物"} · ${agent || "workbuddy"}）${data.push?.title ? `：${data.push.title}` : ""}`);
+  ok(`已推送到${cfg.project ? "项目" : "任务窗"}（${kind === "note" ? "动态" : "产物"} · ${agent || "workbuddy"}）${data.push?.title ? `：${data.push.title}` : ""}`);
 }
 
 const [cmd, ...rest] = process.argv.slice(2);
@@ -146,6 +153,24 @@ const flag = (name) => {
       ok(`当前任务：${hit?.label ?? id}`);
       break;
     }
+    case "projects": {
+      requireConfig({ ...cfg, project: "-" });
+      const { items } = await api(cfg, "/api/collab/projects");
+      if (!items.length) return console.log("工作台上暂无项目，请管理员先在「协作」页创建");
+      for (const p of items) console.log(`${p.id}  ${p.name}`);
+      console.log("\n选定当前项目：node push-agent.mjs project <项目ID>");
+      break;
+    }
+    case "project": {
+      const id = rest[0];
+      if (!id) die("用法：node push-agent.mjs project <项目ID>（projects 子命令可列出项目）");
+      const { items } = await api(cfg, "/api/collab/projects");
+      const hit = items.find((p) => p.id === id);
+      if (!hit) die(`找不到项目 ${id}，先用 projects 子命令列出`);
+      saveConfig({ project: id, task: "" });
+      ok(`当前项目：${hit.name}（之后推送都进这个项目；用 use <任务ID> 可切回任务）`);
+      break;
+    }
     case "clip": {
       const kind = flag("--kind") || "artifact";
       const agent = flag("--agent") || "clipboard";
@@ -175,6 +200,8 @@ const flag = (name) => {
   node push-agent.mjs token <成员Token>      填管理员发的 Token
   node push-agent.mjs tasks                  列出任务
   node push-agent.mjs use <任务ID>           选当前任务
+  node push-agent.mjs projects               列出项目
+  node push-agent.mjs project <项目ID>       选当前项目（推送都进它）
   node push-agent.mjs push <文件|文本|->     推送（- 为管道输入）
   node push-agent.mjs clip [--kind note]     推剪贴板内容`);
   }

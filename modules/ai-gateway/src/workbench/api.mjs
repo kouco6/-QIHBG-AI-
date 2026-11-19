@@ -16,61 +16,12 @@ import { PRESET_VIEWS, LOCAL_CLI_PRESETS } from "./model-presets.mjs";
 import { probeLocalCli } from "./agent-config.mjs";
 import { readArtifact, classifyArtifact, confinePath } from "./artifact-writer.mjs";
 import { computeFlowStats, computeStats } from "./stats.mjs";
-import { buildPricingPrompt, parsePricingReply } from "./pricing-fetcher.mjs";
 import { DOMAINS, TEMPLATES, buildPrompt, findTemplate } from "./templates.mjs";
 import { HubClient, HubError } from "./hub-client.mjs";
 import { describeHubSettings, saveHubSettings } from "./hub-settings.mjs";
 import { applySkills, autoSkillNames, skillStoreFor } from "./skill-mount.mjs";
-import { prepareResearch, researchResult, researchView, runtimeResearch, trustedResearch, researchOwner, workbuddyConnection, ResearchFailure } from "./research.mjs";
 
 const MAX_BODY = 2 * 1024 * 1024;
-
-// AI 查价的内存任务表：查价是短生命周期的一次性动作，不值得进任务列表落盘。
-// 只留最近 30 条，前端凭 id 轮询。
-const pricingJobs = new Map();
-
-const pricingJobView = (job) => ({
-  id: job.id,
-  status: job.status,
-  model: job.model,
-  workerId: job.workerId,
-  startedAt: job.startedAt,
-  finishedAt: job.finishedAt,
-  error: job.error,
-  pricing: job.pricing,
-  source: job.source,
-  note: job.note,
-  rawReply: job.rawReply ?? null,
-});
-
-/** 跑一次查价：派员工 → 拿回复 → 解析校验。结果写回 job，不落配置。 */
-const runPricingJob = async (job, { prompt, runner, cwd, timeoutMs, signal }) => {
-  try {
-    // mode "web"：文件只读但放行 WebSearch/WebFetch，普通只读模式会被权限确认卡死
-    const result = await runner(
-      { id: job.id, prompt, agent: job.workerId, mode: "web", cwd },
-      { signal, timeoutMs, toolContext: null, emit: () => {} },
-    );
-    const reply = String(result?.finalResponse ?? "");
-    const parsed = parsePricingReply(reply);
-    if (parsed.error) {
-      job.status = "failed";
-      job.error = parsed.error;
-      // 留一段原文，前端和排查都能看到员工到底回了什么
-      job.rawReply = reply.replace(/\s+/g, " ").trim().slice(0, 400);
-      return;
-    }
-    job.status = "completed";
-    job.pricing = parsed.pricing;
-    job.source = parsed.source;
-    job.note = parsed.note;
-  } catch (err) {
-    job.status = "failed";
-    job.error = String(err?.message || err || "查价失败").slice(0, 300);
-  } finally {
-    job.finishedAt = Date.now();
-  }
-};
 
 const readJson = async (req) => {
   const chunks = [];
@@ -134,7 +85,7 @@ const agentViews = (config) => listAgents(config.agents).map((agent) => ({
   config: describeAgent(config, agent.id),
 }));
 
-function selectTasks(manager, params) {
+function selectTasks(manager, params, viewer = null, isAdmin = false, collabApi = null) {
   const domain = params.get("domain") || "";
   const agent = params.get("agent") || "";
   const outputType = params.get("outputType") || "";
@@ -142,9 +93,27 @@ function selectTasks(manager, params) {
   const range = params.get("range") || "all";
   const column = params.get("column") || "";
   const includeArchived = params.get("archived") === "1";
+  const projectId = (params.get("projectId") || "").trim();
+
+  // 项目页签视角：归档进这个项目的任务，项目成员都能看到（不只任务创建人）。
+  // visibleProjectIds 对管理员返回 null（看全部），普通成员返回他能进的项目集合。
+  const projectVisible = projectId && collabApi?.service
+    ? (() => {
+        const visible = collabApi.service.visibleProjectIds(viewer ?? { id: null, role: "admin" });
+        return visible === null ? true : visible.has(projectId);
+      })()
+    : false;
 
   const all = manager.list();
+  // 产出隔离：普通账号只看自己名下的任务（产出、附件、事件都挂在任务上）；
+  // 管理员 / 主 Token 看全部。没有归属的存量任务不再对所有人可见，
+  // 否则等于把别人的历史产出摊给全公司看。
+  const mine = (task) => Boolean(isAdmin || !viewer) || task.ownerAccountId === viewer.id
+    // 项目页签：只要请求的就是这个项目的任务、且查看者在项目里，归档任务对项目成员可见
+    || (projectId && projectVisible && task.projectId === projectId);
   const filtered = all.filter((task) => {
+    if (!mine(task)) return false;
+    if (projectId && task.projectId !== projectId) return false;
     if (!includeArchived && task.status === "archived") return false;
     if (domain && task.domain !== domain) return false;
     if (agent && task.agent !== agent) return false;
@@ -157,6 +126,7 @@ function selectTasks(manager, params) {
   const counts = Object.fromEntries(COLUMN_ORDER.map((key) => [key, 0]));
   counts.attention = 0;
   for (const task of all) {
+    if (!mine(task)) continue;
     if (task.status === "archived" && !includeArchived) continue;
     counts[task.column] = (counts[task.column] ?? 0) + 1;
     if (task.unread) counts.unread = (counts.unread ?? 0) + 1;
@@ -165,8 +135,10 @@ function selectTasks(manager, params) {
   return { items: filtered, counts, total: all.length };
 }
 
-function buildStats(manager) {
-  const all = manager.list().filter((task) => task.status !== "archived");
+function buildStats(manager, scope = null) {
+  // scope = { accountId, isAdmin }：普通账号只统计自己名下的任务
+  const visible = (task) => !scope || scope.isAdmin || !scope.accountId || task.ownerAccountId === scope.accountId;
+  const all = manager.list().filter((task) => task.status !== "archived" && visible(task));
   const week = Date.now() - 7 * 24 * 3600 * 1000;
   const recent = all.filter((task) => new Date(task.createdAt || 0).getTime() >= week);
   const done = recent.filter((task) => task.status === "completed");
@@ -219,45 +191,14 @@ export async function handleWorkbenchApi(req, res, path, url, ctx) {
   const method = req.method;
   const params = url.searchParams;
   const segment = path.slice(5).split("/").filter(Boolean); // after "/api/"
+  // 多人模式：viewer = 登录账号（主 Token 时为 null，按管理员对待）
+  const viewer = ctx.viewer ?? null;
+  const isAdmin = ctx.viewerIsAdmin === true;
+  const userAgents = ctx.userAgents ?? null;
+  const collabApi = ctx.collabApi ?? null;
 
   const skillStore = () => skillStoreFor(config);
   const hubClient = () => new HubClient(config.hub);
-
-  if (path.startsWith("/api/research/")) {
-    trustedResearch(req, config);
-    const connection = workbuddyConnection(config);
-    if (path === "/api/research/workbuddy" && method === "GET") {
-      json(res, 200, connection.info()); return true;
-    }
-    if (method === "POST" && ["authorization", "callback", "online", "refresh"].some(action =>
-      path === "/api/research/workbuddy/" + action)) {
-      const body = await readJson(req), action = path.split("/").pop();
-      const allowed = action === "callback" ? ["state", "code"] : [];
-      if (!body || Array.isArray(body) || Object.keys(body).some(k => !allowed.includes(k)))
-        throw new ResearchFailure("INVALID_REQUEST", "WorkBuddy 接入请求字段无效", 422);
-      const value = action === "authorization" ? connection.begin() :
-        action === "callback" ? await connection.complete(body) :
-        action === "refresh" ? await connection.refresh() : await connection.checkOnline();
-      json(res, 200, value); return true;
-    }
-    if (method !== "GET") throw new ResearchFailure("METHOD_NOT_ALLOWED", "研究查询只读", 405);
-    if (path === "/api/research/runtime") { json(res, 200, runtimeResearch(config)); return true; }
-    const projectId = params.get("projectId");
-    if (!projectId || !/^[A-Za-z0-9._-]{1,120}$/.test(projectId))
-      throw new ResearchFailure("INVALID_REQUEST", "必须指定 projectId", 422);
-    const owned = t => t?.research?.ownerId === researchOwner(config) && t.research.projectId === projectId;
-    if (path === "/api/research/tasks") {
-      const items = [...manager.tasks.values()].filter(owned)
-        .filter(t => !params.get("dimensionId") || t.research.dimensionId === params.get("dimensionId"))
-        .filter(t => !params.get("cycleId") || t.research.cycleId === params.get("cycleId"))
-        .sort((a,b) => b.research.version - a.research.version).map(researchView);
-      json(res, 200, { items }); return true;
-    }
-    const match = path.match(/^\/api\/research\/(tasks|results)\/([A-Za-z0-9-]+)$/);
-    const task = match ? manager.tasks.get(match[2]) : null;
-    if (!owned(task)) throw new ResearchFailure("RESEARCH_TASK_NOT_FOUND", "当前项目下未找到研究任务", 404);
-    json(res, 200, match[1] === "results" ? researchResult(config, task) : researchView(task)); return true;
-  }
 
   // ---------------------------------------------------------------- skills（工作方法库）
   // 云端目录、拉取安装、本地列表、删除，都走这几个口。平台账号密码只在服务端用。
@@ -426,6 +367,11 @@ export async function handleWorkbenchApi(req, res, path, url, ctx) {
       codexVersion: ctx.codexVersion,
       domains: DOMAINS,
       agents: agentViews(config),
+      // 系统员工（本机 CLI 执行位）只对管理员可见可派；其他人的下拉里只放自己的员工
+      isAdmin,
+      viewer: viewer ? { id: viewer.id, name: viewer.name ?? null, role: viewer.role ?? null } : null,
+      // 模型池：员工引用它，前端新增员工时直接从这里选
+      models: ctx.userAgents?.listModels(viewer?.id ?? null) ?? [],
       capabilities: CAPABILITIES,
       // 本机 CLI 磁贴放最前：新增员工时默认选它，整张表单都不用碰 API Key。
       // installed 是服务端探测的结果，前端磁贴直接标「已安装 / 未检测到」
@@ -598,14 +544,15 @@ export async function handleWorkbenchApi(req, res, path, url, ctx) {
   }
 
   if (method === "GET" && path === "/api/stats") {
-    // 原有字段继续服务设置页；看板页用 ?days=7|30 拿 totals + trend + 各聚合。
+    // 内网版不按 token 计费：只出用量与成败统计，不出现任何金额。
     const days = Number(params.get("days")) || 7;
-    const runs = ctx.flowStore ? ctx.flowStore.listRuns() : [];
-    // 单价只存在配置里，不写进任务记录：改价后历史金额跟着重算，但 token 不变。
-    const pricingOf = (agentId) => config.agents?.[agentId]?.pricing ?? null;
+    const scope = isAdmin ? { isAdmin: true } : { accountId: viewer?.id ?? null };
+    const visibleTask = (task) => isAdmin || !viewer || task.ownerAccountId === viewer.id;
+    const scopedTasks = manager.list().filter(visibleTask);
+    const runs = ctx.flowStore ? ctx.flowStore.listRuns(isAdmin ? null : { accountId: viewer?.id ?? null, isAdmin: false }) : [];
     json(res, 200, {
-      ...buildStats(manager),
-      ...computeStats(manager.list(), { days, pricingOf }),
+      ...buildStats(manager, scope),
+      ...computeStats(scopedTasks, { days }),
       flows: computeFlowStats(runs),
     });
     return true;
@@ -665,83 +612,56 @@ export async function handleWorkbenchApi(req, res, path, url, ctx) {
     return true;
   }
 
-  // AI 查价：派一个能联网的本机员工查模型最新公开单价。
-  // 查价目标用表单里当前填的模型名（新增 / 编辑都能用）；结果只回填表单，保存才落盘。
-  if (method === "POST" && segment[0] === "agents" && segment[1] === "pricing" && segment[2] === "refresh" && segment.length === 3) {
-    const body = await readJson(req);
-    let prompt;
-    try {
-      prompt = buildPricingPrompt({ name: body.name, model: body.model });
-    } catch (err) {
-      json(res, 400, { error: err.message });
-      return true;
-    }
-    // 只有本机 CLI 员工真有联网工具；云端 runner 是裸 chat，查不了网页
-    const workers = ["claude", "codex"].filter((id) => ctx.runner?.has?.(id) && config.agents?.[id]?.available);
-    const workerId = workers.includes(body.workerId) ? body.workerId : workers[0];
-    if (!workerId) {
-      json(res, 409, { error: "没有能联网的员工可派（需要 Claude Code 或 Codex 可用）" });
-      return true;
-    }
-    const job = {
-      id: `price-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`,
-      status: "running",
-      model: String(body.model || "").trim() || String(body.name || "").trim(),
-      workerId,
-      startedAt: Date.now(),
-      finishedAt: null,
-      error: null,
-      pricing: null,
-      source: "",
-      note: "",
-      abort: null,
-    };
-    pricingJobs.set(job.id, job);
-    // 只留最近 30 条已结束的，防内存慢慢长
-    const finished = [...pricingJobs.values()].filter((item) => item.finishedAt).sort((a, b) => a.finishedAt - b.finishedAt);
-    while (finished.length > 30) pricingJobs.delete(finished.shift().id);
-
-    const controller = new AbortController();
-    job.abort = controller;
-    runPricingJob(job, {
-      prompt,
-      runner: ctx.runner,
-      cwd: config.allowedRoots?.[0] ?? process.cwd(),
-      // 查价是短任务：网关默认 30 分钟对它太宽，封顶 8 分钟
-      timeoutMs: Math.min(config.taskTimeoutMs ?? 300_000, 8 * 60_000),
-      signal: controller.signal,
-    }).catch(() => {});
-    json(res, 202, { job: pricingJobView(job) });
-    return true;
-  }
-
-  if (method === "GET" && segment[0] === "agents" && segment[1] === "pricing" && segment[2] === "jobs" && segment[3] && segment.length === 4) {
-    const job = pricingJobs.get(segment[3]);
-    if (!job) {
-      json(res, 404, { error: "查价任务不存在或网关已重启" });
-      return true;
-    }
-    json(res, 200, { job: pricingJobView(job) });
-    return true;
-  }
-
   // ---------------------------------------------------------------- flows
   if (segment[0] === "flows" && ctx.flowStore && ctx.flowRunner) {
     const { flowStore, flowRunner, flowEvents } = ctx;
+    // 归属隔离：普通账号只看自己建的流程与自己的运行；管理员看全部。
+    const ownScope = isAdmin ? null : { accountId: viewer?.id ?? null, isAdmin: false };
+    const canSeeRun = (run) => Boolean(run) && (isAdmin || Boolean(run.ownerAccountId && run.ownerAccountId === viewer?.id));
+    /** 取运行实例；不属于当前人一律当「不存在」，不泄露别人的运行 id 是否有效。 */
+    const runOf = (id) => {
+      const run = flowStore.getRun(id);
+      return canSeeRun(run) ? run : null;
+    };
+    const ownFlow = (id) => {
+      const flow = flowStore.getFlow(id);
+      if (!flow) throw new Error(`未知流程：${id}`);
+      if (!isAdmin && flow.ownerAccountId && flow.ownerAccountId !== viewer?.id) throw new Error("这个流程不属于你");
+      return flow;
+    };
+
+    /**
+     * 个人员工（ua- 前缀）跟账号走：流程里只能挂自己的员工。
+     * 不改这一步的话，知道 id 的人就能把自己的流程挂到别人的员工上，
+     * 任务会派到别人电脑上、用别人的模型额度。
+     */
+    const assertOwnAgents = (steps) => {
+      if (isAdmin) return;
+      const ids = new Set();
+      const walk = (value) => {
+        if (typeof value === "string") { if (value.startsWith("ua-")) ids.add(value); return; }
+        if (Array.isArray(value)) { value.forEach(walk); return; }
+        if (value && typeof value === "object") Object.values(value).forEach(walk);
+      };
+      walk(steps);
+      for (const id of ids) {
+        if (!userAgents?.get(id, viewer?.id)) throw new Error(`AI 员工 ${id} 不存在或不属于你`);
+      }
+    };
 
     if (method === "GET" && segment.length === 1) {
-      json(res, 200, { items: flowStore.listFlows(), runs: flowStore.listRuns().slice(0, 30) });
+      json(res, 200, { items: flowStore.listFlows(ownScope), runs: flowStore.listRuns(ownScope).slice(0, 30) });
       return true;
     }
 
     // 运行实例相关路由放在具体 flow id 之前判断
     if (method === "GET" && segment[1] === "runs" && segment.length === 2) {
-      json(res, 200, { items: flowStore.listRuns() });
+      json(res, 200, { items: flowStore.listRuns(ownScope) });
       return true;
     }
 
     if (method === "GET" && segment[1] === "runs" && segment.length === 3) {
-      const run = flowStore.getRun(segment[2]);
+      const run = runOf(segment[2]);
       if (!run) return json(res, 404, { error: "运行实例不存在" }), true;
       json(res, 200, run);
       return true;
@@ -751,7 +671,7 @@ export async function handleWorkbenchApi(req, res, path, url, ctx) {
     // 语义与 /api/tasks/:id/events 一致：Last-Event-ID 续传，窗口过期给 reset。
     if (method === "GET" && segment[1] === "runs" && segment.length === 4 && segment[3] === "events") {
       const runId = segment[2];
-      if (!flowStore.getRun(runId)) return json(res, 404, { error: "运行实例不存在" }), true;
+      if (!runOf(runId)) return json(res, 404, { error: "运行实例不存在" }), true;
       if (!flowEvents) return json(res, 501, { error: "流程事件流未启用" }), true;
 
       const raw = req.headers["last-event-id"] ?? params.get("after") ?? undefined;
@@ -806,7 +726,7 @@ export async function handleWorkbenchApi(req, res, path, url, ctx) {
 
     // 读取运行目录里的单个工件（路径校验在 readArtifact 里做）
     if (method === "GET" && segment[1] === "runs" && segment.length === 4 && segment[3] === "files") {
-      const run = flowStore.getRun(segment[2]);
+      const run = runOf(segment[2]);
       if (!run) return json(res, 404, { error: "运行实例不存在" }), true;
       const target = params.get("path") ?? "";
       if (!target) return json(res, 400, { error: "缺少 path 参数" }), true;
@@ -844,6 +764,7 @@ export async function handleWorkbenchApi(req, res, path, url, ctx) {
     if (method === "POST" && segment[1] === "runs" && segment.length === 4) {
       const body = await readJson(req);
       const action = segment[3];
+      if (!runOf(segment[2])) return json(res, 404, { error: "运行实例不存在" }), true;
 
       if (action === "apply") {
         // 副本运行的改动回写源目录，只动这次运行登记过的文件。
@@ -873,39 +794,59 @@ export async function handleWorkbenchApi(req, res, path, url, ctx) {
 
     // 清理副本作业目录（含副本里的工件，删后文件预览会失效）
     if (method === "DELETE" && segment[1] === "runs" && segment.length === 4 && segment[3] === "workspace") {
+      if (!runOf(segment[2])) return json(res, 404, { error: "运行实例不存在" }), true;
       json(res, 200, flowRunner.dropWorkspace(segment[2]));
       return true;
     }
 
     if (method === "POST" && segment[1] && segment[2] === "run" && segment.length === 3) {
       const body = await readJson(req);
+      ownFlow(segment[1]);
+      // 挂协作项目：完成后产物自动归档。只接受自己参与的项目（管理员不限）。
+      let projectId = null;
+      const cleanProjectId = String(body.projectId ?? "").trim().slice(0, 64);
+      if (cleanProjectId) {
+        const svc = collabApi?.service;
+        if (!svc) throw new Error("协作功能未启用");
+        if (!svc.getProject(cleanProjectId)) throw new Error("协作项目不存在");
+        const visible = svc.visibleProjectIds(viewer ?? { id: null, role: "admin" });
+        if (visible !== null && !visible.has(cleanProjectId)) throw new Error("你不在该项目里，无法把产出归档过去");
+        projectId = cleanProjectId;
+      }
       const run = flowRunner.start(segment[1], {
         input: body.input,
         variables: body.variables,
         cwd: body.cwd,
         mode: body.mode,
+        owner: viewer,
+        projectId,
       });
       json(res, 201, run);
       return true;
     }
 
+
     if (method === "POST" && segment.length === 1) {
       const body = await readJson(req);
-      const flow = flowStore.createFlow(config, body);
-      json(res, 201, { flow, items: flowStore.listFlows() });
+      assertOwnAgents(body.steps);
+      const flow = flowStore.createFlow(config, body, viewer);
+      json(res, 201, { flow, items: flowStore.listFlows(ownScope) });
       return true;
     }
 
     if (method === "PATCH" && segment.length === 2) {
       const body = await readJson(req);
+      ownFlow(segment[1]);
+      if (body.steps) assertOwnAgents(body.steps);
       const flow = flowStore.updateFlow(config, segment[1], body);
-      json(res, 200, { flow, items: flowStore.listFlows() });
+      json(res, 200, { flow, items: flowStore.listFlows(ownScope) });
       return true;
     }
 
     if (method === "DELETE" && segment.length === 2) {
+      ownFlow(segment[1]);
       const result = flowStore.deleteFlow(segment[1]);
-      json(res, 200, { ...result, items: flowStore.listFlows() });
+      json(res, 200, { ...result, items: flowStore.listFlows(ownScope) });
       return true;
     }
   }
@@ -931,22 +872,31 @@ export async function handleWorkbenchApi(req, res, path, url, ctx) {
 
   // ---------------------------------------------------------------- tasks
   if (method === "GET" && path === "/api/tasks") {
-    json(res, 200, selectTasks(manager, params));
+    json(res, 200, selectTasks(manager, params, viewer, isAdmin, collabApi));
     return true;
   }
 
   if (method === "POST" && path === "/api/tasks") {
     const body = await readJson(req);
-    if (Object.hasOwn(body, "research") || body.taskType === "planning_research")
-      { const result=await prepareResearch(req, body, config, manager); json(res,result.status,result.value); return true; }
+    // 个人员工：任务发往执行器本机执行，cwd 是执行器电脑上的目录，服务器只透传
+    let userAgent = null;
+    if (body.userAgentId) {
+      if (!userAgents) throw new Error("当前网关未启用多机执行");
+      userAgent = userAgents.get(String(body.userAgentId), isAdmin ? null : viewer?.id);
+      if (!userAgent) throw new Error("AI 员工不存在或不属于你");
+      if (!userAgent.enabled) throw new Error(`AI 员工「${userAgent.name}」已停用`);
+    }
+
     const template = body.taskType ? findTemplate(body.taskType) : null;
     const values = body.values && typeof body.values === "object" ? body.values : {};
     let prompt = String(body.prompt ?? "").trim() || (template ? buildPrompt(template, values) : "");
     if (!prompt) throw new Error("至少需要一句任务描述");
 
-    // 工作方法挂载：显式勾选的优先；没勾就按任务描述自动匹配（可在设置里关）。
-    // 技能正文插在指令前面，任务本体原样保留在后面。
-    const pickedSkills = Array.isArray(body.skills) ? body.skills : [];
+    // 工作方法挂载：显式勾选的优先；没勾就用员工自己挂的技能（不用每次重挂）；
+    // 都没有才按任务描述自动匹配（可在设置里关）。技能正文插在指令前面。
+    const requestedSkills = Array.isArray(body.skills) ? body.skills.filter(Boolean) : [];
+    const agentSkills = userAgent?.skills?.length ? userAgent.skills : [];
+    const pickedSkills = requestedSkills.length ? requestedSkills : agentSkills;
     const autoSkills = pickedSkills.length ? [] : autoSkillNames(config, prompt);
     const skillResult = applySkills(config, pickedSkills.length ? pickedSkills : autoSkills, prompt);
     if (skillResult.mounted.length) prompt = skillResult.prompt;
@@ -959,19 +909,47 @@ export async function handleWorkbenchApi(req, res, path, url, ctx) {
       ? body.outputTypes
       : template?.outputTypes ?? ["markdown"];
 
-    const recommendation = recommendAgent({
-      domain,
-      taskType: body.taskType ?? null,
-      prompt,
-      outputTypes,
-      model: body.model ?? null,
-    }, config.agents);
-    const agent = body.agent || recommendation.recommendedAgent;
-    const agentChoice = body.agent ? "manual" : "auto";
-    if (!body.draft) assertAgentUsable(agent, config.agents);
+    // 系统员工是网关本机 CLI 执行位（跑在这台服务器上），只对管理员开放；
+    // 其他人的任务必须落在自己的 AI 员工上（执行器那台电脑上），口径与流程面板一致。
+    if (!isAdmin && !userAgent && body.draft !== true) {
+      throw new Error("系统员工只对管理员开放：先建一个自己的 AI 员工，再派活给它");
+    }
 
-    const cwd = resolveAllowedDirectory(body.cwd || config.allowedRoots[0], config.allowedRoots);
-    const mode = ["read-only", "workspace-write"].includes(body.mode) ? body.mode : "workspace-write";
+    const recommendation = userAgent
+      ? { recommendedAgent: userAgent.id, reasons: [`使用你配置的员工「${userAgent.name}」`] }
+      : recommendAgent({
+        domain,
+        taskType: body.taskType ?? null,
+        prompt,
+        outputTypes,
+        model: body.model ?? null,
+      }, config.agents);
+    const agent = userAgent ? userAgent.id : (body.agent || recommendation.recommendedAgent);
+    const agentChoice = body.agent || userAgent ? "manual" : "auto";
+    if (!userAgent && !body.draft) assertAgentUsable(agent, config.agents);
+    // 员工引用的模型：任务记下来，同模型多员工按并发上限排队
+    const agentModel = userAgent?.modelId ? userAgents.getModel(userAgent.modelId) : null;
+
+    const cwd = userAgent
+      ? String(body.cwd ?? "").trim().slice(0, 400)
+      : resolveAllowedDirectory(body.cwd || config.allowedRoots[0], config.allowedRoots);
+    // 写权限：显式传的优先，没传就按员工自己的默认值（只读型员工不用每次勾）
+    const mode = ["read-only", "workspace-write"].includes(body.mode)
+      ? body.mode
+      : (userAgent?.defaultMode ?? "workspace-write");
+
+    // 协作归属：带 projectId 的任务，完成后产物自动归档进该项目。
+    // 只接受自己参与的项目（管理员不限），别人的项目 ID 填进来也进不去。
+    let projectId = null;
+    const cleanProjectId = String(body.projectId ?? "").trim().slice(0, 64);
+    if (cleanProjectId) {
+      const svc = collabApi?.service;
+      if (!svc) throw new Error("协作功能未启用");
+      if (!svc.getProject(cleanProjectId)) throw new Error("协作项目不存在");
+      const visible = svc.visibleProjectIds(viewer ?? { id: null, role: "admin" }); // 主 Token（viewer 为空）按管理员对待
+      if (visible !== null && !visible.has(cleanProjectId)) throw new Error("你不在该项目里，无法把任务挂过去");
+      projectId = cleanProjectId;
+    }
 
     const created = manager.create(
       {
@@ -989,7 +967,16 @@ export async function handleWorkbenchApi(req, res, path, url, ctx) {
         outputTypes,
         agent,
         agentChoice,
+        // 模型池：这条任务占的是哪个模型（并发排队按它统计，页面也显示它）
+        modelId: agentModel?.id ?? null,
+        modelName: agentModel?.name ?? null,
         skills: skillResult.mounted,
+        // 协作归属：完成后产物自动归档进该项目
+        projectId,
+        // 多人模式：任务归属 + 执行位置
+        ownerAccountId: viewer?.id ?? null,
+        ownerName: viewer?.name ?? null,
+        runner: userAgent ? "remote" : "local",
       },
       req.headers["x-idempotency-key"]?.toString().slice(0, 200) || null,
       { draft: body.draft === true }
@@ -1007,14 +994,23 @@ export async function handleWorkbenchApi(req, res, path, url, ctx) {
   const taskId = segment[1];
   const action = segment[2];
 
+  // 产出隔离：登录人只能读写自己名下的任务与产物（管理员 / 主 Token 不限）
+  const taskVisible = (task) =>
+    Boolean(task) && (Boolean(isAdmin || !viewer) || task.ownerAccountId === viewer.id);
+  const visibleTask = (id) => {
+    const task = manager.get(id);
+    return taskVisible(task) ? task : null;
+  };
+
   if (taskId && method === "GET" && segment.length === 2) {
-    const task = manager.get(taskId, params.get("events") === "1");
+    const task = visibleTask(taskId);
     if (!task) return json(res, 404, { error: "任务不存在" }), true;
     json(res, 200, { ...task, queuePosition: manager.queuePosition(taskId) });
     return true;
   }
 
   if (taskId && method === "PATCH" && segment.length === 2) {
+    if (!taskVisible(manager.get(taskId))) return json(res, 404, { error: "任务不存在" }), true;
     const task = manager.update(taskId, await readJson(req));
     if (!task) return json(res, 404, { error: "任务不存在" }), true;
     json(res, 200, task);
@@ -1023,6 +1019,7 @@ export async function handleWorkbenchApi(req, res, path, url, ctx) {
 
   if (taskId && segment.length === 3) {
     if (method === "GET" && action === "events") return false; // handled by server.mjs SSE route
+    if (!taskVisible(manager.get(taskId))) return json(res, 404, { error: "任务不存在" }), true;
     if (method === "GET" && action === "artifacts") {
       const task = manager.get(taskId);
       if (!task) return json(res, 404, { error: "任务不存在" }), true;

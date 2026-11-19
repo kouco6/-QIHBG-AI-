@@ -211,4 +211,13 @@ export const LOCAL_CLI_PRESETS = [
     summary: "复用本机已装的 Claude Code，不需要 API Key、地址和模型名",
     capabilities: ["code", "files", "shell", "office-files", "web"],
   },
+  {
+    id: "local-dsh",
+    label: "DeepSeek Harness",
+    vendor: "本机 CLI",
+    local: true,
+    cli: "dsh",
+    summary: "复用本机已装的 dsh CLI（DeepSeek Harness），执行器电脑需设 DEEPSEEK_API_KEY",
+    capabilities: ["code", "files", "shell", "office-files"],
+  },
 ];

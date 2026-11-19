@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#07101f">
+  <title>登录 · WorkBuddy × Codex 工作台</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/login.css">
+</head>
+<body class="login-body">
+  <main class="login-card">
+    <div class="login-brand">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="bm" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#9FE6EF"/><stop offset=".55" stop-color="#64D8E8"/><stop offset="1" stop-color="#2E8CA0"/>
+          </linearGradient>
+        </defs>
+        <path d="M12 2.6 20.2 7v10L12 21.4 3.8 17V7L12 2.6Z" stroke="url(#bm)" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M8.6 9.4 12 16.4 15.4 9.4" stroke="url(#bm)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="12" cy="12" r="1.15" fill="#64D8E8"/>
+      </svg>
+      <div><strong>WorkBuddy <em>×</em> <span>Codex</span></strong><small>GATEWAY WORKBENCH</small></div>
+    </div>
+    <h1>登录工作台</h1>
+    <p class="login-sub">账号由管理人员在「设置 → 人员与账号」统一分配</p>
+    <form id="loginForm" method="post" action="/api/auth/login">
+      <label>用户名
+        <input name="username" autocomplete="username" required maxlength="32" placeholder="如 admin">
+      </label>
+      <label>密码
+        <input name="password" type="password" autocomplete="current-password" required maxlength="64" placeholder="••••••••">
+      </label>
+      <p class="login-error" id="loginError" hidden></p>
+      <button type="submit" id="loginBtn">登 录</button>
+    </form>
+  </main>
+  <script src="/login.js" type="module"></script>
+</body>
+</html>

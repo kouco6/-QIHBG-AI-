@@ -5,26 +5,32 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#07101f">
-  <title>AI调度中心</title>
+  <title>AI 员工工作台</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
   <div class="app" data-view="worksite">
-    <aside class="sidebar" aria-label="业务菜单">
-      <div class="brand planning-sidebar-header">
-        <span class="module-badge" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><defs><linearGradient id="ai-layer" x1="9" y1="8" x2="53" y2="60" gradientUnits="userSpaceOnUse"><stop stop-color="#10B6FF"/><stop offset="1" stop-color="#1B63D5"/></linearGradient></defs><circle cx="32" cy="32" r="7" fill="url(#ai-layer)"/><circle cx="14" cy="18" r="5.5" stroke="#1289E8" stroke-width="4"/><circle cx="50" cy="18" r="5.5" stroke="#1768CF" stroke-width="4"/><circle cx="16" cy="48" r="5.5" stroke="#1289E8" stroke-width="4"/><circle cx="48" cy="48" r="5.5" stroke="#1768CF" stroke-width="4"/><path d="M19 22 27 28M45 22 37 28M20 44 27 37M44 44 37 37" stroke="#1B63D5" stroke-width="3.2" stroke-linecap="round"/></svg></span>
-        <div class="brand-copy"><strong>AI调度中心</strong><small>任务调度与协作工作台</small></div>
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="bm" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#9FE6EF"/><stop offset=".55" stop-color="#64D8E8"/><stop offset="1" stop-color="#2E8CA0"/>
+              </linearGradient>
+            </defs>
+            <path d="M12 2.6 20.2 7v10L12 21.4 3.8 17V7L12 2.6Z" stroke="url(#bm)" stroke-width="1.4" stroke-linejoin="round"/>
+            <path d="M8.6 9.4 12 16.4 15.4 9.4" stroke="url(#bm)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="12" r="1.15" fill="#64D8E8"/>
+          </svg>
+        </span>
+        <div><strong>WorkBuddy <em>×</em> <span>Codex</span></strong><small>GATEWAY WORKBENCH</small></div>
       </div>
-      <p class="side-kicker"><span class="kicker-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4.5h7v7H4zM13 4.5h7v7h-7zM4 13.5h7v7H4zM13 13.5h7v7h-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span><span>业务菜单</span></p>
       <nav class="nav" id="nav">
-        <button class="nav-item active" data-view="dashboard">
-          <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19.5V13M10 19.5V6.5M15.5 19.5v-9M20.5 19.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M4 9.5 10 6l5.5 4 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span>数据看板</span>
-        </button>
         <button class="nav-item" data-view="worksite">
           <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4.5" width="18" height="12.5" rx="2.2" stroke="currentColor" stroke-width="1.5"/><path d="M7 10.5h2.6l1.8-3 2.2 6 1.7-3H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 20.5h6M12 17v3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
-          <span>任务</span>
+          <span>任务执行</span>
         </button>
         <button class="nav-item" data-view="collab">
           <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 20c0-3 2.5-5 5.5-5s5.5 2 5.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M16 5.6a3 3 0 0 1 0 5.8M17.6 14.4c2 .6 3.4 2.4 3.4 4.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
@@ -33,21 +39,29 @@
         <button class="nav-item" data-view="artifacts">          <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 21 7.6l-9 4.6L3 7.6 12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M4.6 12 12 15.8 19.4 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.6 16.4 12 20.2l7.4-3.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <span>产出库</span><b id="countArtifacts"></b>
         </button>
-        <button class="nav-item" data-view="knowledge">
-          <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H19v15.5H7.5A2.5 2.5 0 0 0 5 21V5.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M5 18.5A2.5 2.5 0 0 1 7.5 16H19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M9.5 8h6M9.5 11.5h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
-          <span>知识库</span><b class="nav-badge" id="navKnowledge" hidden></b>
-        </button>
         <button class="nav-item" data-view="templates">
           <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="6" cy="6.6" r="2.6" stroke="currentColor" stroke-width="1.5"/><circle cx="18" cy="12" r="2.6" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="17.4" r="2.6" stroke="currentColor" stroke-width="1.5"/><path d="M8.4 7.9 15.5 11M15.5 13 8.4 16.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
           <span>工作方法</span>
+        </button>
+        <button class="nav-item" data-view="runner">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.2" y="4.2" width="17.6" height="11.4" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 8.4h4.2M7 11.6h7.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M9 19.4h6M12 15.6v3.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="17.4" cy="8.4" r="1.4" fill="currentColor"/></svg></span>
+          <span>执行器</span><i class="nav-dot" id="navRunnerDot" hidden></i>
+        </button>
+        <button class="nav-item" data-view="stats" id="navStats" hidden>
+          <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 20V9M10 20V4M16 20v-7M21 20H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+          <span>统计</span>
         </button>
         <button class="nav-item" data-view="settings">
           <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7.2h9M17.2 7.2H20M4 16.8h3.6M11.8 16.8H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="15.2" cy="7.2" r="2.1" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="16.8" r="2.1" stroke="currentColor" stroke-width="1.5"/></svg></span>
           <span>设置</span><b class="nav-badge" id="navUpdate" hidden></b>
         </button>
       </nav>
-      <button type="button" class="side-toggle" id="sideToggle" aria-expanded="true" aria-label="收起侧栏"><span aria-hidden="true">«</span><span class="side-toggle-label">收起</span></button>
       <div class="sidebar-foot">
+        <div class="user-chip" id="userChip" hidden>
+          <span class="user-avatar" id="userAvatar"></span>
+          <div class="user-meta"><b id="userName"></b><small id="userRole"></small></div>
+          <button id="logoutBtn" title="退出登录" aria-label="退出登录"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h-8v16h8M10 12h10M17 8.5 20.5 12 17 15.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
         <p class="score-title">今日战绩</p>
         <div class="score"><span>完成 <b id="todayDone">0</b></span><span>失败 <b id="todayFailed">0</b></span></div>
         <div class="gw-status" id="gwStatus"><i></i><span>网关连接中</span></div>
@@ -55,81 +69,91 @@
     </aside>
 
     <main class="main">
-      <section class="employee-strip" id="teamWrap">
-        <div class="team-cards" id="teamCards"></div>
-        <button class="emp-card emp-more" id="teamMore" type="button" hidden aria-haspopup="true" aria-controls="teamMenu"></button>
-        <div class="team-menu" id="teamMenu" hidden></div>
-      </section>
 
       <header class="page-head">
-        <div><h1 id="viewTitle">数据看板</h1><p id="viewSub">平台跑得怎么样，一眼看清</p></div>
+        <div><h1 id="viewTitle">任务执行</h1><p id="viewSub">说清要做什么，选一条流程，剩下的交给你的 AI 员工</p></div>
         <div class="page-tools" id="pageTools"></div>
       </header>
 
       <section class="view" id="viewWorksite">
-        <div class="lib-bar ws-bar">
-          <div class="lib-tabs" id="wsTabs">
-            <button type="button" class="lib-tab active" data-tab="adhoc">临时任务</button>
-            <button type="button" class="lib-tab" data-tab="flows">流程编排</button>
+
+        <!-- 任务页两个页签：临时任务（说一句就派活）/ 流程编排（多步流程） -->
+        <div class="ws-tabs" id="wsTabs" role="tablist" aria-label="任务页签">
+          <button type="button" class="ws-tab" data-tab="adhoc" role="tab" aria-selected="true">
+            <b>临时任务</b><em>说一句话，直接派给某个员工</em>
+          </button>
+          <button type="button" class="ws-tab" data-tab="flows" role="tab" aria-selected="false">
+            <b>流程编排</b><em>多步流程，上一步的产出自动交给下一步</em>
+          </button>
+        </div>
+
+        <!-- 临时任务：一句话派活 + 最近任务，点一行直接看执行详情 -->
+        <div class="page-scroll ws-pane" id="wsPaneAdhoc">
+          <form class="adhoc-card" id="adhocForm">
+            <textarea id="adhocPrompt" rows="3" maxlength="4000"
+                      placeholder="说清这次要做什么，例如：把这份招标文件的评分点整理成表格"
+                      aria-label="这次要做什么"></textarea>
+            <div class="adhoc-foot">
+              <label class="adhoc-field">
+                <span>交给</span>
+                <select id="adhocAgent" aria-label="选择 AI 员工"></select>
+              </label>
+              <label class="adhoc-check" title="勾上：AI 可以在工作目录里改文件；不勾：只读不改">
+                <input type="checkbox" id="adhocWrite" checked>
+                <span>允许写文件</span>
+              </label>
+              <label class="adhoc-field" id="adhocProjectWrap" title="跑完的产出文件会自动归档进这个协作项目" hidden>
+                <span>归档到</span>
+                <select id="adhocProject"><option value="">不归档</option></select>
+              </label>
+              <span class="adhoc-tip">Enter 派活 · Shift + Enter 换行</span>
+              <button type="submit" class="primary adhoc-go" id="adhocGo">派活</button>
+            </div>
+            <div class="adhoc-skills" id="adhocSkills" hidden></div>
+            <p class="adhoc-note" id="adhocNote" hidden></p>
+          </form>
+
+          <div class="adhoc-recent">
+            <div class="lib-bar">
+              <div class="lib-tabs" id="adhocTabs"></div>
+              <span class="lib-count" id="adhocCount"></span>
+            </div>
+            <div class="adhoc-list" id="adhocList"></div>
           </div>
         </div>
-        <div class="ws-pane" id="wsPaneAdhoc">
-        <div class="adhoc-shell">
-          <div class="fact-hero" id="adhocHero"></div>
 
-          <section class="adhoc-card">
-            <div class="adhoc-head">
-              <div><span class="panel-kicker">临时任务</span><h2>要做什么？</h2></div>
-              <span class="adhoc-badge" id="adhocBadge">临时任务</span>
+        <!-- 启动台固定在顶部：说一句 → 选流程 → 开始，始终看得见，不跟内容一起滚走 -->
+        <form class="flow-launch" id="flowLaunch" hidden>
+          <div class="flow-launch-main">
+            <textarea id="flowLaunchInput" rows="2" maxlength="4000"
+                      placeholder="说清这次要做什么，例如：把这份招标文件的评分点整理成表格"
+                      aria-label="这次要做什么"></textarea>
+          </div>
+          <div class="flow-launch-vars" id="flowLaunchVars"></div>
+          <div class="flow-launch-foot">
+            <div class="flow-pick" id="flowPick">
+              <select id="flowLaunchSelect" class="sr-only" aria-label="选择编排流程" tabindex="-1"></select>
+              <button type="button" class="flow-pick-trigger" id="flowPickTrigger"
+                      aria-haspopup="listbox" aria-expanded="false" aria-controls="flowPickMenu">
+                <span class="flow-pick-label">流程</span>
+                <b id="flowPickName">还没有流程</b>
+                <em id="flowPickMeta"></em>
+                <span class="flow-pick-caret" aria-hidden="true"></span>
+              </button>
+              <div class="flow-pick-menu" id="flowPickMenu" role="listbox" aria-label="选择编排流程" hidden></div>
             </div>
-            <textarea id="adhocPrompt" rows="4" spellcheck="false" placeholder="一句话说清你要的结果，例如：把这周的任务整理成一份周报，标出失败和卡住的原因"></textarea>
-            <div class="adhoc-quick" id="adhocQuick"></div>
-
-            <div class="adhoc-block">
-              <div class="adhoc-label"><span>谁来干</span><em>不选就自动挑一个最合适的</em></div>
-              <div class="adhoc-agents" id="adhocAgents"></div>
-            </div>
-
-            <div class="adhoc-row">
-              <label class="field"><span>在哪个目录干活</span><select id="adhocCwd"></select></label>
-              <label class="field"><span>想要什么产出</span><select id="adhocOutput">
-                <option value="markdown">一份文档或报告</option>
-                <option value="code">代码</option>
-                <option value="json">结构化数据</option>
-                <option value="text">纯文字</option>
-              </select></label>
-            </div>
-
-            <div class="adhoc-actions">
-              <p class="adhoc-hint" id="adhocHint">跑完直接看结论，不进流程、不影响已有配置。</p>
-              <div class="adhoc-buttons">
-                <button type="button" class="ghost" id="adhocDraft">存成草稿</button>
-                <button type="button" class="primary" id="adhocRun">开始执行</button>
-              </div>
-            </div>
-          </section>
-
-          <section class="adhoc-recent">
-            <div class="section-head"><h2>最近的临时任务</h2><span id="adhocRecentCount"></span></div>
-            <div id="adhocRecent"></div>
-          </section>
-        </div>
-        </div>
+            <span class="flow-launch-tip">Enter 开始 · Shift + Enter 换行</span>
+            <label class="flow-launch-project" title="跑完的产出文件会自动归档进这个协作项目">
+              <span>归档到</span>
+              <select id="flowLaunchProject"><option value="">不归档</option></select>
+            </label>
+            <button type="submit" class="primary flow-launch-go" id="flowLaunchGo">开始执行</button>
+          </div>
+          <p class="flow-launch-note" id="flowLaunchNote" hidden></p>
+        </form>
 
         <!-- 流程编排并入同一页：页签切换，不再单独占一个导航位 -->
         <div class="page-scroll flow-scroll ws-pane" id="wsPaneFlows" hidden>
-          <form class="flow-launch" id="flowLaunch">
-            <div class="flow-launch-bar">
-              <textarea id="flowLaunchInput" rows="1" maxlength="4000" placeholder="说清这次要做什么，例如：给网关加一个任务编排页" aria-label="这次要做什么"></textarea>
-              <label class="flow-launch-pick">
-                <select id="flowLaunchSelect" aria-label="选择编排流程"></select>
-              </label>
-              <button type="submit" class="primary flow-launch-go" id="flowLaunchGo">开始</button>
-            </div>
-            <div class="flow-launch-vars" id="flowLaunchVars"></div>
-            <p class="flow-launch-note" id="flowLaunchNote" hidden></p>
-          </form>
-
           <!-- 流程卡片：横向一排，超出左右滑动 -->
           <div class="lib-bar flow-lib-bar">
             <div class="lib-tabs" id="flowTabs"></div>
@@ -200,109 +224,10 @@
         </div>
       </section>
 
-      <section class="view active" id="viewDashboard">
+      <section class="view" id="viewStats">
         <div class="page-scroll">
-          <div class="dash-metrics" id="dashMetrics"></div>
-          <div class="dash-grid">
-          <div class="dash-chart-card span-all">
-            <div class="dash-chart-head">
-              <div>
-                <h2>任务趋势</h2>
-                <p class="dash-chart-sub">每天派出去的活，最后干成了多少、砸了多少</p>
-              </div>
-              <div class="lib-tabs" id="dashRange">
-                <button type="button" class="lib-tab active" data-days="7">近 7 天</button>
-                <button type="button" class="lib-tab" data-days="30">近 30 天</button>
-              </div>
-            </div>
-            <div class="dash-chart-wrap">
-              <canvas id="dashTrend" height="240"></canvas>
-              <div class="dash-tip" id="dashTip" hidden></div>
-              <p class="dash-empty" id="dashEmpty" hidden>这段时间还没有结束过的任务，跑几个任务后这里就有曲线了。</p>
-            </div>
-            <div class="dash-legend">
-              <span><i class="dot ok"></i>干成</span>
-              <span><i class="dot bad"></i>砸了</span>
-              <span><i class="dot all"></i>全部派单</span>
-            </div>
-          </div>
-
-          <div class="dash-chart-card">
-            <div class="dash-chart-head">
-              <div>
-                <h2>状态分布</h2>
-                <p class="dash-chart-sub">所有派出去的活现在各是什么状态</p>
-              </div>
-            </div>
-            <div class="dash-dist" id="dashDist"></div>
-          </div>
-
-          <div class="dash-chart-card">
-            <div class="dash-chart-head">
-              <div>
-                <h2>运行效率</h2>
-                <p class="dash-chart-sub">活派出去后，排队等了多久、真正干了多久；用中位数，不被个别卡死的任务带偏</p>
-              </div>
-            </div>
-            <div class="dash-eff" id="dashEff"></div>
-          </div>
-
-          <div class="dash-chart-card">
-            <div class="dash-chart-head">
-              <div>
-                <h2>成本观测</h2>
-                <p class="dash-chart-sub">按员工单价把 token 折算成钱；单价在员工页「填 API」的高级设置里，改价后历史金额跟着重算</p>
-              </div>
-            </div>
-            <div class="dash-cost" id="dashCost"></div>
-          </div>
-
-          <div class="dash-chart-card">
-            <div class="dash-chart-head">
-              <div>
-                <h2>队列积压</h2>
-                <p class="dash-chart-sub">现在还堵在排队和等确认的活，等得越久越靠前；点一条直接看任务详情</p>
-              </div>
-            </div>
-            <div class="dash-backlog" id="dashBacklog"></div>
-          </div>
-
-          <div class="dash-chart-card span-all">
-            <div class="dash-chart-head">
-              <div>
-                <h2>员工表现</h2>
-                <p class="dash-chart-sub">每个员工接过多少活、干成多少、花了多少 token 和钱；点表头可以换着排</p>
-              </div>
-            </div>
-            <table class="dash-agents" id="dashAgents">
-              <thead></thead>
-              <tbody></tbody>
-            </table>
-          </div>
-
-          <div class="dash-chart-card span-all">
-            <div class="dash-chart-head">
-              <div>
-                <h2>流程表现</h2>
-                <p class="dash-chart-sub">每条流程跑了多少次、跑成多少、卡住多少；点表头可以换着排，点一行去看运行记录</p>
-              </div>
-            </div>
-            <table class="dash-agents" id="dashFlows">
-              <thead></thead>
-              <tbody></tbody>
-            </table>
-          </div>
-
-          <div class="dash-chart-card span-all">
-            <div class="dash-chart-head">
-              <div>
-                <h2>产出统计</h2>
-                <p class="dash-chart-sub">任务最后交出了什么：按文件类型分布，点图例到产出库看明细；下面是最近交出来的几件</p>
-              </div>
-            </div>
-            <div class="dash-prod" id="dashProd"></div>
-          </div>
-          </div>
+          <p class="stats-note" id="statsNote">按人员汇总 AI 执行数据：任务数、成败、耗时与用量。仅管理人员可见。</p>
+          <div class="stats-table" id="statsTable"></div>
         </div>
       </section>
       <section class="view" id="viewFlowEdit">
@@ -337,7 +262,7 @@
                     <div class="flow-canvas" id="flowCanvas"></div>
                   </div>
                 </div>
-                <button type="button" class="ghost flow-add-step" id="flowAddStep">+ 添加一步（默认交给 codex）</button>
+                <button type="button" class="ghost flow-add-step" id="flowAddStep">+ 添加一步</button>
               </div>
 
               <details class="agent-adv" id="flowVarBox">
@@ -368,7 +293,7 @@
           <section class="lib-panel" id="skillPanel">
             <header class="lib-head">
               <div>
-                <p class="panel-kicker">技能库</p>
+                <p class="panel-kicker">SKILL HUB</p>
                 <h2>工作方法库</h2>
                 <p id="skillPanelSub">从 AI 能力平台下载工作方法到本机，派活或编排流程时挂上，AI 按它的步骤干活</p>
               </div>
@@ -397,8 +322,8 @@
           </section>
         </div>
       </section>
-      <section class="view" id="viewKnowledge"><div id="knowledge" class="knowledge"></div></section>
       <section class="view" id="viewCollab"><div id="collabPage" class="collab-page"></div></section>
+      <section class="view" id="viewRunner"><div id="runnerPage" class="runner-page"></div></section>
       <section class="view" id="viewSettings"><div id="settings" class="settings"></div></section>
     </main>
   </div>
@@ -414,81 +339,12 @@
     <div class="drawer-meta" id="drawerMeta"></div>
     <div class="drawer-actions" id="drawerActions"></div>
     <div class="drawer-body" id="drawerBody"></div>
-    <footer class="drawer-foot"><textarea id="followUp" rows="2" placeholder="补充要求，或让它在结论上继续…"></textarea><div class="foot-row"><span>将带上上一轮结论，新建续接任务</span><button class="primary" id="sendFollowUp">续聊</button></div></footer>
   </aside>
   <div class="scrim" id="scrim"></div>
 
-  <aside class="composer" id="composer" aria-hidden="true">
-    <header class="drawer-head"><div><p class="eyebrow">派发任务</p><h2>给 AI 员工派活</h2></div><button class="icon-btn" id="closeComposer">✕</button></header>
-    <div class="composer-body">
-      <label class="field primary-field"><span>要做什么</span><textarea id="taskPrompt" rows="5" placeholder="写一句话说明你要的结果，例如：整理这份需求并输出实施清单"></textarea></label>
-      <div class="route-box" id="routeBox"><span>输入需求后，将自动推荐合适的员工</span></div>
-      <div class="field"><span>使用工作方法（可选）</span><div class="tpl-picker" id="tplPicker"></div></div>
-      <div class="field"><span>挂载技能（可选，来自能力平台）</span><div class="skill-picker" id="taskSkills"><span class="skill-picker-empty">本机还没装技能，去「工作方法 → 工作方法库」拉一个</span></div></div>
-      <div id="templateFields" class="template-fields"></div>
-      <div class="field-row three"><label class="field"><span>执行员工</span><select id="taskAgent"></select></label><label class="field"><span>工作域</span><select id="taskDomain"></select></label><label class="field"><span>优先级</span><select id="taskPriority"><option value="normal">普通</option><option value="high">高</option><option value="low">低</option></select></label></div>
-      <div class="field"><span>产出格式</span><div class="checks" id="outputTypes"></div></div>
-      <details class="advanced"><summary>高级设置</summary><div class="advanced-body"><label class="field"><span>工作目录</span><select id="taskCwd"></select></label><label class="field"><span>模型（可空）</span><input id="taskModel" placeholder="使用 Codex 默认模型"></label><label class="check"><input type="checkbox" id="allowWrite" checked><span>允许修改文件</span></label></div></details>
-    </div>
-    <footer class="composer-foot"><p id="composerHint">可自动匹配员工，也可手动指定。</p><div class="foot-row"><button class="ghost" id="saveDraft">存草稿</button><button class="primary" id="dispatchTask">派发任务</button></div></footer>
-  </aside>
 
-  <dialog id="tokenDialog"><form method="dialog" id="tokenForm"><p class="eyebrow">本地网关</p><h2>连接本地网关</h2><p class="muted">Token 只保存在当前浏览器会话。</p><label class="field"><span>Token</span><input id="tokenInput" type="password" autocomplete="off" required></label><button class="primary" value="connect">连接</button></form></dialog>
+  <dialog id="tokenDialog"><form method="dialog" id="tokenForm"><p class="eyebrow">LOCAL GATEWAY</p><h2>连接本地网关</h2><p class="muted">Token 只保存在当前浏览器会话。</p><label class="field"><span>Token</span><input id="tokenInput" type="password" autocomplete="off" required></label><button class="primary" value="connect">连接</button></form></dialog>
 
-  <dialog id="agentDialog">
-    <form id="agentForm">
-      <p class="eyebrow">员工配置</p>
-      <h2 id="agentDialogTitle">配置员工</h2>
-      <p class="muted" id="agentDialogSub">模型与地址写入网关配置，密钥单独存放且不回传浏览器</p>
-      <div class="preset-block" id="agentPresetBlock">
-        <div class="preset-head">
-          <strong id="presetHeadLabel">接入哪个模型</strong>
-          <em id="presetHeadHint">地址与默认模型已备好，选完只差 Key</em>
-          <button type="button" id="presetSwitch" hidden>换一个</button>
-        </div>
-        <div class="preset-grid" id="agentPresetGrid"></div>
-        <p class="preset-tip" id="agentPresetTip"></p>
-      </div>
-      <label class="field"><span>名称</span><input id="agentName" maxlength="20" autocomplete="off" placeholder="如 标书助手"></label>
-      <label class="field"><span>概述</span><input id="agentSummary" maxlength="40" autocomplete="off" placeholder="一句话说明它擅长什么"></label>
-      <div class="field">
-        <span>头像</span>
-        <div class="agent-avatars" id="agentAvatars"></div>
-      </div>
-      <label class="field"><span>API Key</span><input id="agentApiKey" type="password" autocomplete="off" placeholder="粘贴厂商控制台里的 Key"></label>
-      <div class="agent-key-state"><span id="agentKeyState"></span><button type="button" id="agentClearKey">清除</button></div>
-      <p class="agent-key-help" id="agentKeyHelp" hidden></p>
-      <p class="agent-key-help" id="agentLocalHint" hidden>本机 CLI 员工，不需要密钥；能不能用只看本机装没装这个命令。</p>
-      <label class="agent-toggle">
-        <input type="checkbox" id="agentEnabled">
-        <span>启用这个员工</span>
-        <em>停用后不再参与自动路由</em>
-      </label>
-      <details class="agent-adv" id="agentAdv">
-        <summary><b>高级设置</b><em id="agentAdvHint">模型、地址、tokens、单价、能力标签</em></summary>
-        <label class="field"><span>模型</span><input id="agentModel" list="agentModelList" autocomplete="off" spellcheck="false"></label>
-        <datalist id="agentModelList"></datalist>
-        <label class="field"><span>Base URL</span><input id="agentBaseUrl" autocomplete="off" spellcheck="false"></label>
-        <div class="field"><span>能力标签（决定自动路由）</span><div class="agent-caps" id="agentCaps"></div></div>
-        <label class="field" id="agentTokensField"><span>最大输出 tokens</span><input id="agentMaxTokens" type="number" min="256" max="65536" step="256"></label>
-        <div class="field-row price-row" id="agentPriceField">
-          <label class="field"><span>输入单价（元/百万 tokens）</span><input id="agentPriceIn" type="number" min="0" step="0.01" placeholder="留空则不估算成本"></label>
-          <label class="field"><span>输出单价（元/百万 tokens）</span><input id="agentPriceOut" type="number" min="0" step="0.01" placeholder="按厂商价目表填"></label>
-          <button type="button" class="ghost" id="agentPriceFetch" title="派一个能联网的员工，查这个模型的最新公开价并填进来">AI 查价</button>
-        </div>
-        <p class="agent-price-hint" id="agentPriceHint">填了单价，看板才会把这家员工的 token 折成钱；不填只统计 token。</p>
-        <p class="agent-price-hint" id="agentPriceFetchState" hidden></p>
-      </details>
-      <p class="agent-note" id="agentNote"></p>
-      <div class="agent-form-foot">
-        <button type="button" class="danger" id="agentDelete" hidden>删除员工</button>
-        <button type="button" class="ghost" id="agentTestBtn">测试连接</button>
-        <span class="agent-test" id="agentTest"></span>
-        <button type="button" class="ghost" id="agentCancel">取消</button>
-        <button type="button" class="primary" id="agentSave">保存并生效</button>
-      </div>
-    </form>
-  </dialog>
 
   <dialog id="artifactPreview">
     <div class="apreview">
@@ -512,7 +368,7 @@
 
   <dialog id="hubDialog">
     <form id="hubForm">
-      <p class="eyebrow">技能库</p>
+      <p class="eyebrow">SKILL HUB</p>
       <h2>连接 AI 能力平台</h2>
       <p class="muted">账号只存在本机网关的密钥文件里，不会写进页面或日志</p>
       <label class="field"><span>平台地址</span><input id="hubBaseUrl" placeholder="http://8.138.91.205/hub/" autocomplete="off"></label>
@@ -530,7 +386,7 @@
   <dialog id="skillDialog">
     <div class="skilldlg">
       <header class="skilldlg-head">
-        <div><p class="eyebrow" id="skillDlgMeta">技能</p><h2 id="skillDlgTitle">技能</h2></div>
+        <div><p class="eyebrow" id="skillDlgMeta">SKILL</p><h2 id="skillDlgTitle">技能</h2></div>
         <button type="button" class="icon-btn" id="skillDlgClose">✕</button>
       </header>
 

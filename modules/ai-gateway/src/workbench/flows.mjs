@@ -243,6 +243,8 @@ export function normalizeFlowPayload(config, payload = {}, existing = null) {
   const knownAgents = new Set(
     (config.flowAgentIds ? config.flowAgentIds() : ["codex", ...Object.keys(config.agents ?? {})])
   );
+  // 个人员工（ua- 前缀）跟账号走，保存时只认前缀；归属与可用性在运行时由 FlowRunner 校验
+  const isKnownAgent = (id) => knownAgents.has(id) || String(id).startsWith("ua-");
   const seenKeys = new Set();
   const steps = payload.steps.map((raw, index) => {
     const source = raw && typeof raw === "object" ? raw : {};
@@ -272,7 +274,7 @@ export function normalizeFlowPayload(config, payload = {}, existing = null) {
     if (kind === "condition") {
       const agentId = String(source.agentId ?? "").trim();
       if (!agentId) throw new Error(`条件节点「${stepName}」需要指定谁来判断`);
-      if (!knownAgents.has(agentId)) throw new Error(`条件节点「${stepName}」指定的员工 ${agentId} 不存在`);
+      if (!isKnownAgent(agentId)) throw new Error(`条件节点「${stepName}」指定的员工 ${agentId} 不存在`);
       const question = String(source.question ?? "").trim();
       if (!question) throw new Error(`条件节点「${stepName}」需要写一句判断问题，比如「方案里有没有包含报价」`);
       if (question.length > 4000) throw new Error(`条件节点「${stepName}」的判断问题超过 4000 字`);
@@ -304,7 +306,7 @@ export function normalizeFlowPayload(config, payload = {}, existing = null) {
     const agentId = String(source.agentId ?? "").trim();
     if (agentMode === "fixed") {
       if (!agentId) throw new Error(`步骤「${stepName}」需要指定员工，或改为自动路由`);
-      if (!knownAgents.has(agentId)) throw new Error(`步骤「${stepName}」指定的员工 ${agentId} 不存在`);
+      if (!isKnownAgent(agentId)) throw new Error(`步骤「${stepName}」指定的员工 ${agentId} 不存在`);
     }
 
     const promptTemplate = String(source.promptTemplate ?? "").trim();
@@ -322,7 +324,7 @@ export function normalizeFlowPayload(config, payload = {}, existing = null) {
     const legacyManual = source.approval === "manual" && source.checkpoint === undefined;
     const checkpointEnabled = rawCheck.enabled === true || (rawCheck.enabled === undefined && legacyManual);
     const checkAgentId = String(rawCheck.agentId ?? "").trim();
-    if (checkpointEnabled && checkAgentId && !knownAgents.has(checkAgentId)) {
+    if (checkpointEnabled && checkAgentId && !isKnownAgent(checkAgentId)) {
       throw new Error(`步骤「${stepName}」的检查员工 ${checkAgentId} 不存在`);
     }
     const checkpoint = {
@@ -477,17 +479,27 @@ export class FlowStore {
     writeJsonAtomic(this.file, { flows: this.flows.slice(0, MAX_FLOWS), runs: this.runs.slice(-MAX_RUNS) });
   }
 
-  listFlows() {
-    return this.flows.filter((flow) => flow.status !== "deleted");
+  /**
+   * 流程列表。
+   * filter = { accountId, isAdmin } 时按归属过滤：普通账号只看自己建的流程，
+   * 管理员看全部；没有主人字段的存量流程只有管理员能看到。
+   */
+  listFlows(filter = null) {
+    const items = this.flows.filter((flow) => flow.status !== "deleted");
+    if (!filter || filter.isAdmin) return items;
+    return items.filter((flow) => flow.ownerAccountId && flow.ownerAccountId === filter.accountId);
   }
 
   getFlow(id) {
     return this.flows.find((flow) => flow.id === id && flow.status !== "deleted") ?? null;
   }
 
-  createFlow(config, payload) {
+  /** 同一归属下不允许重名；不同人各自可以有自己的「日报流程」。 */
+  createFlow(config, payload, owner = null) {
     const normalized = normalizeFlowPayload(config, payload);
-    if (this.listFlows().some((flow) => flow.name === normalized.name)) {
+    const ownerId = owner?.id ?? null;
+    const scope = this.listFlows().filter((flow) => (flow.ownerAccountId ?? null) === ownerId);
+    if (scope.some((flow) => flow.name === normalized.name)) {
       throw new Error(`已经有叫「${normalized.name}」的流程`);
     }
     const flow = {
@@ -495,6 +507,8 @@ export class FlowStore {
       version: 1,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      ownerAccountId: ownerId,
+      ownerName: owner?.name ?? owner?.username ?? null,
       ...normalized,
     };
     this.flows.push(flow);
@@ -530,8 +544,11 @@ export class FlowStore {
     return { id, deleted: true };
   }
 
-  listRuns() {
-    return [...this.runs].reverse();
+  /** 运行历史同样按归属过滤：产出跟着运行走，别人看不到你的运行与产物。 */
+  listRuns(filter = null) {
+    const items = [...this.runs].reverse();
+    if (!filter || filter.isAdmin) return items;
+    return items.filter((run) => run.ownerAccountId && run.ownerAccountId === filter.accountId);
   }
 
   getRun(id) {

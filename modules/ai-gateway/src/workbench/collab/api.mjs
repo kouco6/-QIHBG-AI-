@@ -1,17 +1,15 @@
 /**
  * 任务协作 · /api/collab/* 路由组。
  *
- * 双 Token 体系：
- * - 成员推送（POST /api/collab/push）只认成员 Token，独立于网关主 Token——
- *   所以这组路由必须在 server.mjs 的主鉴权闸门**之前**接管。
- * - 管理端（成员管理、流转、删除）只认网关主 Token。
- * - SSE（/api/collab/stream）把新推送实时推给工作台页面。
+ * 三种身份：
+ * - 平台会话（登录页账号+密码，HttpOnly cookie）：看板/协作页按项目隔离读；
+ * - 网关主 Token（Bearer）：程序化集成，等同管理员；
+ * - 推送 Token（账号的推送凭证）：只用于推送、读任务/项目列表、读附件。
+ * 管理类操作（建删项目、AI 员工、成员管理）只认「主 Token 或 admin 会话」。
  */
 
 import { extname } from "node:path";
 import { CollabService, KIND_NAME } from "./service.mjs";
-import { LocalResearch } from "../local-research.mjs";
-import { researchView } from "../research.mjs";
 
 const MAX_UPLOAD = 40 * 1024 * 1024;
 
@@ -25,19 +23,15 @@ const MIME = {
   ".zip": "application/zip",
 };
 
-export function createCollabApi({ stateDir, authorized, taskLabel, manager, config, ownerId, nativeEvidenceVerifier }) {
-  const service = new CollabService({ stateDir });
+export function createCollabApi({ stateDir, authorized, taskLabel, accounts, accountsApi }) {
+  const service = new CollabService({ stateDir, accounts });
   service.boot();
-  const research = manager && config && ownerId ? new LocalResearch({manager,collab:service,config,ownerId,nativeEvidenceVerifier}) : null;
 
   const sseClients = new Set();
 
   const broadcast = (event, data) => {
     const payload = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
     for (const res of sseClients) {
-      const task = manager?.tasks.get(data?.taskId);
-      if (task?.research?.transport === "local-pull" && res.researchMemberId &&
-          task.research.memberId !== res.researchMemberId) continue;
       try { res.write(payload); } catch { sseClients.delete(res); }
     }
   };
@@ -52,7 +46,24 @@ export function createCollabApi({ stateDir, authorized, taskLabel, manager, conf
   const fail = (res, status, message) => json(res, status, { error: message });
 
   const bearer = (req) => (req.headers.authorization || "").replace(/^Bearer\s+/i, "");
-  const isAdmin = (req) => authorized(req);
+  /** 登录会话账号；主 Token 请求没有会话但视为管理员。 */
+  const viewer = (req) => {
+    const account = accountsApi?.sessionAccount(req) ?? null;
+    return { account, isAdmin: Boolean(authorized(req) || account?.role === "admin") };
+  };
+  const isAdmin = (req) => viewer(req).isAdmin;
+  /** 非 admin 会话的可视项目集合；admin/主 Token 为 null（不限定）。 */
+  const visibleIdsFor = (req) => {
+    const { account, isAdmin: admin } = viewer(req);
+    return admin ? null : service.visibleProjectIds(account);
+  };
+  /** 项目读取权限：admin 全量；普通会话必须是项目成员。 */
+  const canSeeProject = (req, projectId) => {
+    const { account, isAdmin: admin } = viewer(req);
+    if (admin) return true;
+    if (!account) return false;
+    return service.visibleProjectIds(account).has(projectId);
+  };
 
   const readRaw = async (req, limit = MAX_UPLOAD) => {
     const chunks = [];
@@ -67,46 +78,11 @@ export function createCollabApi({ stateDir, authorized, taskLabel, manager, conf
 
   const handle = async (req, res, path, url) => {
     const method = req.method || "GET";
-    if (path.startsWith("/api/collab/research/")) {
-      if (!research) return json(res,503,{code:"LOCAL_RESEARCH_NOT_CONFIGURED",error:"本地研究领取未配置"});
-      const member = service.memberByToken(bearer(req));
-      if (!member) return json(res,401,{code:"COLLAB_MEMBER_REQUIRED",error:"协作成员身份无效"});
-      try {
-        if (path === "/api/collab/research/pending" && method === "GET")
-          return json(res,200,research.pending(member));
-        if (path === "/api/collab/research/info" && method === "GET")
-          return json(res,200,research.info());
-        const match=path.match(/^\/api\/collab\/research\/tasks\/([A-Za-z0-9._-]{1,120})\/(claim|heartbeat|status|complete|files\/md|files\/json)$/);
-        if (!match) return json(res,404,{code:"ENDPOINT_NOT_FOUND",error:"研究领取接口不存在"});
-        const [,id,action]=match;
-        if (method === "GET" && action === "status") {
-          const task=research.requireTask(id,member);research.expire(task);
-          return json(res,200,{...researchView(task),phase:task.research.localPull.phase});
-        }
-        if (method !== "POST") return json(res,405,{code:"METHOD_NOT_ALLOWED",error:"操作方法无效"});
-        if (action.startsWith("files/"))
-          return json(res,200,research.upload(id,member,req.headers,action.slice(6),await readRaw(req,8*1024*1024)));
-        if (!(req.headers["content-type"]??"").startsWith("application/json"))
-          return json(res,415,{code:"JSON_REQUIRED",error:"控制请求须使用 JSON"});
-        const body=JSON.parse((await readRaw(req,65536)).toString("utf8"));
-        if (!body || typeof body !== "object" || Array.isArray(body))
-          return json(res,422,{code:"INVALID_REQUEST",error:"请求字段无效"});
-        if(action === "claim") return json(res,200,research.claim(id,member,body));
-        if(action === "heartbeat") return json(res,200,research.heartbeat(id,member,req.headers));
-        if(action === "status") return json(res,200,research.report(id,member,req.headers,body));
-        const value=await research.complete(id,member,req.headers,body);
-        return json(res,value.verificationRequired?202:200,value);
-      } catch(error) {
-        return json(res,error.status??422,{code:error.code??"RESEARCH_REQUEST_INVALID",error:error.code?error.message:"研究请求无法处理"});
-      }
-    }
 
     // ---------- 成员推送（成员 Token） ----------
     if (path === "/api/collab/push" && method === "POST") {
       const member = service.memberByToken(bearer(req));
       if (!member) return fail(res, 401, "无效的成员 Token");
-      if (manager?.tasks.get(url.searchParams.get("task"))?.research?.transport === "local-pull")
-        return json(res,409,{code:"RESEARCH_UPLOAD_REQUIRES_LEASE",error:"研究原件须经租约绑定的文件接口上传"});
       const contentType = req.headers["content-type"] || "";
       let body = "";
       let file = null;
@@ -134,6 +110,7 @@ export function createCollabApi({ stateDir, authorized, taskLabel, manager, conf
         const push = service.ingest({
           token: bearer(req),
           taskId: url.searchParams.get("task"),
+          projectId: url.searchParams.get("project"),
           agent: url.searchParams.get("agent"),
           kind: url.searchParams.get("kind"),
           title: url.searchParams.get("title") || undefined,
@@ -147,21 +124,32 @@ export function createCollabApi({ stateDir, authorized, taskLabel, manager, conf
       }
     }
 
-    // ---------- 成员视角任务列表（选「当前任务」用） ----------
+    // ---------- 任务/项目列表（推送端选目标用：推送 Token、会话、主 Token 均可） ----------
     if (path === "/api/collab/tasks" && method === "GET") {
-      const member=service.memberByToken(bearer(req));
-      if (!member && !isAdmin(req)) return fail(res, 401, "Unauthorized");
-      const items=(taskLabel?.()??[]).filter(item=>!member ||
-        manager?.tasks.get(item.id)?.research?.transport!=="local-pull" || research?.owned(manager.tasks.get(item.id),member));
-      return json(res, 200, { items });
+      if (!service.memberByToken(bearer(req)) && !viewer(req).account && !isAdmin(req)) return fail(res, 401, "Unauthorized");
+      return json(res, 200, { items: taskLabel?.() ?? [] });
     }
 
-    // ---------- SSE 实时流（工作台页面，主 Token 或 query token） ----------
+    // ---------- 项目列表：管理员全量；会话用户按项目隔离；推送端只要 id/name ----------
+    if (path === "/api/collab/projects" && method === "GET") {
+      const { account, isAdmin: admin } = viewer(req);
+      const byPush = service.memberByToken(bearer(req));
+      if (!account && !admin && !byPush) return fail(res, 401, "Unauthorized");
+      const items = admin
+        ? service.listProjects()
+        : service.listProjects({ visibleIds: byPush ? null : service.visibleProjectIds(account) });
+      const slim = !account && !admin; // 推送端只要 id/name/status
+      return json(res, 200, {
+        items: slim ? items.map((p) => ({ id: p.id, name: p.name, status: p.status })) : items,
+      });
+    }
+
+    // ---------- SSE 实时流（登录会话 / 主 Token / query token 均可） ----------
     if (path === "/api/collab/stream" && method === "GET") {
       const qToken = url.searchParams.get("token");
       const ok = qToken
         ? (service.memberByToken(qToken) || authorized({ headers: { authorization: `Bearer ${qToken}` } }))
-        : isAdmin(req);
+        : (viewer(req).account || isAdmin(req));
       if (!ok) return fail(res, 401, "Unauthorized");
       res.writeHead(200, {
         "content-type": "text/event-stream", "cache-control": "no-store",
@@ -169,20 +157,15 @@ export function createCollabApi({ stateDir, authorized, taskLabel, manager, conf
       });
       res.write(": connected\n\n");
       sseClients.add(res);
-      res.researchMemberId = qToken ? service.memberByToken(qToken)?.id ?? null : null;
       const ping = setInterval(() => { try { res.write(": ping\n\n"); } catch { /* 断开即清 */ } }, 25000);
       req.on("close", () => { clearInterval(ping); sseClients.delete(res); });
       return true;
     }
 
-    // ---------- 附件（工作台或成员都可读） ----------
+    // ---------- 附件（登录会话、推送 Token、主 Token 均可读） ----------
     const fileMatch = path.match(/^\/api\/collab\/files\/([\w-]+)$/);
     if (fileMatch && method === "GET") {
-      const member=service.memberByToken(bearer(req));
-      if (!member && !isAdmin(req)) return fail(res, 401, "Unauthorized");
-      const push=service.getPush(fileMatch[1]),task=manager?.tasks.get(push?.taskId);
-      if(member&&task?.research?.transport==="local-pull"&&!research?.owned(task,member))
-        return fail(res,404,"附件不存在或无权限");
+      if (!viewer(req).account && !service.memberByToken(bearer(req)) && !isAdmin(req)) return fail(res, 401, "Unauthorized");
       const got = service.readFile(fileMatch[1]);
       if (!got) return fail(res, 404, "附件不存在");
       res.writeHead(200, {
@@ -194,19 +177,18 @@ export function createCollabApi({ stateDir, authorized, taskLabel, manager, conf
       return true;
     }
 
-    // ---------- 管理端（主 Token） ----------
-    if (!isAdmin(req)) return fail(res, 401, "Unauthorized");
-
-    if (path === "/api/collab/members" && method === "GET") {
-      return json(res, 200, { items: service.listMembers() });
-    }
-    // ---------- 协作总览（左侧一级「协作」页） ----------
+    // ---------- 协作总览（左侧一级「协作」页；会话用户按项目隔离） ----------
     if (path === "/api/collab/overview" && method === "GET") {
+      const { account, isAdmin: admin } = viewer(req);
+      if (!account && !admin && !service.memberByToken(bearer(req))) return fail(res, 401, "Unauthorized");
+      const visibleIds = visibleIdsFor(req);
       const data = service.overview({
         memberId: url.searchParams.get("member") || undefined,
         agent: url.searchParams.get("agent") || undefined,
         kind: url.searchParams.get("kind") || undefined,
+        projectId: url.searchParams.get("project") || undefined,
         limit: url.searchParams.get("limit") || undefined,
+        visibleIds,
       });
       const labels = new Map((taskLabel?.() ?? []).map((t) => [t.id, t]));
       data.items = data.items.map((p) => {
@@ -214,46 +196,131 @@ export function createCollabApi({ stateDir, authorized, taskLabel, manager, conf
         return { ...p, taskLabel: t?.label ?? null, taskStatus: t?.status ?? null };
       });
       data.tasks = data.tasks.map((t) => ({ ...t, label: labels.get(t.taskId)?.label ?? null }));
+      data.viewer = { id: account?.id ?? null, role: account?.role ?? "admin", isAdmin: admin };
       return json(res, 200, data);
     }
-    if (path === "/api/collab/members" && method === "POST") {
+
+    // ---------- 项目详情 / 项目成员：读操作对项目成员开放 ----------
+    const projectMatch = path.match(/^\/api\/collab\/projects\/([\w-]+)(\/pushes|\/agents|\/members)?$/);
+    if (projectMatch && method === "GET" && !projectMatch[2]) {
+      if (!canSeeProject(req, projectMatch[1])) return fail(res, 404, "项目不存在");
+      const project = service.getProject(projectMatch[1]);
+      if (!project) return fail(res, 404, "项目不存在");
+      return json(res, 200, {
+        project,
+        agents: service.listProjectAgents(projectMatch[1]),
+        members: service.listProjectMembers(projectMatch[1]),
+        pushes: service.listPushes({ projectId: projectMatch[1], limit: url.searchParams.get("limit") }),
+      });
+    }
+    if (projectMatch && method === "GET" && projectMatch[2] === "/members") {
+      if (!canSeeProject(req, projectMatch[1])) return fail(res, 404, "项目不存在");
+      return json(res, 200, { items: service.listProjectMembers(projectMatch[1]) });
+    }
+
+    // ---------- 任务推送读取（任务页一期对登录用户全可见） ----------
+    const pushesMatch = path.match(/^\/api\/collab\/tasks\/([\w-]+)\/pushes$/);
+    if (pushesMatch && method === "GET") {
+      if (!viewer(req).account && !isAdmin(req) && !service.memberByToken(bearer(req))) return fail(res, 401, "Unauthorized");
+      const kind = url.searchParams.get("kind") || undefined;
+      const items = service.listPushes({ taskId: pushesMatch[1], kind, limit: url.searchParams.get("limit") });
+      return json(res, 200, { items, counts: service.countByTask(pushesMatch[1]) });
+    }
+
+    // ---------- 新建协作项目：任何在用账号都可以 ----------
+    if (path === "/api/collab/projects" && method === "POST") {
+      const { account, isAdmin: admin } = viewer(req);
+      if (!account && !admin) return fail(res, 401, "请先登录");
       let body = {};
       try { body = JSON.parse((await readRaw(req, 65536)).toString("utf8") || "{}"); } catch { /* 空体 */ }
       try {
-        const created = service.createMember(body.name);
-        broadcast("members", {});
-        return json(res, 200, created); // 明文 Token 只在这里返回一次
+        const created = service.createProject({ ...body, creator: account });
+        broadcast("projects", {});
+        return json(res, 200, created);
       } catch (err) { return fail(res, 400, err.message); }
     }
-    const memberMatch = path.match(/^\/api\/collab\/members\/([\w-]+)(\/token)?$/);
-    if (memberMatch && method === "POST" && memberMatch[2]) {
-      const m = service.listMembers().find((x) => x.id === memberMatch[1]);
-      if (!m) return fail(res, 404, "成员不存在");
-      const reissued = service.issueMember(m.id, m.name);
-      return json(res, 200, reissued);
+
+    // ---------- 项目级写操作：管理人员，或项目创建人（普通账号建的项目由他自己管） ----------
+    // 先分清「没登录」和「登录了但没权限」：前者 401，后者 403
+    if (!isAdmin(req) && !viewer(req).account) return fail(res, 401, "Unauthorized");
+    const canManageProject = (projectId) =>
+      isAdmin(req) || service.isProjectManager(projectId, viewer(req).account);
+
+    const readBody = async () => {
+      try { return JSON.parse((await readRaw(req, 65536)).toString("utf8") || "{}"); } catch { return {}; }
+    };
+
+    if (projectMatch && method === "PUT" && !projectMatch[2]) {
+      if (!canManageProject(projectMatch[1])) return fail(res, 403, "只有项目创建人或管理人员能修改这个项目");
+      try {
+        const updated = service.updateProject(projectMatch[1], await readBody());
+        broadcast("projects", {});
+        return json(res, 200, updated);
+      } catch (err) { return fail(res, 400, err.message); }
     }
-    if (memberMatch && method === "DELETE") {
-      service.removeMember(memberMatch[1]);
-      broadcast("members", {});
+    if (projectMatch && method === "DELETE" && !projectMatch[2]) {
+      if (!canManageProject(projectMatch[1])) return fail(res, 403, "只有项目创建人或管理人员能删除这个项目");
+      service.deleteProject(projectMatch[1]);
+      broadcast("projects", {});
       return json(res, 200, { ok: true });
     }
+    // 项目成员管理
+    if (projectMatch && method === "POST" && projectMatch[2] === "/members") {
+      if (!canManageProject(projectMatch[1])) return fail(res, 403, "只有项目创建人或管理人员能加人");
+      const body = await readBody();
+      const acc = accounts?.listAccounts().find((a) => a.id === body.accountId);
+      if (!acc) return fail(res, 400, "账号不存在");
+      service.addProjectMember(projectMatch[1], acc);
+      broadcast("projects", {});
+      return json(res, 200, { items: service.listProjectMembers(projectMatch[1]) });
+    }
+    if (projectMatch && method === "DELETE" && projectMatch[2] === "/members") {
+      if (!canManageProject(projectMatch[1])) return fail(res, 403, "只有项目创建人或管理人员能移出成员");
+      const accountId = url.searchParams.get("account");
+      if (!accountId) return fail(res, 400, "缺少账号");
+      service.removeProjectMember(projectMatch[1], accountId);
+      broadcast("projects", {});
+      return json(res, 200, { items: service.listProjectMembers(projectMatch[1]) });
+    }
+    if (projectMatch && method === "POST" && projectMatch[2] === "/agents") {
+      if (!canManageProject(projectMatch[1])) return fail(res, 403, "只有项目创建人或管理人员能配 AI 员工");
+      try {
+        const created = service.addProjectAgent({ ...(await readBody()), projectId: projectMatch[1] });
+        broadcast("projects", {});
+        return json(res, 200, created);
+      } catch (err) { return fail(res, 400, err.message); }
+    }
+    // 单个项目 AI 员工的改/删：按它所属项目判断权限
+    const agentMatch = path.match(/^\/api\/collab\/project-agents\/([\w-]+)$/);
+    const agentProjectOf = (agentId) => service.projectIdOfAgent(agentId);
+    if (agentMatch && method === "PUT") {
+      const projectId = agentProjectOf(agentMatch[1]);
+      if (!projectId) return fail(res, 404, "AI 员工不存在");
+      if (!canManageProject(projectId)) return fail(res, 403, "只有项目创建人或管理人员能改 AI 员工");
+      try {
+        const updated = service.updateProjectAgent(agentMatch[1], await readBody());
+        broadcast("projects", {});
+        return json(res, 200, updated);
+      } catch (err) { return fail(res, 400, err.message); }
+    }
+    if (agentMatch && method === "DELETE") {
+      const projectId = agentProjectOf(agentMatch[1]);
+      if (!projectId) return fail(res, 404, "AI 员工不存在");
+      if (!canManageProject(projectId)) return fail(res, 403, "只有项目创建人或管理人员能删除 AI 员工");
+      service.removeProjectAgent(agentMatch[1]);
+      broadcast("projects", {});
+      return json(res, 200, { ok: true });
+    }
+
+    // ---------- 管理端（主 Token 或 admin 会话） ----------
+    if (!isAdmin(req)) return fail(res, 401, "Unauthorized");
 
     if (path === "/api/collab/tasks" && method === "POST") {
       // 预留：二期给任务挂汇总配置
       return fail(res, 404, "Not found");
     }
 
-    const pushesMatch = path.match(/^\/api\/collab\/tasks\/([\w-]+)\/pushes$/);
-    if (pushesMatch && method === "GET") {
-      const kind = url.searchParams.get("kind") || undefined;
-      const items = service.listPushes({ taskId: pushesMatch[1], kind, limit: url.searchParams.get("limit") });
-      return json(res, 200, { items, counts: service.countByTask(pushesMatch[1]) });
-    }
-
     const pushMatch = path.match(/^\/api\/collab\/pushes\/([\w-]+)$/);
-    if(pushMatch && ["POST","DELETE"].includes(method) &&
-      manager?.tasks.get(service.getPush(pushMatch[1])?.taskId)?.research?.transport==="local-pull")
-      return fail(res,409,"研究原件不能移动或删除");
     if (pushMatch && method === "POST") {
       let body = {};
       try { body = JSON.parse((await readRaw(req, 65536)).toString("utf8") || "{}"); } catch { /* 空体 */ }
@@ -273,5 +340,5 @@ export function createCollabApi({ stateDir, authorized, taskLabel, manager, conf
     return false;
   };
 
-  return { handle, service, research, broadcast, KIND_NAME };
+  return { handle, service, broadcast, KIND_NAME };
 }

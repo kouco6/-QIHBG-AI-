@@ -45,7 +45,7 @@ export class AppServerRunner {
     try {
       return await this.#runAppServer(task, context);
     } catch (error) {
-      if (error?.safeToFallback && this.allowExecFallback && !task.research) {
+      if (error?.safeToFallback && this.allowExecFallback) {
         this.fallbackCount += 1;
         context.emit("runtime", {
           mode: "exec-fallback",
@@ -150,7 +150,6 @@ export class AppServerRunner {
         sandbox: task.mode === "workspace-write" ? "workspace-write" : "read-only",
         approvalPolicy: task.mode === "workspace-write" ? "on-request" : "never",
         approvalsReviewer: "user",
-        ...(task.research?.nativeSkill ? {config: {web_search: "live"}} : {}),
       };
       let threadResult;
       try {
@@ -197,8 +196,7 @@ export class AppServerRunner {
       turnRequested = true;
       const turnResult = await this.client.request("turn/start", {
         threadId,
-        input: [{ type: "text", text: task.prompt },
-          ...(task.research?.nativeSkill ? [{type:"skill", name:task.research.skillName, path:task.research.nativeSkill.path}] : [])],
+        input: [{ type: "text", text: task.prompt }],
         effort: task.reasoningEffort || null,
         model: task.model || null,
         cwd: task.cwd,
@@ -206,10 +204,6 @@ export class AppServerRunner {
       turnId = turnResult?.turn?.id;
       if (!turnId) throw new Error("Codex app-server returned no turn id");
       emit("codex", { type: "turn.started", thread_id: threadId, turn_id: turnId });
-      if (task.research?.nativeSkill) emit("research.native-skill", {
-        threadId, turnId, name:task.research.skillName, path:task.research.nativeSkill.path,
-        sha256:task.research.skillSha256, inputType:"skill", accepted:true,
-      });
       // 这里无条件 await：即使中止信号在 turn/start 之前就到达（settled 已置位、
       // finished 已被 reject），这里也能把那个 rejection 认领出来当作本次运行的结局。
       return await finished;

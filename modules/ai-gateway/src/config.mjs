@@ -199,8 +199,9 @@ export function loadConfig(env = process.env) {
       modelEnv: env.WORKBUDDY_KIMI_MODEL?.trim(),
       tokensEnv: env.WORKBUDDY_KIMI_MAX_OUTPUT_TOKENS,
     },
-    // WorkBuddy localassistant uses OAuth and a dedicated adapter, never an
-    // OpenAI-compatible endpoint/model/API-key preset.
+    // WorkBuddy 暂不在册（2026-11-02 先拿下，等 API 到手再加回）。
+    // 它在时走的是标准 OpenAI 兼容通道，加回来直接用「新建员工」填地址+模型+Key，
+    // 不需要在这里补 preset，也不需要动 agents 注册表。
   };
 
   const agents = {};
@@ -302,14 +303,6 @@ export function loadConfig(env = process.env) {
     };
   }
 
-  // Native WorkBuddy is represented in the existing employee registry, but
-  // cannot become a generic model runner, even if legacy keys are present.
-  agents.workbuddy = { id: "workbuddy", provider: "workbuddy-localassistant", name: "WorkBuddy",
-    enabled: fileConfig.workbuddy?.enabled === true,
-    configured: Boolean(fileConfig.workbuddy?.clientId && fileConfig.workbuddy?.redirectUri),
-    available: false, availabilityReason: "workbuddy_authorization_required",
-    apiKey: "", baseUrl: "", model: "", maxOutputTokens: 0 };
-
   const rootsSource = env.WORKBUDDY_ALLOWED_ROOTS
     ?? (Array.isArray(fileConfig.allowedRoots) ? fileConfig.allowedRoots.join(process.platform === "win32" ? ";" : delimiter) : "");
   const allowedRoots = splitRoots(rootsSource).map(canonicalDirectory);
@@ -321,7 +314,9 @@ export function loadConfig(env = process.env) {
   return {
     root: ROOT,
     configPath,
-    host: env.WORKBUDDY_HOST?.trim() || fileConfig.host || "127.0.0.1",
+    // 内网部署默认监听全部网卡：同事的浏览器和执行器都要能连上这台机器。
+    // 只在本机试用时，把 host 改回 127.0.0.1（或设置页里切「只本机」）即可。
+    host: env.WORKBUDDY_HOST?.trim() || fileConfig.host || "0.0.0.0",
     port: int(env.WORKBUDDY_PORT ?? fileConfig.port, 4317, 1, 65535),
     token,
     tokenSource,
@@ -364,9 +359,6 @@ export function loadConfig(env = process.env) {
     // AI 能力平台：从云端把技能拉进本地工作方法库。账号密码在 hub-secrets.json。
     hub: loadHubSettings(configPath, fileConfig, env),
     skillDir: resolve(dirname(configPath), env.WORKBUDDY_SKILL_DIR ?? fileConfig.skillDir ?? "skills"),
-    // Nonsecret operator configuration only; no environment credential discovery.
-    workbuddy: fileConfig.workbuddy && typeof fileConfig.workbuddy === "object" ? fileConfig.workbuddy : {},
-    workbuddyCredentialRoot: env.WORKBUDDY_RESEARCH_AUTH_DIR ?? fileConfig.workbuddyCredentialRoot ?? null,
   };
 }
 
@@ -401,8 +393,9 @@ export function validateTaskInput(input, config) {
     throw new Error("mode must be read-only or workspace-write");
   }
 
+  // 模型名放宽带符号：网关 id 常见大写、下划线、@ 等，只挡空格 / 反斜杠 / 换行
   const model = input.model == null || input.model === "" ? null : String(input.model);
-  if (model && !/^[A-Za-z0-9._:-]{1,80}$/.test(model)) throw new Error("model is invalid");
+  if (model && !/^[\p{L}\p{N}][\p{L}\p{N}._:@+#/-]{0,199}$/u.test(model)) throw new Error("model is invalid");
 
   const threadId = input.threadId == null || input.threadId === "" ? null : String(input.threadId);
   if (threadId && !/^[A-Za-z0-9._:-]{1,128}$/.test(threadId)) throw new Error("threadId is invalid");

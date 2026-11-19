@@ -1,4 +1,4 @@
-import { appendFileSync, closeSync, existsSync, fsyncSync, mkdirSync, openSync, readFileSync, renameSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
 /**
@@ -26,7 +26,7 @@ const toRecord = (task, idempotencyKey) => ({
   id: task.id,
   label: task.label ?? "",
   tags: task.tags ?? [],
-  prompt: task.research ? task.prompt : clip(task.prompt, PROMPT_LIMIT),
+  prompt: clip(task.prompt, PROMPT_LIMIT),
   cwd: task.cwd ?? null,
   mode: task.mode ?? null,
   model: task.model ?? null,
@@ -48,9 +48,7 @@ const toRecord = (task, idempotencyKey) => ({
   approvalWaitCount: task.approvalWaitCount ?? 0,
   runtimeMode: task.runtimeMode ?? null,
   turnId: task.turnId ?? null,
-  finalResponse: task.research ? task.finalResponse : clip(task.finalResponse, RESPONSE_LIMIT),
-  research: task.research ?? null,
-  skills: task.skills ?? [],
+  finalResponse: clip(task.finalResponse, RESPONSE_LIMIT),
   error: task.error ?? null,
   domain: task.domain ?? null,
   taskType: task.taskType ?? null,
@@ -69,6 +67,10 @@ const toRecord = (task, idempotencyKey) => ({
   usage: task.usage ?? null,
   readAt: task.readAt ?? null,
   archivedAt: task.archivedAt ?? null,
+  // 多人模式：任务归属与执行位置要活过重启，否则重启后执行器认不出自己的活
+  ownerAccountId: task.ownerAccountId ?? null,
+  ownerName: task.ownerName ?? null,
+  runner: task.runner ?? "local",
   idempotencyKey: idempotencyKey ?? null,
   savedAt: new Date().toISOString(),
 });
@@ -128,19 +130,11 @@ export class TaskStore {
   }
 
   append(task, idempotencyKey) {
-    if (!this.enabled) {
-      if (task.research) throw new Error("Research persistence is required");
-      return;
-    }
+    if (!this.enabled) return;
     try {
-      const body = `${JSON.stringify(toRecord(task, idempotencyKey))}\n`;
-      if (task.research) {
-        const fd = openSync(this.file, "a", 0o600);
-        try { writeFileSync(fd, body, "utf8"); fsyncSync(fd); } finally { closeSync(fd); }
-      } else appendFileSync(this.file, body, "utf8");
+      appendFileSync(this.file, `${JSON.stringify(toRecord(task, idempotencyKey))}\n`, "utf8");
       this.lines += 1;
     } catch (error) {
-      if (task.research) throw new Error("RESEARCH_PERSISTENCE_FAILED");
       // Persistence must never take the gateway down: a full disk should degrade
       // to "memory only", not to "no dispatch at all".
       process.stderr.write(`[store] append failed: ${error?.message || error}\n`);

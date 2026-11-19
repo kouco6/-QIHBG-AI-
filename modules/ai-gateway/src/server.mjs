@@ -17,19 +17,18 @@ import { TaskManager } from "./task-manager.mjs";
 import { handleWorkbenchApi } from "./workbench/api.mjs";
 import { createKnowledgeApi, knowledgeOptions } from "./workbench/knowledge/api.mjs";
 import { createCollabApi } from "./workbench/collab/api.mjs";
+import { AccountsService } from "./workbench/accounts/service.mjs";
+import { createAccountsApi } from "./workbench/accounts/api.mjs";
+import { UserAgentsService } from "./workbench/user-agents/service.mjs";
+import { createRunnerApi } from "./workbench/runner/api.mjs";
 import { FlowEventBus } from "./workbench/flow-events.mjs";
 import { FlowRunner } from "./workbench/flow-runner.mjs";
 import { FlowStore } from "./workbench/flows.mjs";
 import { skillStoreFor } from "./workbench/skill-mount.mjs";
 import { Updater } from "./workbench/updater.mjs";
 import { agentName, listAgents } from "./workbench/agents.mjs";
-import { bindResearchService, bindLocalResearch, bindCodexResearch, researchOwner, prepareResearch, researchRunner, ResearchFailure } from "./workbench/research.mjs";
-import { CodexResearch } from "./workbench/codex-research.mjs";
-import { ExecutorError } from "./workbench/research-executors.mjs";
-import { WorkBuddyError } from "./workbench/workbuddy-client.mjs";
 
 const config = loadConfig();
-bindResearchService(config);
 applyProxyPolicy(config.codexUseSystemProxy);
 applySilencePolicy(config.codexSilenceWarnMs);
 applyCodexCommand(config.codexCommand);
@@ -54,7 +53,6 @@ const refreshAgentRunners = () => {
   // Codex 是独立执行器（app-server），不在下面的循环里重建
   const keep = new Set(["codex"]);
   for (const [id, agentConfig] of Object.entries(config.agents ?? {})) {
-    if (id === "workbuddy" || agentConfig?.provider === "workbuddy-localassistant") continue;
     // 本机 CLI 员工（内置 claude + 界面新建的自定义位）：
     // 可用性只看「CLI 装没装」，跟 API Key 无关，不能混进云端循环；
     // 目前统一由 Claude Code 执行器承载。
@@ -124,38 +122,64 @@ const store = new TaskStore({ file: config.stateFile, eventFile: config.eventFil
 const manager = new TaskManager({
   concurrency: config.maxConcurrency,
   timeoutMs: config.taskTimeoutMs,
-  runner: researchRunner(config, selectedRunner),
+  runner: selectedRunner,
   persist: (task, idempotencyKey) => store.append(task, idempotencyKey),
   persistEvent: (taskId, event) => store.appendEvent(taskId, event),
   approvalResolver: (taskId, approvalId, decision) => appRunner.resolveApproval(taskId, approvalId, decision),
 });
 
 const persisted = store.load();
-bindCodexResearch(config,new CodexResearch({config,manager,client:appServer,runner:appRunner,ownerId:researchOwner(config)}));
 const recovery = manager.restore(persisted.latest, persisted.idempotency, persisted.eventsByTask);
 // 流程模板与运行实例；任务先恢复完再恢复流程，重启恢复为暂停（决策 10）。
 const flowStore = new FlowStore({ file: join(dirname(config.stateFile), "flows.json") });
-// 产品中枢知识库：DB 与 state 同目录（knowledge.db），Vault/备份目录来自配置或默认值
-const knowledgeApi = createKnowledgeApi({
-  stateDir: dirname(config.stateFile),
-  options: knowledgeOptions(config.configPath ?? join(dirname(config.stateFile), "gateway.config.json"), process.env),
-  askModel: createKnowledgeAskModel(config, agentName),
-});
+// 产品中枢知识库：暂停使用本地库。
+// 现状：知识库要在服务器上重新建（多人共享），先把本机的 vault / knowledge.db 连接断掉，
+// 避免网关一边读本地目录、一边和将来的服务器库打架。代码保留，重建时打开这个开关即可。
+const KNOWLEDGE_ENABLED = false;
+const knowledgeApi = KNOWLEDGE_ENABLED
+  ? createKnowledgeApi({
+    stateDir: dirname(config.stateFile),
+    options: knowledgeOptions(config.configPath ?? join(dirname(config.stateFile), "gateway.config.json"), process.env),
+    askModel: createKnowledgeAskModel(config, agentName),
+  })
+  : null;
+// 平台账号：登录会话 + 推送 Token 的身份源（先于 collab 创建，collab 依赖它校验身份）
+const accountsService = new AccountsService({ stateDir: dirname(config.stateFile) });
+accountsService.boot();
+const bootstrapAdmin = accountsService.ensureAdmin();
+if (bootstrapAdmin) {
+  console.log(`[accounts] 首次启动已创建管理员账号 admin（初始密码 admin123，请尽快在「账号管理」里修改）`);
+}
+const accountsApi = createAccountsApi({ service: accountsService, authorized: (req) => authorized(req) });
 // 任务协作：成员推送走独立 Token，路由必须在主鉴权闸门之前接管 /api/collab/*
 const collabApi = createCollabApi({
   stateDir: dirname(config.stateFile),
-  manager,config,ownerId:researchOwner(config),
   authorized: (req) => authorized(req),
+  accounts: accountsService,
+  accountsApi,
   taskLabel: () => manager.list()
     .filter((t) => t.status !== "archived")
     .map((t) => ({ id: t.id, label: t.label || "未命名任务", status: t.status })),
 });
-bindLocalResearch(config,collabApi.research);
+// 服务器侧推送 Token：用于任务产物自动归档（TaskManager 在任务完成时投递到协作项目）
+const serverCollabToken = accountsService.issueServiceToken();
+manager.collab = collabApi.service;
+manager.collabServerToken = serverCollabToken;
+// 旧「协作成员」一次性迁移到平台账号（同名、角色、推送 Token 哈希都带过去）
+{
+  const legacy = collabApi.service.legacyMembers();
+  if (legacy.length) {
+    const moved = accountsService.migrateFromMembers(legacy);
+    if (moved) console.log(`[accounts] 已把 ${moved} 个旧协作成员迁移为平台账号（密码为随机值，请在「账号管理」重置）`);
+  }
+}
+// 多机部署：个人 AI 员工配置中心（runnerApi 在下方 json/authorized 就绪后创建）
+const userAgents = new UserAgentsService({ stateDir: dirname(config.stateFile) }).boot();
 // 问答通道类型（cloud/local）在选型时就确定，供「机密不上云」的边界判断
-knowledgeApi.service.modelKind = knowledgeApi.service.askModel?.kind?.() ?? "local";
+if (knowledgeApi) knowledgeApi.service.modelKind = knowledgeApi.service.askModel?.kind?.() ?? "local";
 // 流程事件总线：只推步骤状态与产物清单，替代前端 3 秒全量轮询。
 const flowEvents = new FlowEventBus();
-const flowRunner = new FlowRunner({ store: flowStore, manager, config, skillStore: skillStoreFor(config), events: flowEvents });
+const flowRunner = new FlowRunner({ store: flowStore, manager, config, skillStore: skillStoreFor(config), events: flowEvents, userAgents, accounts: accountsService });
 const flowRecovery = flowStore.recoverOnBoot();
 if (persisted.lines > config.taskRetention * 3) {
   store.compact(persisted.latest);
@@ -279,7 +303,13 @@ function setAutostart(enabled) {
   });
 }
 
+/**
+ * 统一的 JSON 响应。
+ * 必须返回 true：各子路由都用 `return json(...)` 表示「这个请求我已经处理完了」，
+ * 外层据此判断是否继续往下走。返回 undefined 会让已应答的请求二次写响应头。
+ */
 const json = (res, status, body, extraHeaders = {}) => {
+  if (res.headersSent || res.writableEnded) return true;
   const payload = JSON.stringify(body);
   res.writeHead(status, {
     "content-type": "application/json; charset=utf-8",
@@ -288,6 +318,7 @@ const json = (res, status, body, extraHeaders = {}) => {
     ...extraHeaders,
   });
   res.end(payload);
+  return true;
 };
 
 const tokenMatches = (provided) => {
@@ -300,6 +331,16 @@ const authorized = (req) => {
   const header = req.headers.authorization || "";
   return header.startsWith("Bearer ") && tokenMatches(header.slice(7));
 };
+
+// 多机部署：远程执行器（本机 Codex 在执行器电脑上跑）+ 个人员工配置中心
+const runnerApi = createRunnerApi({
+  manager,
+  userAgents,
+  accounts: accountsService,
+  accountsApi,
+  authorized: (req) => authorized(req),
+  json,
+});
 
 const readJson = async (req) => {
   const chunks = [];
@@ -385,18 +426,33 @@ const server = createServer(async (req, res) => {
       });
     }
 
+    // 平台账号：登录/登出/我/账号管理，先于一切鉴权闸门
+    if (path.startsWith("/api/auth/")) {
+      const handled = await accountsApi.handle(req, res, path, url);
+      if (handled) return;
+    }
+
     // 任务协作：独立 Token 体系，先于主鉴权闸门处理 /api/collab/*
     if (path.startsWith("/api/collab/")) {
       const handled = await collabApi.handle(req, res, path, url);
       if (handled) return;
     }
 
-    if ((path.startsWith("/v1/") || path.startsWith("/api/")) && !authorized(req)) {
+    // 多机部署：远程执行器领单/回传 + 个人员工配置 + 模型池 + 执行器运行配置，自带认证，先于主闸门
+    if (path.startsWith("/api/runner/") || path.startsWith("/api/user-agents") || path.startsWith("/api/runner-prefs") || path.startsWith("/api/models")) {
+      const handled = await runnerApi.handle(req, res, path, url);
+      if (handled) return;
+    }
+
+    // API 鉴权：网关主 Token（程序化集成）或平台登录会话（浏览器）二选一
+    const sessionAccount = accountsApi.sessionAccount(req);
+    if ((path.startsWith("/v1/") || path.startsWith("/api/")) && !authorized(req) && !sessionAccount) {
       return json(res, 401, { error: "Unauthorized" }, { "www-authenticate": "Bearer" });
     }
 
-    // 产品中枢知识库：独立路由组，先于通用 workbench API 处理 /api/knowledge/*
+    // 产品中枢知识库：本地库已断开（见 KNOWLEDGE_ENABLED），接口统一回 404，前端也看不到入口
     if (path.startsWith("/api/knowledge/")) {
+      if (!knowledgeApi) return json(res, 404, { error: "知识库将在服务器端重建，当前已停用" });
       const handled = await knowledgeApi.handle(req, res, path, url);
       if (handled) return;
     }
@@ -416,6 +472,13 @@ const server = createServer(async (req, res) => {
         serviceControl,
         updater,
         onAgentConfigChanged: refreshAgentRunners,
+        // 多人模式：登录身份透传给任务归属与隔离（主 Token 落到管理员名下）
+        viewer: sessionAccount ?? (authorized(req)
+          ? accountsService.listAccounts().find((a) => a.role === "admin" && a.active) ?? null
+          : null),
+        viewerIsAdmin: sessionAccount ? sessionAccount.role === "admin" : authorized(req),
+        userAgents,
+        collabApi,
       });
       if (handled) return;
     }
@@ -446,10 +509,7 @@ const server = createServer(async (req, res) => {
     }
 
     if (req.method === "POST" && path === "/v1/tasks") {
-      const body = await readJson(req);
-      if (Object.hasOwn(body, "research") || body.taskType === "planning_research")
-        { const result=await prepareResearch(req, body, config, manager); return json(res,result.status,result.value); }
-      const input = validateTaskInput(body, config);
+      const input = validateTaskInput(await readJson(req), config);
       if (!selectedRunner.has(input.agent)) {
         throw new Error(`AI 员工 ${input.agent} 尚未配置 API Key 或已被禁用`);
       }
@@ -521,18 +581,35 @@ const server = createServer(async (req, res) => {
       return task ? json(res, 200, task) : json(res, 404, { error: "Task not found" });
     }
 
+    if (req.method === "GET" && path === "/login") {
+      if (serveStatic("/login.html", res)) return;
+    }
+    // 平台页面：未登录一律跳登录页；静态资源本身不拦（无 API 凭证也无害）
+    if (req.method === "GET" && (path === "/" || path === "/index.html") && !accountsApi.sessionAccount(req)) {
+      const target = encodeURIComponent(req.url);
+      res.writeHead(302, { location: `/login${target && target !== "%2F" ? `?next=${target}` : ""}` });
+      res.end();
+      return;
+    }
     if (req.method === "GET" && serveStatic(path, res)) return;
     json(res, 404, { error: "Not found" });
   } catch (error) {
-    if (error instanceof ResearchFailure || error instanceof WorkBuddyError || error instanceof ExecutorError)
-      return json(res, error.status, { code: error.code, error: error.message });
-    json(res, 400, { error: error instanceof Error ? error.message : String(error) });
+    console.log("[req-error]", req.method, path, "->", error instanceof Error ? (error.stack || error.message) : String(error));
+    if (!res.headersSent) json(res, 400, { error: error instanceof Error ? error.message : String(error) });
   }
 });
 
 server.listen(config.port, config.host, () => {
+  const lan = config.host === "0.0.0.0" || config.host === "::"
+    ? Object.values(networkInterfaces()).flat()
+      .filter((item) => item && item.family === "IPv4" && !item.internal)
+      .map((item) => item.address)
+    : [];
+  const access = [`本机 http://127.0.0.1:${config.port}`];
+  for (const address of lan) access.push(`局域网 http://${address}:${config.port}`);
   console.log(`\nWorkBuddy <-> Codex Gateway`);
-  console.log(`Dashboard: http://${config.host}:${config.port}`);
+  console.log(`监听:      ${config.host}:${config.port}`);
+  console.log(`访问:      ${access.join("  |  ")}`);
   console.log(`Config:    ${config.configPath}`);
   console.log(`Codex:     ${codexVersion || "not found"} (${getCodexCommand()})`);
   console.log(`Claude:    ${claudeVersion || "not found"} (${config.claudeCommand})`);
@@ -604,6 +681,8 @@ setInterval(autoApplySweep, 60 * 60 * 1000).unref?.();
 
 const shutdown = () => {
   void appServer.stop();
+  accountsService.shutdown();
+  collabApi.service.shutdown();
   server.close(() => process.exit(0));
 };
 process.on("SIGINT", shutdown);

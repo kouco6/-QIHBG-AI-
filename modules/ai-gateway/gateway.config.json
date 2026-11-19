@@ -1,0 +1,163 @@
+{
+  "_comment": "网关运行配置。可安全提交/分享——凭据不在本文件里。",
+  "port": 4317,
+  "host": "0.0.0.0",
+  "_tokenComment": "凭据存放位置，相对于本文件。用 scripts/rotate-token.ps1 轮换。",
+  "tokenFile": "secrets.json",
+  "_agentSecretsComment": "豆包和 Kimi 的 API Key 存放在独立的 agent-secrets.json；运行 scripts/configure-agents.ps1 配置，不要把 Key 写进本文件。",
+  "agentSecretsFile": "agent-secrets.json",
+  "_pricingComment": "成本观测用的单价，单位「元 / 百万 tokens」，写在每个 agent 里：\"pricing\": {\"input\": 0.8, \"output\": 2}。可选 cachedInput（缓存命中价），不填按 input 算。不填 pricing 就不估算金额，看板只统计 token。也可以在员工页「填 API → 高级设置」里改。",
+  "agents": {
+    "doubao": {
+      "enabled": true,
+      "baseUrl": "https://ark.cn-beijing.volces.com/api/v3",
+      "model": "doubao-seed-2-1-turbo-260628",
+      "maxOutputTokens": 16384,
+      "name": "豆包",
+      "summary": "中文长文与文档归纳",
+      "capabilities": [
+        "longform",
+        "chinese-writing",
+        "doc",
+        "summarize"
+      ]
+    },
+    "kimi": {
+      "enabled": true,
+      "baseUrl": "https://api.moonshot.cn/v1",
+      "model": "kimi-k3",
+      "maxOutputTokens": 16384,
+      "name": "Kimi",
+      "summary": "超长上下文与资料归纳",
+      "capabilities": [
+        "longform",
+        "long-context",
+        "doc",
+        "summarize"
+      ]
+    },
+    "custom-mvjd6i35-z4l0": {
+      "provider": "openai",
+      "name": "DeepSeek",
+      "summary": "",
+      "capabilities": [
+        "web"
+      ],
+      "enabled": true,
+      "baseUrl": "https://ark.cn-beijing.volces.com/api/v3",
+      "model": "deepseek-v4-1-flash-economy-261017",
+      "maxOutputTokens": 16384,
+      "pricing": null,
+      "avatar": "amber"
+    },
+    "claude": {
+      "provider": "local",
+      "name": "Claude",
+      "summary": "本机 Claude Code：改代码、跑命令、读文件，带工具链与 Skill",
+      "capabilities": [
+        "code",
+        "files",
+        "shell",
+        "office-files",
+        "web"
+      ],
+      "enabled": true,
+      "maxOutputTokens": 16384,
+      "pricing": null,
+      "avatar": "cyan"
+    },
+    "custom-mw04iy6a-nm2g": {
+      "provider": "openai",
+      "name": "千问",
+      "summary": "中文写作、长文档与超长上下文",
+      "capabilities": [
+        "longform",
+        "chinese-writing",
+        "long-context",
+        "doc",
+        "summarize"
+      ],
+      "enabled": true,
+      "baseUrl": "http://172.16.131.10:9001/v1",
+      "model": "qwen3.7-max",
+      "maxOutputTokens": 16384,
+      "pricing": null,
+      "avatar": "ink"
+    },
+    "custom-mw04lwfk-7uvs": {
+      "provider": "openai",
+      "name": "Claude 4-6",
+      "summary": "英文写作、代码与通用推理",
+      "capabilities": [
+        "code",
+        "shell"
+      ],
+      "enabled": true,
+      "baseUrl": "http://172.16.131.10:9001/v1",
+      "model": "claude-sonnet-4-6",
+      "maxOutputTokens": 16384,
+      "pricing": null,
+      "avatar": "cocoa"
+    },
+    "custom-mw04neoa-z9c2": {
+      "provider": "openai",
+      "name": "claude-opus-4-7",
+      "summary": "英文写作、代码与通用推理",
+      "capabilities": [
+        "code"
+      ],
+      "enabled": true,
+      "baseUrl": "http://172.16.131.10:9001/v1",
+      "model": "claude-opus-4-7",
+      "maxOutputTokens": 16384,
+      "pricing": null,
+      "avatar": "indigo"
+    },
+    "custom-mw04oeiu-luz4": {
+      "provider": "openai",
+      "name": "claude-opus-4-8",
+      "summary": "英文写作、代码与通用推理",
+      "capabilities": [
+        "code",
+        "doc"
+      ],
+      "enabled": true,
+      "baseUrl": "http://172.16.131.10:9001/v1",
+      "model": "claude-opus-4-8",
+      "maxOutputTokens": 16384,
+      "pricing": null,
+      "avatar": "coral"
+    }
+  },
+  "_allowedRootsComment": "Codex 只能在这些目录内工作。新增业务仓库时追加到这个数组。",
+  "allowedRoots": [
+    "C:\\Users\\zenglb\\Documents\\Codex\\2026-10-19\\new-chat\\outputs\\workbuddy-codex-gateway",
+    "E:\\WorkBuddy\\工作输出"
+  ],
+  "_codexHomeComment": "留空则自动探测：codexHome 显式指定 → PATH → %LOCALAPPDATA%\\OpenAI\\Codex\\bin\\<hash>（优先带 codex-code-mode-host.exe 的完整安装）→ ~/.codex/.sandbox-bin。网关不再依赖启动方注入 PATH；只有当探测完全失败时才回退到裸名 codex。也可用环境变量 WORKBUDDY_CODEX_HOME 覆盖。",
+  "codexHome": "",
+  "maxConcurrency": 2,
+  "taskTimeoutMs": 1800000,
+  "_runnerComment": "最终架构默认使用单例 Codex app-server（stdio JSONL）。仅在回合尚未启动时允许回退到旧 codex exec，避免自动重放造成重复改文件。紧急回滚可把 runnerMode 改为 exec。",
+  "runnerMode": "app-server",
+  "allowExecFallback": true,
+  "_reasoningComment": "Codex 推理强度：minimal/low/medium/high。它是质量与延迟的调节项，不是连接可靠性开关；默认 medium，单任务可在请求里用 reasoningEffort 覆盖。",
+  "codexReasoningEffort": "medium",
+  "_proxyComment": "Codex 子进程默认剥离宿主注入的 HTTP(S)_PROXY，以获得可复现的显式网络环境；网络必须经过系统代理时才改为 true。2026-10-22 的直连/代理各 10 次交错压测未复现早先单次 2.5 倍差异，两种模式均出现随机长尾。",
+  "codexUseSystemProxy": false,
+  "_silenceComment": "静默告警阈值（毫秒）。Codex 连续这么久没有任何输出时，界面标记「已静默 N 分钟」——只记录事实，不中断进程（长推理回合本来就会安静几分钟）。每跨过一个阈值倍数各记一条，5/10/15 分钟依次出现。填 0 关闭。",
+  "codexSilenceWarnMs": 300000,
+  "_stateComment": "任务持久化文件（JSONL 追加写），网关重启后自动恢复。taskRetention 为内存中保留的任务数上限。",
+  "stateFile": "state/tasks.jsonl",
+  "eventFile": "state/events.jsonl",
+  "taskRetention": 500,
+  "_watchdogComment": "健康检查间隔与崩溃重启退避。",
+  "healthCheckSeconds": 10,
+  "restartBackoffSeconds": [
+    3,
+    5,
+    10,
+    20,
+    30
+  ]
+}
