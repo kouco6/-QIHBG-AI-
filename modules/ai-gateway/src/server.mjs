@@ -1,4 +1,4 @@
-import { createHash, timingSafeEqual } from "node:crypto";
+import { createHash, randomUUID, timingSafeEqual } from "node:crypto";
 import { createReadStream, existsSync } from "node:fs";
 import { createServer } from "node:http";
 import { execFile, spawn } from "node:child_process";
@@ -446,6 +446,26 @@ const server = createServer(async (req, res) => {
 
     // API 鉴权：网关主 Token（程序化集成）或平台登录会话（浏览器）二选一
     const sessionAccount = accountsApi.sessionAccount(req);
+    // 平台集成身份桥：portal 反代持主 Token + X-Integration-Account（平台登录名）访问时，
+    // 自动映射（缺则建）同名网关账号，让平台用户在 AI 网关里拥有独立的员工/模型池身份。
+    let integrationAccount = null;
+    if (!sessionAccount && authorized(req)) {
+      const integrationLogin = String(req.headers["x-integration-account"] || "").trim().slice(0, 32);
+      if (integrationLogin) {
+        integrationAccount = accountsService.listAccounts().find((a) => a.username === integrationLogin && a.active) ?? null;
+        if (!integrationAccount) {
+          try {
+            integrationAccount = accountsService.createAccount({
+              username: integrationLogin,
+              name: String(req.headers["x-integration-name"] || integrationLogin).trim().slice(0, 40) || integrationLogin,
+              role: req.headers["x-integration-admin"] === "1" ? "admin" : "other",
+              password: randomUUID(),
+            });
+            console.log(`[accounts] 平台集成账号已映射：${integrationLogin}`);
+          } catch { /* 创建失败（如重名停用）时按无账号处理 */ }
+        }
+      }
+    }
     if ((path.startsWith("/v1/") || path.startsWith("/api/")) && !authorized(req) && !sessionAccount) {
       return json(res, 401, { error: "Unauthorized" }, { "www-authenticate": "Bearer" });
     }
@@ -472,11 +492,13 @@ const server = createServer(async (req, res) => {
         serviceControl,
         updater,
         onAgentConfigChanged: refreshAgentRunners,
-        // 多人模式：登录身份透传给任务归属与隔离（主 Token 落到管理员名下）
-        viewer: sessionAccount ?? (authorized(req)
+        // 多人模式：登录身份透传给任务归属与隔离（集成身份桥 → 平台账号；主 Token 落到管理员名下）
+        viewer: sessionAccount ?? integrationAccount ?? (authorized(req)
           ? accountsService.listAccounts().find((a) => a.role === "admin" && a.active) ?? null
           : null),
-        viewerIsAdmin: sessionAccount ? sessionAccount.role === "admin" : authorized(req),
+        viewerIsAdmin: sessionAccount ? sessionAccount.role === "admin"
+          : integrationAccount ? integrationAccount.role === "admin"
+          : authorized(req),
         userAgents,
         collabApi,
       });
@@ -585,7 +607,7 @@ const server = createServer(async (req, res) => {
       if (serveStatic("/login.html", res)) return;
     }
     // 平台页面：未登录一律跳登录页；静态资源本身不拦（无 API 凭证也无害）
-    if (req.method === "GET" && (path === "/" || path === "/index.html") && !accountsApi.sessionAccount(req)) {
+    if (req.method === "GET" && (path === "/" || path === "/index.html") && !accountsApi.sessionAccount(req) && !integrationAccount) {
       const target = encodeURIComponent(req.url);
       res.writeHead(302, { location: `/login${target && target !== "%2F" ? `?next=${target}` : ""}` });
       res.end();
