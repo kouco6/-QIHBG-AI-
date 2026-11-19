@@ -1,0 +1,136 @@
+{
+  "enabled": {
+    "large": true,
+    "scenes": true
+  },
+  "largeName": "核电站",
+  "largeImage": "",
+  "systems": [
+    {
+      "id": "id161xuybq",
+      "name": "公共广播系统",
+      "devices": [
+        {
+          "id": "idt6nj7t53",
+          "name": "网络广播终端",
+          "status": "planned",
+          "image": ""
+        },
+        {
+          "id": "idpq7px7wi",
+          "name": "数字功率放大器",
+          "status": "existing",
+          "image": ""
+        },
+        {
+          "id": "id3w7gwwc5",
+          "name": "IP网络音箱",
+          "status": "missing",
+          "image": ""
+        }
+      ]
+    },
+    {
+      "id": "idmxz5ft0k",
+      "name": "内部通话系统",
+      "devices": [
+        {
+          "id": "iddjblo7by",
+          "name": "工业对讲终端",
+          "status": "planned",
+          "image": ""
+        },
+        {
+          "id": "id24tw1w62",
+          "name": "紧急呼叫面板",
+          "status": "existing",
+          "image": ""
+        }
+      ]
+    },
+    {
+      "id": "idcnllgzki",
+      "name": "应急指挥系统",
+      "devices": [
+        {
+          "id": "idje8rglak",
+          "name": "指挥调度主机",
+          "status": "planned",
+          "image": ""
+        },
+        {
+          "id": "idhkld3070",
+          "name": "控制台话筒",
+          "status": "missing",
+          "image": ""
+        }
+      ]
+    }
+  ],
+  "scenes": [
+    {
+      "id": "idus8c5iqq",
+      "name": "主控室",
+      "topology": "",
+      "features": [
+        {
+          "id": "idcjn95qwj",
+          "name": "高可靠值守",
+          "description": "全天候集中监测，通信与告警必须保持连续可用。"
+        }
+      ],
+      "needs": [
+        {
+          "id": "id3luwq95y",
+          "name": "多系统联动",
+          "description": "报警信息需快速触达值班人员，并同步至声光提示。"
+        }
+      ],
+      "pains": [
+        {
+          "id": "idmx74o6aa",
+          "name": "告警信息分散",
+          "description": "不同系统告警入口独立，人工判断和处置耗时。"
+        }
+      ],
+      "goals": [
+        {
+          "id": "idzuaz3v73",
+          "text": "建立告警分级广播与语音确认机制，缩短主控室异常响应链路。"
+        }
+      ]
+    },
+    {
+      "id": "id2uuxb017",
+      "name": "机组厂房",
+      "topology": "",
+      "features": [
+        {
+          "id": "idrlrc822g",
+          "name": "高噪声环境",
+          "description": "设备持续运行，现场噪声和空间遮挡影响语音传播。"
+        }
+      ],
+      "needs": [
+        {
+          "id": "idg80067k4",
+          "name": "语音清晰覆盖",
+          "description": "常规通知与紧急指令均应在关键作业区域清晰传达。"
+        }
+      ],
+      "pains": [
+        {
+          "id": "idr9vn620e",
+          "name": "信息传递效率低",
+          "description": "复杂设备环境下，传统人工通知易延迟或遗漏。"
+        }
+      ],
+      "goals": [
+        {
+          "id": "idodev5562",
+          "text": "规划高声压、分区可控的现场广播能力，提升指令可听度。"
+        }
+      ]
+    }
+  ]
+}

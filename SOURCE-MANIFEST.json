@@ -1,0 +1,2132 @@
+{
+  "format": "qihbg-v2-independent-source-v1",
+  "date": "2026-11-19",
+  "scope": "Independent V2 frontend, capabilities, necessary backend, task service and V2 baseline; no original platform shell or unrelated modules",
+  "files": [
+    {
+      "path": ".gitignore",
+      "size": 230,
+      "sha256": "95dc7a9b064db2c43d17456630029c31b93ac5139eff422af076bb3e33e1c50a"
+    },
+    {
+      "path": "AGENTS.md",
+      "size": 1102,
+      "sha256": "a7578373b2c72000b31cb89c93bd65e952ebb4f5ef0b50a5f86ecbf978f11474"
+    },
+    {
+      "path": "README.md",
+      "size": 3377,
+      "sha256": "bd39e7b6477e5797dba805c9bd9e79b4b30ac56db4fc94f59ee812a93400ce31"
+    },
+    {
+      "path": "backend/ai_adapter.py",
+      "size": 1411,
+      "sha256": "da74c012ae48022487da01217af6b806bb79391a2bd51d98e619f1d580a0be68"
+    },
+    {
+      "path": "backend/http_server.py",
+      "size": 25281,
+      "sha256": "1d61f5cf4cc0cd44359fb03cca4a91d5400e35eacb1d22e29857ffbec6962f78"
+    },
+    {
+      "path": "backend/identity.py",
+      "size": 16618,
+      "sha256": "277e5aeccff457e667a8a7063389a6104762928a1c7ea20734aa20ab36c4bfb8"
+    },
+    {
+      "path": "backend/planning_templates.py",
+      "size": 13735,
+      "sha256": "3578e7da6d0da38ff7361ca1098f1500f16ced245d8723ce61f7268a35c98a29"
+    },
+    {
+      "path": "backend/planning_templates_v2.py",
+      "size": 5149,
+      "sha256": "2ac37bd19a4ce5c0ffc00e6fcb662dbb56da99b43cff057f64ae1780d535885d"
+    },
+    {
+      "path": "backend/runtime.py",
+      "size": 5465,
+      "sha256": "096ed83a9338cf28e3c12458a676a50725bdfffc4ac30a83cc2cb7ff3b38a858"
+    },
+    {
+      "path": "backend/template-contract/seeds/dim03-seed.json",
+      "size": 6122,
+      "sha256": "a4f692562938839aa8b227c5fc76cc1268b14ae06d6e0c6ca78b8e22c4abd8e7"
+    },
+    {
+      "path": "backend/template-contract/seeds/dim04-seed.json",
+      "size": 18597,
+      "sha256": "2836492cc86d4fa06fd05542f64fff88d07bae13c4861bae88fdcc9af7f7d500"
+    },
+    {
+      "path": "backend/template-contract/seeds/dim05-seed.json",
+      "size": 86511,
+      "sha256": "4499a84cf8d32a001b1f78d86261112d879a90a0ebb5b7af91348d99c9601c96"
+    },
+    {
+      "path": "backend/template-contract/seeds/dim06-seed.json",
+      "size": 7890,
+      "sha256": "cd3e1d484253bd17d89bff45f6ad41f40c5d6c78f269cdfc2323077cdbec83c0"
+    },
+    {
+      "path": "backend/template-contract/seeds/dim07-seed.json",
+      "size": 12608,
+      "sha256": "d03d0628067600986109a999e80b622101e1441b8248327a857e109be0e6dbd9"
+    },
+    {
+      "path": "backend/template-contract/seeds/dim08-seed.json",
+      "size": 1322,
+      "sha256": "aad31c86f285cb4ebc3b1e92a7728755621e277d436363494a68405a8b93765f"
+    },
+    {
+      "path": "backend/template-contract/seeds/dim09-seed.json",
+      "size": 13020,
+      "sha256": "bc4090b40f103bfead7805f180c7663a18da1df4aa6fedce7cd07bb22e4c008a"
+    },
+    {
+      "path": "backend/template-contract/seeds/dim10-seed.json",
+      "size": 4376,
+      "sha256": "d8c73bf3cbd9f499e17e176bd774c2d3e08a9686e8b7c6ae58aefd4210501d44"
+    },
+    {
+      "path": "backend/template-contract/seeds/dim11-seed.json",
+      "size": 26875,
+      "sha256": "e4f57f7cc5f1e582d8fd79c2bc96eb44227ef975546234d25965aab518a07e3a"
+    },
+    {
+      "path": "backend/template-contract/seeds/dim12-seed.json",
+      "size": 3646,
+      "sha256": "717c3e0a475e36a9223ba6a572a09255d733ce1b4d70b4039e658fbded25927c"
+    },
+    {
+      "path": "backend/template-contract/v2-appearance/fonts.css",
+      "size": 1926,
+      "sha256": "7a9025c015cbd3e2d3f95acb75b5a854a00b0bf158000bb24cf4501824b103a2"
+    },
+    {
+      "path": "backend/template-contract/v2-appearance/theme.css",
+      "size": 4216,
+      "sha256": "67851899c943738c328089ff2d4dec3b49d4c52387f6d700d49b661a23bf30a7"
+    },
+    {
+      "path": "backend/template-contract/v2-appearance/theme.js",
+      "size": 1105,
+      "sha256": "9d8b88fdbe064f0fc14dc1206832e16223eed6d26f2c6eeb9e95cb24225e4fe8"
+    },
+    {
+      "path": "backend/template-contract/validators.py",
+      "size": 24230,
+      "sha256": "e48d5c2d050b135a3113535c846e827a1d1baad0510e23ea455ee5e25d98f8ea"
+    },
+    {
+      "path": "baseline/assets/dim-bid-core.html",
+      "size": 15840,
+      "sha256": "b871c206da3e257e63c0ddfafa4556001869526bab9f5e10aa8dcedd8563e77f"
+    },
+    {
+      "path": "baseline/assets/dim-bid-core.js",
+      "size": 24562,
+      "sha256": "9e3eb97de1096d104ad32847efe93698b7a97f41dafc53b460e41ae0eebfbe0b"
+    },
+    {
+      "path": "baseline/assets/dim-final-core.html",
+      "size": 14469,
+      "sha256": "a8d598754d4de80e2293a04cd810f3127463c903a070654e96fdf26f9adceddf"
+    },
+    {
+      "path": "baseline/assets/dim-final-core.js",
+      "size": 21460,
+      "sha256": "d86d1027d3a7f10c04757174ff6a8385e40eac02246c71b31632ecf5647d1fe0"
+    },
+    {
+      "path": "baseline/assets/dim-multi-core.html",
+      "size": 10858,
+      "sha256": "c942a21fe6c35f33d79ba54f480a9154c0d74866104eeec1beb4858bfbf007a0"
+    },
+    {
+      "path": "baseline/assets/dim-multi-core.js",
+      "size": 18569,
+      "sha256": "36d28782a39437723140b2132e6cdedbb62e0bd744946c4546be30f7fde2466d"
+    },
+    {
+      "path": "baseline/assets/dim01-v7.html",
+      "size": 121468,
+      "sha256": "82da316e0ae5c303260fe89d45c6d3ba41652842ff7c5d3064a535180976713b"
+    },
+    {
+      "path": "baseline/assets/dim02-core.html",
+      "size": 46089,
+      "sha256": "ced7e07cd0ad0cb7ccccec44f7ce8b705578b6fa431069fad338ff29a7881ebe"
+    },
+    {
+      "path": "baseline/assets/dim02-workmode.js",
+      "size": 12052,
+      "sha256": "541c7dffd10e156e009734b24476a70e680e43f7b7de9b8758002d6d314adef5"
+    },
+    {
+      "path": "baseline/assets/dim03-core.html",
+      "size": 37556,
+      "sha256": "497e1cce179a9f99646d85403923a658bac060640426f51dc249322a462cdfc6"
+    },
+    {
+      "path": "baseline/assets/dim03-core.js",
+      "size": 8323,
+      "sha256": "c2e56391c5f43c2138405da28be6291b70a2abfcb4070207632b74cd8fedd37f"
+    },
+    {
+      "path": "baseline/assets/dim03-seed.json",
+      "size": 6122,
+      "sha256": "a4f692562938839aa8b227c5fc76cc1268b14ae06d6e0c6ca78b8e22c4abd8e7"
+    },
+    {
+      "path": "baseline/assets/dim04-core.html",
+      "size": 77800,
+      "sha256": "dab54dfd94d18cc61f5f8e4a34d07b6bce80a72c6f47ce4030b4de9c8e3de7cb"
+    },
+    {
+      "path": "baseline/assets/dim04-core.js",
+      "size": 14193,
+      "sha256": "c79b4ecc956184550ccb64a83b75c3bb15486a11f9e420d88f1ef855c7715b95"
+    },
+    {
+      "path": "baseline/assets/dim04-seed.json",
+      "size": 18597,
+      "sha256": "2836492cc86d4fa06fd05542f64fff88d07bae13c4861bae88fdcc9af7f7d500"
+    },
+    {
+      "path": "baseline/assets/dim05-seed.json",
+      "size": 86511,
+      "sha256": "4499a84cf8d32a001b1f78d86261112d879a90a0ebb5b7af91348d99c9601c96"
+    },
+    {
+      "path": "baseline/assets/dim06-core.html",
+      "size": 65962,
+      "sha256": "67dc6be8e91f21ad04d6d3f6cc0d946b37c568f574a9c6a043b2a1d0a8301cba"
+    },
+    {
+      "path": "baseline/assets/dim06-seed.json",
+      "size": 7890,
+      "sha256": "cd3e1d484253bd17d89bff45f6ad41f40c5d6c78f269cdfc2323077cdbec83c0"
+    },
+    {
+      "path": "baseline/assets/dim07-seed.json",
+      "size": 12608,
+      "sha256": "d03d0628067600986109a999e80b622101e1441b8248327a857e109be0e6dbd9"
+    },
+    {
+      "path": "baseline/assets/dim08-seed.json",
+      "size": 1322,
+      "sha256": "aad31c86f285cb4ebc3b1e92a7728755621e277d436363494a68405a8b93765f"
+    },
+    {
+      "path": "baseline/assets/dim09-seed.json",
+      "size": 13020,
+      "sha256": "bc4090b40f103bfead7805f180c7663a18da1df4aa6fedce7cd07bb22e4c008a"
+    },
+    {
+      "path": "baseline/assets/dim10-seed.json",
+      "size": 4376,
+      "sha256": "d8c73bf3cbd9f499e17e176bd774c2d3e08a9686e8b7c6ae58aefd4210501d44"
+    },
+    {
+      "path": "baseline/assets/dim11-seed.json",
+      "size": 26875,
+      "sha256": "e4f57f7cc5f1e582d8fd79c2bc96eb44227ef975546234d25965aab518a07e3a"
+    },
+    {
+      "path": "baseline/assets/dim12-seed.json",
+      "size": 3646,
+      "sha256": "717c3e0a475e36a9223ba6a572a09255d733ce1b4d70b4039e658fbded25927c"
+    },
+    {
+      "path": "baseline/assets/theme-a-chrome.css",
+      "size": 871,
+      "sha256": "9e14e32594a2e345a66acda7a362338c7b4e0b98fb76d33539d7caf32b8c6c76"
+    },
+    {
+      "path": "baseline/assets/v2-fonts/license.json",
+      "size": 4434,
+      "sha256": "c6dffb9b17e88e74def4a74456066f533bf2c8eb0a7ed7ae1b989d30b0076ef1"
+    },
+    {
+      "path": "baseline/assets/v2-fonts/noto-sans-sc-chinese-simplified-400-normal.woff2",
+      "size": 1141536,
+      "sha256": "eb385eca10dd39caff881c38338aefccecfaec6b42cc016fbe81434e388d6c3a"
+    },
+    {
+      "path": "baseline/assets/v2-fonts/noto-sans-sc-chinese-simplified-500-normal.woff2",
+      "size": 1158564,
+      "sha256": "beb1344739bee4f45a96d019fbe37a0022848652a8016b3c2d8a8bf63fd6264f"
+    },
+    {
+      "path": "baseline/assets/v2-fonts/noto-sans-sc-chinese-simplified-700-normal.woff2",
+      "size": 1171972,
+      "sha256": "70f78783862ce06f00424d43a5105475d49b3b61ad737b51bf5e561644845614"
+    },
+    {
+      "path": "baseline/assets/v2-fonts/noto-sans-sc-latin-400-normal.woff2",
+      "size": 13432,
+      "sha256": "1b204530ab786f0a3bd02f411818ba1133019f3747965ab57a46d1aca7f4686e"
+    },
+    {
+      "path": "baseline/assets/v2-fonts/noto-sans-sc-latin-500-normal.woff2",
+      "size": 13464,
+      "sha256": "cc326e2cfaf18d0a69ffe205ff2f457d1a4a49fef940c3ab7cbd0aa5c3440644"
+    },
+    {
+      "path": "baseline/assets/v2-fonts/noto-sans-sc-latin-700-normal.woff2",
+      "size": 13504,
+      "sha256": "82c6fd5578763f9b15f3404a203b74bf4139b725ebf0d5d1534bfd05d0991419"
+    },
+    {
+      "path": "baseline/assets/v2-fonts/noto-sans-sc.css",
+      "size": 1926,
+      "sha256": "7a9025c015cbd3e2d3f95acb75b5a854a00b0bf158000bb24cf4501824b103a2"
+    },
+    {
+      "path": "baseline/assets/v2-theme.css",
+      "size": 4216,
+      "sha256": "67851899c943738c328089ff2d4dec3b49d4c52387f6d700d49b661a23bf30a7"
+    },
+    {
+      "path": "baseline/assets/v2-theme.js",
+      "size": 1105,
+      "sha256": "9d8b88fdbe064f0fc14dc1206832e16223eed6d26f2c6eeb9e95cb24225e4fe8"
+    },
+    {
+      "path": "baseline/manifest.json",
+      "size": 3390,
+      "sha256": "082b92bfda0ecffe734f3d323fdf813aa6274d4193bb0588da6a024c051a8997"
+    },
+    {
+      "path": "baseline/samples/dim01.json",
+      "size": 1366,
+      "sha256": "97e57907116b4ac54f127b410dadcf695e273d814b7fb8a6b80a84f6a7d44891"
+    },
+    {
+      "path": "baseline/samples/dim02.json",
+      "size": 3251,
+      "sha256": "8e2146911a23e808add861494f631eb80c72898700acb612fc846fdb7772d02d"
+    },
+    {
+      "path": "baseline/samples/dim03.json",
+      "size": 5083,
+      "sha256": "e0ddd5a1a4d4f61efb2858d0b1a4ded02e123b47863d56c835c983fa047b95e8"
+    },
+    {
+      "path": "baseline/samples/dim04.json",
+      "size": 17794,
+      "sha256": "fc965822f6ab09d64e6cb656313d6a1725cd5407bc548e4ce99bb6537c3a99a5"
+    },
+    {
+      "path": "baseline/samples/dim05.json",
+      "size": 86511,
+      "sha256": "4499a84cf8d32a001b1f78d86261112d879a90a0ebb5b7af91348d99c9601c96"
+    },
+    {
+      "path": "baseline/samples/dim06.json",
+      "size": 4965,
+      "sha256": "18fe980314ae37b433d925316a2db9a55790a15afe3f8ad2cd50ce54d63eb0f2"
+    },
+    {
+      "path": "baseline/samples/dim07.json",
+      "size": 12608,
+      "sha256": "d03d0628067600986109a999e80b622101e1441b8248327a857e109be0e6dbd9"
+    },
+    {
+      "path": "baseline/samples/dim08.json",
+      "size": 1322,
+      "sha256": "aad31c86f285cb4ebc3b1e92a7728755621e277d436363494a68405a8b93765f"
+    },
+    {
+      "path": "baseline/samples/dim09.json",
+      "size": 13020,
+      "sha256": "bc4090b40f103bfead7805f180c7663a18da1df4aa6fedce7cd07bb22e4c008a"
+    },
+    {
+      "path": "baseline/samples/dim10.json",
+      "size": 4376,
+      "sha256": "d8c73bf3cbd9f499e17e176bd774c2d3e08a9686e8b7c6ae58aefd4210501d44"
+    },
+    {
+      "path": "baseline/samples/dim11.json",
+      "size": 26875,
+      "sha256": "e4f57f7cc5f1e582d8fd79c2bc96eb44227ef975546234d25965aab518a07e3a"
+    },
+    {
+      "path": "baseline/samples/dim12.json",
+      "size": 3646,
+      "sha256": "717c3e0a475e36a9223ba6a572a09255d733ce1b4d70b4039e658fbded25927c"
+    },
+    {
+      "path": "docs/工程边界.md",
+      "size": 2005,
+      "sha256": "4909200d68cc29f47abb735576771be9f0cab076ed8a42a822e8508e33e6c74b"
+    },
+    {
+      "path": "docs/验收记录.md",
+      "size": 1997,
+      "sha256": "c1e17be5ca3270e0fcebd39701b79dc9e9dc29e945ad699ebf004220eba094db"
+    },
+    {
+      "path": "scripts/build.py",
+      "size": 528,
+      "sha256": "6fef5337f4edfd39a4730d902b6584818c52a22d5a0424123868bc019263bc24"
+    },
+    {
+      "path": "scripts/package_source.py",
+      "size": 4320,
+      "sha256": "2ce17ee0b870e58671a96044070b4091dadd07d6e88aef5674608703b867dabb"
+    },
+    {
+      "path": "scripts/run.py",
+      "size": 1910,
+      "sha256": "594b26073531d1638ac8442259739e1d9fdba9718e598813349bff41b2b5b687"
+    },
+    {
+      "path": "services/ai-gateway/.env.example",
+      "size": 1285,
+      "sha256": "84c2b214c1a3637afe56cea75a3a11eaf469132284392a3bff1dee4619df7634"
+    },
+    {
+      "path": "services/ai-gateway/openapi.yaml",
+      "size": 5167,
+      "sha256": "3ee4a47be89e3c3f3f68c4e7360eb77eef74f959e1a97aebc038085edd56e293"
+    },
+    {
+      "path": "services/ai-gateway/package.json",
+      "size": 393,
+      "sha256": "5186c235c041590f22c5088f4f8d0c6fd57595822827b939c561ac7961a17b80"
+    },
+    {
+      "path": "services/ai-gateway/public/app.js",
+      "size": 341226,
+      "sha256": "639280d92b79fefa4dd3d7ccd54149ea5f85452e7eac477534b98f88d69cebc6"
+    },
+    {
+      "path": "services/ai-gateway/public/assets/avatars/amber.svg",
+      "size": 1774,
+      "sha256": "8d058780c6de7b3c982818bd2cce2db16c69f5a3c2de8a85e936f0c40b90abdf"
+    },
+    {
+      "path": "services/ai-gateway/public/assets/avatars/cocoa.svg",
+      "size": 1792,
+      "sha256": "56116e8368eabbe710bacb79f13c1377d69e895f680572df76ab7b2725e0fb99"
+    },
+    {
+      "path": "services/ai-gateway/public/assets/avatars/codex.svg",
+      "size": 1771,
+      "sha256": "b1510b187c7056cd92b726fd696731baee2d5d610fdadfd511af6a09dce3a1f7"
+    },
+    {
+      "path": "services/ai-gateway/public/assets/avatars/coral.svg",
+      "size": 1890,
+      "sha256": "1e3b2cd1b40c4963a5970815d756e486bc0d1a7c7effc0b6ab35cc6bbb77ee80"
+    },
+    {
+      "path": "services/ai-gateway/public/assets/avatars/cyan.svg",
+      "size": 2006,
+      "sha256": "ceee778dd6322c9789805d319c6510140ed8bd18a481afed83c48109d181223e"
+    },
+    {
+      "path": "services/ai-gateway/public/assets/avatars/doubao.svg",
+      "size": 1824,
+      "sha256": "75ef5a445852b9fc276224b0572328821291836d42e0017c41dcb4070fa80ff0"
+    },
+    {
+      "path": "services/ai-gateway/public/assets/avatars/graphite.svg",
+      "size": 1903,
+      "sha256": "e0564ae6d7984499e39ec6e77b2ad92f76369b1093f9e36eae0dc89b60002a13"
+    },
+    {
+      "path": "services/ai-gateway/public/assets/avatars/indigo.svg",
+      "size": 1809,
+      "sha256": "a68fea8a3bda0cef8772ecd3ac28fa981796c1bdd1de1c9eccfbefef1eb81fa5"
+    },
+    {
+      "path": "services/ai-gateway/public/assets/avatars/ink.svg",
+      "size": 1979,
+      "sha256": "fefd95d6c41f28b7a706d6177adfdf4465fa7aa61a41a73d0d6cc56eef597189"
+    },
+    {
+      "path": "services/ai-gateway/public/assets/avatars/kimi.svg",
+      "size": 1780,
+      "sha256": "52aca65312f96853b13fcf08eff2decc750b8d5574242db24438e60ba87aa650"
+    },
+    {
+      "path": "services/ai-gateway/public/assets/avatars/lime.svg",
+      "size": 1821,
+      "sha256": "9c8c446db62ea5f69516dcc8ca473211bb842ac57f13641e9b1045352678b11e"
+    },
+    {
+      "path": "services/ai-gateway/public/assets/avatars/sky.svg",
+      "size": 1818,
+      "sha256": "931e2d87696a33cf29d89bd7e68b64f66e0251a73e4736a82d90891c48cae3ab"
+    },
+    {
+      "path": "services/ai-gateway/public/assets/avatars/violet.svg",
+      "size": 1689,
+      "sha256": "b5295cfe8bd87fb0b1e52e3fda65cfcbd82eba15fff754d0417fa45cd3686ed5"
+    },
+    {
+      "path": "services/ai-gateway/public/collab-page.js",
+      "size": 35026,
+      "sha256": "f354294bcb7c61de17707883e71814127d3617e5ad8933afe16137f38cb9d0bd"
+    },
+    {
+      "path": "services/ai-gateway/public/collab.js",
+      "size": 9055,
+      "sha256": "48b031962b1db1f1303e222906230a0d848ee959b240f6faecc965eec75cf2bf"
+    },
+    {
+      "path": "services/ai-gateway/public/dialog.js",
+      "size": 12821,
+      "sha256": "83104c56d9c1a3dc4eb278ef6ca1c28d20c5100680d382628711b2e370b7ae0b"
+    },
+    {
+      "path": "services/ai-gateway/public/layout.css",
+      "size": 289160,
+      "sha256": "c7cfa324cfa1ec84f671d0839e47aecc27b04cfe92bd9dfded00fd9b9e112fd2"
+    },
+    {
+      "path": "services/ai-gateway/public/people.js",
+      "size": 358,
+      "sha256": "72ff332cf8aeb9d8d7c30b2922de4880c256ed93fcdfab6d6ac9bf0674304fda"
+    },
+    {
+      "path": "services/ai-gateway/public/scaffold.html",
+      "size": 20354,
+      "sha256": "c48a0962dd9945a1badaa0124ba4fd38465c659c9478a9bb53ad31169c1a799d"
+    },
+    {
+      "path": "services/ai-gateway/push-agent.mjs",
+      "size": 9186,
+      "sha256": "89775e7a9a4806ce5b589d1e7ba7de3994093b0441b435716ba9e48704e432bf"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/SKILL.md",
+      "size": 5188,
+      "sha256": "6bedb07d9a6aea9b7ecf1691f61ed5d2498888f0df6c1cfa7448818a50ac943b"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/manifest.json",
+      "size": 6048,
+      "sha256": "bf79994b9e2a4d6a3772987b65d00994b95099d261292f08cd236e6a24945d5c"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/c2c-entry.md",
+      "size": 1184,
+      "sha256": "379ee9877c6088862d9fc0fabca1fafeeba6a48952185892a2ac2638dbbdf48e"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/contract.md",
+      "size": 5815,
+      "sha256": "217c3312f25331f8280eeb4ae2509c6d9952d24a6755787b99ef5981e6ad576a"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/dim01.md",
+      "size": 1590,
+      "sha256": "3cd23295b852c34fc5bc698676cff96f2cc9be283d5269e6508fc2fb9a0f6958"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/dim02.md",
+      "size": 1525,
+      "sha256": "67e26ae5dffefc072e63726b04c63c878327462ba7703cf84046467c93416452"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/dim03.md",
+      "size": 1803,
+      "sha256": "4b67a511639e1e415c098bb07e50558a964bcd28d266bc47f5aa2c17b10d3aed"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/dim04.md",
+      "size": 1532,
+      "sha256": "9a69622c1dd0c806549aceebcc4a3be3b4f71227b36c562a841fbb829b952dac"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/dim05.md",
+      "size": 1469,
+      "sha256": "52c997f78d8bdb96795a45359980f0cd109e0304a8f5e535a768f4deb257da87"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/dim06.md",
+      "size": 1498,
+      "sha256": "f94fbfae31a87a4cd48596ba84f8353dfd175a91d9dd87411abb98df3cea856b"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/dim07.md",
+      "size": 1449,
+      "sha256": "5f9a8f6cc5d8944ea08794d82b7b82ccf5da356f4c7906148b5ac836637a5ef7"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/dim08.md",
+      "size": 1533,
+      "sha256": "bb3a976cfcb61d0cdda251ed6b05c0b7f85c89d595827ccfca66d9eb0d72c0bd"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/dim09.md",
+      "size": 1448,
+      "sha256": "564e705aca7a278f8a5be8abfa1527e3ad2c30a1c0b056de5efa6e2be065071f"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/dim10.md",
+      "size": 1437,
+      "sha256": "90740f29a207eea5302c365258f830c882fe43e8e7e36692179d68706ec39b25"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/dim11.md",
+      "size": 1477,
+      "sha256": "c1f485def74f7771be7c87bf03a9cd89eceb3b1cc187c427af581bbd02fc4a8b"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/dim12.md",
+      "size": 1903,
+      "sha256": "e5ada2d069df19ee501b369802cccf49e3612ff89559c905d19af76cb9b4e4d4"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/frontend-fields/dim01.json",
+      "size": 7027,
+      "sha256": "087972f69686fef68ccc58ba84e096e816741cee56ab60b7431299357cc30300"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/frontend-fields/dim02.json",
+      "size": 6913,
+      "sha256": "28bf783d4daccee93072aedea789c77c2ffcd4425205788f68848be8d2c622e0"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/frontend-fields/dim03.json",
+      "size": 2977,
+      "sha256": "20b0ceb55132245772517369fe0474a5545f9fe14655f25c085e7eac19979cce"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/frontend-fields/dim04.json",
+      "size": 7949,
+      "sha256": "c67243c19a15de73d9ea4690f961447733349e43c0138582c2f30ef4fe708d72"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/frontend-fields/dim05.json",
+      "size": 16538,
+      "sha256": "883609d0b9ef4c72e0d53664b0b961f2b49d07456fa12810ad24543975f87795"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/frontend-fields/dim06.json",
+      "size": 4244,
+      "sha256": "495b92feafd3db142f328682e4d30361b71dd139b5fb8f70c20cb89e135139c5"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/frontend-fields/dim07.json",
+      "size": 2832,
+      "sha256": "c53ae5000b2751fd6c73c84e662aaae4356dcb6e256121e3ba03e32cadb941ae"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/frontend-fields/dim08.json",
+      "size": 3693,
+      "sha256": "8d361bef5e7a3b55a71f86696d1dd018b77a8a832fa2d2b4370b2b3c6842db1d"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/frontend-fields/dim09.json",
+      "size": 7567,
+      "sha256": "902a67b1042d13cb4df0b05a38198678b3842a95fa7d9543b9b0b7ab58fcd469"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/frontend-fields/dim10.json",
+      "size": 3274,
+      "sha256": "37042365a679e70bda9e8739f7ff420c6c09f19bf84b3afcb0a9446909df7fcd"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/frontend-fields/dim11.json",
+      "size": 4726,
+      "sha256": "bea4c6b7877b74ed05ecd4efe2fd15fff77ba384354b29e651bd5473c1549a30"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/frontend-fields/dim12.json",
+      "size": 24885,
+      "sha256": "c43f157aff964c2fb0ee69ace5708696673c1f368022b9995924eb771f654489"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/references/frontend-output.md",
+      "size": 10286,
+      "sha256": "bcac658b6728c30c3df9340cab83cded6bf780c68f0ac7a98d32437e8e12100a"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/c2c-dimension-research/scripts/check_frontend_output.py",
+      "size": 23786,
+      "sha256": "96d4ee3b015fb00f1b322fd0734857b275eff6f5575a5442caa481ad79ba0f05"
+    },
+    {
+      "path": "services/ai-gateway/research-skills/dim03-cert-completeness/SKILL.md",
+      "size": 14112,
+      "sha256": "f175ba68634b4fb1527d8f59b0893f0bfbfa7e78536ead13d4190f98bdedf54c"
+    },
+    {
+      "path": "services/ai-gateway/runner-agent.mjs",
+      "size": 40790,
+      "sha256": "32adfebf1920505cd19b8fe4dfeaebc169773954325307df3574ed10f99bf41e"
+    },
+    {
+      "path": "services/ai-gateway/src/agent-router.mjs",
+      "size": 758,
+      "sha256": "f6c714cedc29304b14dc8817f777f1aaa2357d215c55c79ebd0472bc5f76a1ec"
+    },
+    {
+      "path": "services/ai-gateway/src/app-server-client.mjs",
+      "size": 5928,
+      "sha256": "5ec290d1c910c0e4aa0c353f5972d86f8222dbedab8db350c874e2af62a83d92"
+    },
+    {
+      "path": "services/ai-gateway/src/app-server-runner.mjs",
+      "size": 10892,
+      "sha256": "1182c138d449423c0e6bbd01b36912cd1839e2c18a016173be064bb59ecbb344"
+    },
+    {
+      "path": "services/ai-gateway/src/claude-runner.mjs",
+      "size": 15172,
+      "sha256": "d4563aa407749cc89c87dc277f36b48697a3e0f6249afbb1feb99a44ac369f77"
+    },
+    {
+      "path": "services/ai-gateway/src/codex-runner.mjs",
+      "size": 11858,
+      "sha256": "5ffc93ea1ac3735a7125ab8121642f8eeec73fef37819db3a190394659194c10"
+    },
+    {
+      "path": "services/ai-gateway/src/config.mjs",
+      "size": 18781,
+      "sha256": "4c25be6111e4c53b31ab395838c7bb44a02405f3e952f9b124201f1e67193cc0"
+    },
+    {
+      "path": "services/ai-gateway/src/openai-compatible-runner.mjs",
+      "size": 14535,
+      "sha256": "0518e1c074c47907edfab6927bc1234d3e63453505c2d901de17cf1045fd153f"
+    },
+    {
+      "path": "services/ai-gateway/src/server.mjs",
+      "size": 33423,
+      "sha256": "2be7c37e955ed53a984c9ed15ddab8526241c61c1b89ac083f1027dec709142e"
+    },
+    {
+      "path": "services/ai-gateway/src/store.mjs",
+      "size": 8052,
+      "sha256": "b24d4a3c622692f173f7b5f57ac279ad5ae3fd36ea6fc356461fa1b1741d521d"
+    },
+    {
+      "path": "services/ai-gateway/src/task-manager.mjs",
+      "size": 39521,
+      "sha256": "e8dd9b91b738e2832dcde348ad47736255537053a6c5c7e48fdc2ab4b55ffa99"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/accounts/api.mjs",
+      "size": 7763,
+      "sha256": "414d719fdaf5bbd4388f9e6e2c95d4c27b8be8a51fb119c97ed533843631dd4f"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/accounts/service.mjs",
+      "size": 14597,
+      "sha256": "ee3c03235ae3e384ef0dd18c427bbcfcb2c76e69c157bcb5b9ee55fa40fe31e6"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/agent-config.mjs",
+      "size": 17631,
+      "sha256": "f9604587e1b2b35a0798676bd6dfeb5378ee5953ca27053853e48328975169e1"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/agent-probe.mjs",
+      "size": 8572,
+      "sha256": "3fc41a80320127a4adceb7d443aa230c0215c515ba34aecc09c372dd0da7d898"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/agent-tools.mjs",
+      "size": 15134,
+      "sha256": "4863ecd5ba10882fa59a8b6350429717abed1cf25a35c5711f97b6e68c8693d6"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/agents.mjs",
+      "size": 11396,
+      "sha256": "893c7eb202b9a7f26ee5fbc48bd748a237a0266c77fd736a65e01ef8d58b6593"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/api.mjs",
+      "size": 54793,
+      "sha256": "2eca9d2959207fc00a0c4d715b6dafe2c272ba1d2ede52eb4071884f1e0a7848"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/artifact-writer.mjs",
+      "size": 13531,
+      "sha256": "03f13c46ca308987b449d22dede4d58b2b6f6b6ae9e84c5b833638cc4b023b7a"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/artifacts.mjs",
+      "size": 4389,
+      "sha256": "12482de65b3fa0454be6228aeda3410840e5e22d7fe6358d4b3b1da5c46e41dc"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/avatars.mjs",
+      "size": 1531,
+      "sha256": "6ce7631d6d45a1f112a4fd8ffa9e5220792cd542f3ce508b58ee55504378fd27"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/codex-research.mjs",
+      "size": 10357,
+      "sha256": "d065f9721c5758f469cfd284633fc6777c3b966331a391a827717dfabdd9ec73"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/collab/api.mjs",
+      "size": 20543,
+      "sha256": "41fe4aa713107256c010112e6ca5647e9d61fed4b0faf885a0b01c25cf4f2dec"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/collab/service.mjs",
+      "size": 19375,
+      "sha256": "955a545452fa156bd945f7423b1c702803986034e19b92be32f414f6cc6673ed"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/flow-events.mjs",
+      "size": 5486,
+      "sha256": "740023887c76765f6b7e00a2bbff5025879321983de3b6d858b669f0ae4247ac"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/flow-runner.mjs",
+      "size": 65663,
+      "sha256": "952afe080071ac1ccc7a52822bb3a88a1f189f2f26f557c1c761467ff11398c3"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/flows.mjs",
+      "size": 26292,
+      "sha256": "0daa3d4c8994225d2af3f1510a0480443ada2aa1b762ad5dd5fecf839929f24e"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/hub-client.mjs",
+      "size": 13421,
+      "sha256": "802d467d38b7e71bd9cb7d609dd2903f657d9d1f7a7d9fee98766cfc2f9826c4"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/hub-settings.mjs",
+      "size": 4567,
+      "sha256": "2cf614cfe3e7e89207f67d57f1dfd01908797befd09ff370e7d89015f97d3343"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/local-research.mjs",
+      "size": 15670,
+      "sha256": "7003dfc0da77a25b6d18de1d5c3fafa7c1eb39962e19524237ca0a3c40a489db"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/model-presets.mjs",
+      "size": 8289,
+      "sha256": "e5adab4d0df11869344d5ca48ddabae63b8d3b6cf95fab573266e15e345d781e"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/parse.mjs",
+      "size": 4310,
+      "sha256": "b780f5869e22e68cd188659c8d2c40adedd3d26689854e59c827a735e1566d2c"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/pricing-fetcher.mjs",
+      "size": 4793,
+      "sha256": "40dc9903e59001d2d76e2ee398ccb409eb7b6212fe056090b9e3fd0b4626410d"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/pricing.mjs",
+      "size": 5058,
+      "sha256": "4d1bb9e9b73d0b13bce38160c5d10a7d6c0a874017ca3ad71089e7f414a112af"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/research-executors.mjs",
+      "size": 6008,
+      "sha256": "28e822f10f7baf1612c04215b27c2d1f1053aee5522b5c412ea26f2d08369ed1"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/research.mjs",
+      "size": 10006,
+      "sha256": "97a13ea0bc4694089aad1e2366dc91bd703933eff5c6d7c55873020e29e23127"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/run-workspace.mjs",
+      "size": 13297,
+      "sha256": "fdb1e18f6cbca53174dc79cf2aca5289a16bf16f967c960f7292d4f6f426ee31"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/runner/api.mjs",
+      "size": 19391,
+      "sha256": "a1a9127cd2db47a2db0cb9183920db2024f7a1c4dded75a174ef5e61b6943bc6"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/skill-mount.mjs",
+      "size": 2868,
+      "sha256": "80aca1e91f85cc8e575e15218d51ad98a07f80bf261d17306346077803981fe7"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/skill-store.mjs",
+      "size": 23022,
+      "sha256": "4e527f8c76b956b582c465b8ba9d384dfaa28162b48c5c840516158f6e9dbdbb"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/stats.mjs",
+      "size": 17931,
+      "sha256": "a4a3acb7df23893e986d113e62f7f6a617154a11a9d4ec92070ec88f4011397f"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/templates.mjs",
+      "size": 14913,
+      "sha256": "b066d88a7be5f9697668051211ec831469c71574f5201a428088bdead7216c1d"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/updater.mjs",
+      "size": 27836,
+      "sha256": "1096a9a1b2c171a8837bc3906893a2ac43a838a593eb13a630da879d65b6e3d8"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/user-agents/service.mjs",
+      "size": 32482,
+      "sha256": "afb184f18049759c6472d6270698accfb275c6e4e6318d4219a6d8deb921a8b1"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/workbuddy-client.mjs",
+      "size": 11152,
+      "sha256": "7f2fa008170ceaa66bbfac541026ec6e03fb7850405bdb68cc3fad360b47287c"
+    },
+    {
+      "path": "services/ai-gateway/src/workbench/workbuddy-connection.mjs",
+      "size": 12295,
+      "sha256": "d1cd54ab207e757af83528dc20605b86fa9f2bb028e06b1ec0fc0f889c75ac26"
+    },
+    {
+      "path": "services/ai-gateway/test/migration.test.mjs",
+      "size": 6735,
+      "sha256": "684ea9f5a3d7754b4d8ae895e71f7f5a53f91fea35bcf9c18b1d4ec6346eb890"
+    },
+    {
+      "path": "tests/ai.browser.cjs",
+      "size": 8768,
+      "sha256": "23e25340cfe61007ad9da51c3e79b841d5eff0482b84eb78ff5950e548962389"
+    },
+    {
+      "path": "tests/serve.py",
+      "size": 1987,
+      "sha256": "f09922afedea2b2178f26db640d9792ff6fe9bce7991bdf0128b214d6ba8f7fc"
+    },
+    {
+      "path": "tests/templates.browser.cjs",
+      "size": 1722,
+      "sha256": "800cbd763c2078ddc20eb1fde6d91fa5e58921a91a8b93e24437d941d1e0302b"
+    },
+    {
+      "path": "tests/test_backend.py",
+      "size": 4908,
+      "sha256": "6d545c10ac860c9a8fc1d1427501b8e7cf488332d4b24c6a7107f8837f48c7fa"
+    },
+    {
+      "path": "tests/test_startup.py",
+      "size": 2596,
+      "sha256": "c7d48cee71f1e59e371c8a6e1115576bd7a94496be5b140912bd05f00e128ea7"
+    },
+    {
+      "path": "web/.env.example",
+      "size": 124,
+      "sha256": "a81b362c0e4eda9c1d5f6d09b96262758b8320555d2003f6f043efbfe4d6bad0"
+    },
+    {
+      "path": "web/.gitignore",
+      "size": 253,
+      "sha256": "fe718e7babb14f3cbad2d97f08889b9ce5215ed3fe0e43b2b8cfbfb3b9b844e8"
+    },
+    {
+      "path": "web/.oxlintrc.json",
+      "size": 245,
+      "sha256": "b4d344818a1e1bf43997e4744a9153c8eef770c98b58229cd86363dabb85ded4"
+    },
+    {
+      "path": "web/README.md",
+      "size": 1278,
+      "sha256": "fa8aac78b8be1993010b57f41000a243ecba006f6731513fe4ec91e788bf2517"
+    },
+    {
+      "path": "web/components.json",
+      "size": 576,
+      "sha256": "ca0fc366c5c783c4ac7912b7d6fdf2968099223b44a9ff5f3a4e96830b9e330f"
+    },
+    {
+      "path": "web/index.html",
+      "size": 375,
+      "sha256": "12bc2a7117a8bbdc1c2ea8617547405582c93aed5360675d94440dd2f124e6ca"
+    },
+    {
+      "path": "web/package-lock.json",
+      "size": 256068,
+      "sha256": "c5946d821ef60d0289e1e623d8639432225e15c8eb5eb863dcdafc8ad9596937"
+    },
+    {
+      "path": "web/package.json",
+      "size": 895,
+      "sha256": "1e403118ff13b285dc4939122f8204785c46d4ddc220c830342594edb74c7910"
+    },
+    {
+      "path": "web/public/favicon.svg",
+      "size": 9522,
+      "sha256": "61bc9a161de58248288e6905425d7180f0624c2865007b97d763fdac12043a66"
+    },
+    {
+      "path": "web/public/icons.svg",
+      "size": 5031,
+      "sha256": "b45fa506195cfcdef406ba9f0c77b36ddc1a7c224040926ec70abc2fdea7b93a"
+    },
+    {
+      "path": "web/scheduler.html",
+      "size": 404,
+      "sha256": "1689ff8c4444a04d1ef0eb72a97b7d914226330bfab8652584e1ede341e45a36"
+    },
+    {
+      "path": "web/scripts/lint.mjs",
+      "size": 947,
+      "sha256": "00cf6d621ef617186b0f73ddd579967afd9fff0bb594199b6add69fd75b88cca"
+    },
+    {
+      "path": "web/src/App.css",
+      "size": 2891,
+      "sha256": "6e25a776d3e8102da5bacb3cb99f4a5fc662a2e01e6143140671a556d28c3d5c"
+    },
+    {
+      "path": "web/src/App.tsx",
+      "size": 7006,
+      "sha256": "fa5d0b44afe37a1fffb89669f7854fd8d925a65710bdf0c36924e5145c7e26ba"
+    },
+    {
+      "path": "web/src/assets/hero.png",
+      "size": 13057,
+      "sha256": "881ffbcaafc212e49addad08846a5b82761355fa20624253af3477ba33262c5c"
+    },
+    {
+      "path": "web/src/assets/react.svg",
+      "size": 4126,
+      "sha256": "35ef61ed53b323ae94a16a8ec659b3d0af3880698791133f23b084085ab1c2e5"
+    },
+    {
+      "path": "web/src/assets/vite.svg",
+      "size": 8709,
+      "sha256": "5be21acd42eb7b896e517f4e0f0f11eb5c5d9e54fbbcebe9453f033008fcca6f"
+    },
+    {
+      "path": "web/src/components/JellyRadio.tsx",
+      "size": 9640,
+      "sha256": "a231cde1bf6d69dc90e7384899bd56a5c7aa3405e9fb29f48d3bd9811906c6eb"
+    },
+    {
+      "path": "web/src/components/ai-page.tsx",
+      "size": 4439,
+      "sha256": "b3a6d4f98196a333998a536fda0e6ea37cb30f2bb502adc5886643ce0cd55da2"
+    },
+    {
+      "path": "web/src/components/app-sidebar.tsx",
+      "size": 4792,
+      "sha256": "65f516730fc443189e4f888bf6dfd400a0240f78f202e932a0346e05cbfb4f3f"
+    },
+    {
+      "path": "web/src/components/capability-pages.tsx",
+      "size": 9588,
+      "sha256": "44871a95e5d628c5f1e43739f771ca121f65f822b60e7f44075073698a325700"
+    },
+    {
+      "path": "web/src/components/login-page.tsx",
+      "size": 5423,
+      "sha256": "c064c2c48dfbdf7861ad57c03a02baf68cfb4f8bbe42259e9d2c3596127044e7"
+    },
+    {
+      "path": "web/src/components/overview.tsx",
+      "size": 4285,
+      "sha256": "c0dec3ee1e010ac9e4851dfabf29cae832dc14a429e27820cc6425ca18bcf1c2"
+    },
+    {
+      "path": "web/src/components/personnel-page.css",
+      "size": 662,
+      "sha256": "460019179592bc357bbad3acbbd214f5bbd7816d7395a0da490601479e5823c5"
+    },
+    {
+      "path": "web/src/components/personnel-page.tsx",
+      "size": 22142,
+      "sha256": "1fa1817b29319ad84083b1477418405cd2089a6048e9aa26bcf3382b8cdec54d"
+    },
+    {
+      "path": "web/src/components/search-command.tsx",
+      "size": 2040,
+      "sha256": "fd1709d1180d77e32762c1eb23ca3c4f307cfec9328bae6d9e1a803de45a0679"
+    },
+    {
+      "path": "web/src/components/templates-page.css",
+      "size": 1200,
+      "sha256": "def74d4729770da603e2b7dcdc813f1431f521b344f7738bcbe43bb7bdac6feb"
+    },
+    {
+      "path": "web/src/components/templates-page.tsx",
+      "size": 23446,
+      "sha256": "8706b81297fe7b83d4dc8e1335321407ae0b293eca78c7de09358639b0ef8d2f"
+    },
+    {
+      "path": "web/src/components/theme-toggle.tsx",
+      "size": 673,
+      "sha256": "0a7430c03c778cd929157eedf3f21b940d91301e828ae0aed6503721644e4db1"
+    },
+    {
+      "path": "web/src/components/ui/avatar.tsx",
+      "size": 119,
+      "sha256": "65bfadc9833d3602113b338419fd5aae206e644c8c1d8982a71ef343e46ee526"
+    },
+    {
+      "path": "web/src/components/ui/breadcrumb.tsx",
+      "size": 123,
+      "sha256": "ae5bbd0644008f16ef6fc1791c2901171cfc21fcd1fe5115372d4451a48cca93"
+    },
+    {
+      "path": "web/src/components/ui/button.tsx",
+      "size": 119,
+      "sha256": "a345b3506072aeb7aefb59f9ba9ad546bfc41952f73b4a011607ce6230c61fa2"
+    },
+    {
+      "path": "web/src/components/ui/card.tsx",
+      "size": 117,
+      "sha256": "241bb9a402cdfc8fa3d69f68fdf07f0e204a3408b115600f2e05329b2f0d61eb"
+    },
+    {
+      "path": "web/src/components/ui/chart.tsx",
+      "size": 118,
+      "sha256": "adf1346305b60cea20b44849e0f92fd872a5305900283dd73bfc1b7f6309ce8a"
+    },
+    {
+      "path": "web/src/components/ui/command.tsx",
+      "size": 120,
+      "sha256": "c98cfc4443fe4b1cf29af22378df205297f2f0e14f04c4eb1380094ecae418f9"
+    },
+    {
+      "path": "web/src/components/ui/dialog.tsx",
+      "size": 119,
+      "sha256": "bee7fdc4f95078b46383dd56476c70c2960e281d3f0f510e812f6cc7c5313695"
+    },
+    {
+      "path": "web/src/components/ui/dropdown-menu.tsx",
+      "size": 126,
+      "sha256": "e6469584e12ce0a6716fbe2316c637922ab2d365fcf2d58bfa27e4f882db384e"
+    },
+    {
+      "path": "web/src/components/ui/input-group.tsx",
+      "size": 124,
+      "sha256": "2a6cb1a9ae696454b8f3b468b3e02266842d1ef5d906b93d59f60699747ec348"
+    },
+    {
+      "path": "web/src/components/ui/input.tsx",
+      "size": 118,
+      "sha256": "1a50b3c465feb103813b0334153b841865622bfad5be2e8ca0fb54ef28079729"
+    },
+    {
+      "path": "web/src/components/ui/scroll-area.tsx",
+      "size": 124,
+      "sha256": "b881808f60726dda80abc446df124b572729ec0429d497b2f063f5dd69ee5091"
+    },
+    {
+      "path": "web/src/components/ui/separator.tsx",
+      "size": 122,
+      "sha256": "509baa78b77a420585a863ae11178be98778d3788f3f7ac40ea8a05b5934ad3a"
+    },
+    {
+      "path": "web/src/components/ui/sheet.tsx",
+      "size": 118,
+      "sha256": "f22f14402008150bf2f1c49463acb43f38d00e2eba2b9f3815d259ca4c075b57"
+    },
+    {
+      "path": "web/src/components/ui/sidebar.tsx",
+      "size": 120,
+      "sha256": "078727334be31e6c10dcaa539c3992cb1f9f4c9fe6482fdf595cc7aac4ba7f7a"
+    },
+    {
+      "path": "web/src/components/ui/skeleton.tsx",
+      "size": 121,
+      "sha256": "4acf27b6bf4b6b80f98074248f4af5d25122c51c5699356783f85d17c8b4b17c"
+    },
+    {
+      "path": "web/src/components/ui/textarea.tsx",
+      "size": 121,
+      "sha256": "e847c22b9a0068b38885350b89984f3674c54cabfbdbbdaf08aa6a815f2408ec"
+    },
+    {
+      "path": "web/src/components/ui/tooltip.tsx",
+      "size": 120,
+      "sha256": "7d22378ede9a08d7aa082009cc3d1be9cf72dee4d7b4624d9a8662ee9f12869f"
+    },
+    {
+      "path": "web/src/components/user-menu.tsx",
+      "size": 2107,
+      "sha256": "4c1f9029acdca7b92a5b5591aec93f80963cdd0fb1f37cc3eec392703b0528f0"
+    },
+    {
+      "path": "web/src/hooks/use-mobile.ts",
+      "size": 565,
+      "sha256": "ad0936f84f1df79d3697bfbff9c18f8ad58431c1cbaf2359c6a853b0fcc9f28b"
+    },
+    {
+      "path": "web/src/index.css",
+      "size": 5452,
+      "sha256": "9acc8d9a49f5b4dcfc25f3ef5fd2ecbdf3ed82be00368514e31502d311913603"
+    },
+    {
+      "path": "web/src/lib/platform-api.ts",
+      "size": 772,
+      "sha256": "12c029591edd32c69b10dc130acf47691285ac3a127acb008cbdbe67feaee896"
+    },
+    {
+      "path": "web/src/lib/utils.ts",
+      "size": 24,
+      "sha256": "14300d758170c270c75b057f38fedb3793a5920ea872f0477e29fb131185e8a7"
+    },
+    {
+      "path": "web/src/main.tsx",
+      "size": 354,
+      "sha256": "3613b72e035d2a02ec3ed1299930c7e833d05acc1851ed169e09bb621b6e126e"
+    },
+    {
+      "path": "web/src/scheduler-frame.ts",
+      "size": 2924,
+      "sha256": "55a0dc6febed2c0a67bfb56ad35163351d5eab7e04e38215e4b824bb0641b28a"
+    },
+    {
+      "path": "web/src/scheduler.css",
+      "size": 6956,
+      "sha256": "93e68029010d159f66b4b0fd2ed2946b5f5c30701d44b735f885ea4019300d12"
+    },
+    {
+      "path": "web/tsconfig.app.json",
+      "size": 1312,
+      "sha256": "4b9162f82e115c095e86f12e621f69e6e6e35b96613e19513c58e932516cf602"
+    },
+    {
+      "path": "web/tsconfig.json",
+      "size": 193,
+      "sha256": "5f2b69b8fdc63166a79e58723d05950b548480244503b85ac763107900d1f73d"
+    },
+    {
+      "path": "web/tsconfig.node.json",
+      "size": 558,
+      "sha256": "d366cc0827139db39c61815f22491bbfda56c654354a42ad7795143d314e45e8"
+    },
+    {
+      "path": "web/vite.config.ts",
+      "size": 1975,
+      "sha256": "8c6f90c8b268328ae6b198be58ce84eecb6d387c8818b96e4709967dfc2ea3b1"
+    },
+    {
+      "path": "启动V2.0.bat",
+      "size": 106,
+      "sha256": "2ae249ef723e089ddc37ee441ddbc1c32be26ca57de37aed2cc86bac596c0fba"
+    },
+    {
+      "path": "启动V2.0.command",
+      "size": 93,
+      "sha256": "791ca09cf6626d0bd78bdb9d5292401d14d2bda10304d59284bb1d8e64456618"
+    },
+    {
+      "path": "底层能力/中心页面/app.js",
+      "size": 2613,
+      "sha256": "8e766ac1a2a4f78c060d00cd4ea63861dbee879904fc8b472543e49599727658"
+    },
+    {
+      "path": "底层能力/中心页面/index.html",
+      "size": 4178,
+      "sha256": "2fb2d8f6232862dcf2f6414b191e694703534f2b7e74f7f4d31a7dc4e5b952c7"
+    },
+    {
+      "path": "底层能力/中心页面/style.css",
+      "size": 3669,
+      "sha256": "7e6ff41712cb25d152a83afcd6e57cc1994d4cd74c281cf034b46e474b99cdd5"
+    },
+    {
+      "path": "底层能力/交互组件/README.md",
+      "size": 2801,
+      "sha256": "07381844d20fdfe3406f7dd7e1790c67388b7eee298cdf6436cc41908bf6bedc"
+    },
+    {
+      "path": "底层能力/交互组件/package.json",
+      "size": 574,
+      "sha256": "26cb3ad594c5d819fd7cce63e6c9cb9ad492cbf4f790dc7372193d87e4750d63"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Animations/FadeContent/FadeContent.jsx",
+      "size": 12240,
+      "sha256": "78168efd2be545694b9aafe1d1d186f071629da77956129ed61eda0f0443eb50"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Animations/GlareHover/GlareHover.css",
+      "size": 1045,
+      "sha256": "556debf36792dd1a774b27f96c120494b7d2a1ed19c188f2b30faf5df31f2b35"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Animations/GlareHover/GlareHover.jsx",
+      "size": 9486,
+      "sha256": "c84ff00d6942a484c40fc11f8215b50d238a8673eb79d4143379adb5585ee4eb"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Backgrounds/DotGrid/DotGrid.css",
+      "size": 197,
+      "sha256": "41da475e62d101909c5f958569214c38cf20441223059d07a3e56b4e9a176a51"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Backgrounds/DotGrid/DotGrid.jsx",
+      "size": 21984,
+      "sha256": "42cae48309a885b5e0475ff9e58ee9f2a1332c84e7a0f0221b8cd2eac7d949f8"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Components/AnimatedList/AnimatedList.css",
+      "size": 3864,
+      "sha256": "c9b74ad88b92e9836b6ec91ad21170da5d5325cfd0a1a18d1a863e545d8baffc"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Components/AnimatedList/AnimatedList.jsx",
+      "size": 20564,
+      "sha256": "85be463db3f30eb24e041ae9f1e8260896c259b4e231e748cb3a799d8bdae5cb"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Components/SpotlightCard/SpotlightCard.css",
+      "size": 980,
+      "sha256": "b646b7da4bb46f0a4d819d0af275804c49a845a5c2dc848700aaf9282db13a92"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Components/SpotlightCard/SpotlightCard.jsx",
+      "size": 10279,
+      "sha256": "d3cfd800adb8f6f8fcfbab58b606df1d91b752bacd9415d24c6ca95744e0e525"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Components/Stepper/Stepper.css",
+      "size": 8424,
+      "sha256": "417223c9c56157b27bae7d7214e3fb3a3c8da65e69c6935c6a199fc22b151436"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Components/Stepper/Stepper.jsx",
+      "size": 19239,
+      "sha256": "7baec9e5f4f14e3a952f25a4ac4b74d54cd88d35d7f092396ca64a234e9269a2"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Micro/RubberSegment/RubberSegment.css",
+      "size": 2545,
+      "sha256": "8e27a0daf7c64dc09939020db11d0461b03368763bceaaa60b88accad1b06cb4"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Micro/RubberSegment/RubberSegment.jsx",
+      "size": 11282,
+      "sha256": "6b1c622f8e1efd09f37c9e0f2497f60b5b0c88fd210df277d5aa17409d7c821a"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Micro/SpringCheck/SpringCheck.css",
+      "size": 2580,
+      "sha256": "dc29047d805e99f439356880dda04240c1524693380059650e8188ce456c81c6"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Micro/SpringCheck/SpringCheck.jsx",
+      "size": 5521,
+      "sha256": "b9da52ca0151a56857b75c0054ccdb0ba0d54f0983426b60ae9d139d4d172d01"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Micro/SquishSwitch/SquishSwitch.css",
+      "size": 1723,
+      "sha256": "c05d751d50995b2683ea005098c8459694e03a2c2a3d532f4ab545aac5d5dfcb"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Micro/SquishSwitch/SquishSwitch.jsx",
+      "size": 6097,
+      "sha256": "0f8b4556dca06350769f03769a8b90caec1ef8943df23b14e36fa60575462044"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Micro/StatusMark/StatusMark.css",
+      "size": 3912,
+      "sha256": "9c46c47df3729a4e1d258d7a77521faa08fc445fd1ea8b8c4ade8bdb8c2e45c9"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Micro/StatusMark/StatusMark.jsx",
+      "size": 5072,
+      "sha256": "5efdeacdcd1721bd5b3616eb6a1370a671a85de5151a960270494d4d461efe85"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Micro/SwipeToast/SwipeToast.css",
+      "size": 5475,
+      "sha256": "dcb13f804fa6c3012b48bfa3c2c3c2ca35369209c4fe0687283191b516db22be"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Micro/SwipeToast/SwipeToast.jsx",
+      "size": 10254,
+      "sha256": "667c09de5aa30ae3d27216eb18b455c5d20ee679772a653d26c34a2d8547bdc9"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Micro/WarmTooltip/WarmTooltip.css",
+      "size": 3398,
+      "sha256": "241941731b1a83626caa3df16bb535e55ece65591154d5eac4ea9c5e3e940386"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/Micro/WarmTooltip/WarmTooltip.jsx",
+      "size": 17594,
+      "sha256": "bccafc86f49d07915f826faac88623b952b816c30abfe50903e6f78045e7194e"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/TextAnimations/BlurText/BlurText.jsx",
+      "size": 12700,
+      "sha256": "a451643bd39b6935d2458f35701a0e5e05ab010ab7a63f6e39485e9a5bb2c8e7"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/TextAnimations/CountUp/CountUp.jsx",
+      "size": 15392,
+      "sha256": "f02796025b886025af413aa4ad93924fd3a22f5619f5c7fddfb550683ef8c2c4"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/TextAnimations/ShinyText/ShinyText.css",
+      "size": 469,
+      "sha256": "6030200a8885aba91536e2e367a0ed316989f10122f9d91a20f09caf1b5f46ab"
+    },
+    {
+      "path": "底层能力/交互组件/src/bits/TextAnimations/ShinyText/ShinyText.jsx",
+      "size": 11211,
+      "sha256": "815db7b91e33dbea0f0f94852cee25a23d1422cefd4788f65aa35a160467aa71"
+    },
+    {
+      "path": "底层能力/交互组件/src/hooks/use-mobile.ts",
+      "size": 565,
+      "sha256": "ad0936f84f1df79d3697bfbff9c18f8ad58431c1cbaf2359c6a853b0fcc9f28b"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/avatar.tsx",
+      "size": 3088,
+      "sha256": "036b8f39d9f42962a9eedd097103c90450d58a50ea55c693896c4cea4b5953a4"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/badge.tsx",
+      "size": 729,
+      "sha256": "f0bd5e750183a96e4a438a6fd8d719e69101ee1dfbfe21647a9fc26c01cedabe"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/breadcrumb.tsx",
+      "size": 2466,
+      "sha256": "0a8bde9cce18e08b8189d86eec603709c6ffa04238f062875685b90a44037154"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/button.tsx",
+      "size": 3375,
+      "sha256": "08e5f87833c5db8436e89337ebde0f776bcdbf649d3de69fb89be6441ca2e366"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/card.tsx",
+      "size": 2620,
+      "sha256": "8ad3a18d36bda0598dc0e9aa96ea22854944d5443ee4946f1d173815e115375f"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/catalog.ts",
+      "size": 2183,
+      "sha256": "aa75a044906355c471408d45d9e95c8cd3dcd54642376c279629c07b27f78f4a"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/chart.tsx",
+      "size": 10477,
+      "sha256": "3903f6406cd3267d6ffb3502a43369c15f3c193a811f1a7ec77ce7c74ba9410f"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/checkbox.tsx",
+      "size": 898,
+      "sha256": "2522c8178112d80c03d7a72e32e88630948021ab019253a4985909cc41f84ead"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/command.tsx",
+      "size": 4908,
+      "sha256": "77778dc7ad1eca1a17c67d1e231435888b9ac024d2a9c22fda16402673e001f3"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/dialog.tsx",
+      "size": 4197,
+      "sha256": "9ce920655e50c28268677e25e670aaa249851590236e79c5244b03bdaa46f55e"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/dropdown-menu.tsx",
+      "size": 8807,
+      "sha256": "1b9c748a8ea8c2890124f316e3edf840153ef43f6df76b3ff1878d8fd37f9685"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/faceted-filter.tsx",
+      "size": 2486,
+      "sha256": "26986ea40a4fc94772c94d1d84ceac84f24dc4df9e85eeec9e279e24585c3148"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/input-group.tsx",
+      "size": 5141,
+      "sha256": "2c8f7d951e1c10e9a5d3e543e9808efc37b8bdaa347bc2c3e0fde915ae8627aa"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/input.tsx",
+      "size": 1007,
+      "sha256": "a61ae854b1530d4e397fde5f0a5875065597cc9fa10abec42fd69fd890b3a469"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/native-controls.ts",
+      "size": 1805,
+      "sha256": "c231455fced5bd80f428aac2b0f2f06054e01dc9b2eebdf6208f696cec816ee2"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/native-dialog.tsx",
+      "size": 3145,
+      "sha256": "d1b988e7d48a356b9643c338331f2f859a621b438ab17a8e7686b60fca1f2fc2"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/popover.tsx",
+      "size": 791,
+      "sha256": "51d36f7cced22db7b8db12e21cf2adf1236da1a1c7f7c63f6d5406f8a5d5219e"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/scroll-area.tsx",
+      "size": 1682,
+      "sha256": "436777583f300e9fb0ca9df97ce9d1ca45443b7513273f39d27c6183b99db396"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/select.tsx",
+      "size": 1989,
+      "sha256": "ebcd11be6aeaf6e99fce67dd2e4e25d7fe84494b54832b60040ae6a949033381"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/separator.tsx",
+      "size": 620,
+      "sha256": "42aa6209fe9bec178e4009cf042c16f7e8730bfc4edbc0c39972c1f0482e7d19"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/sheet.tsx",
+      "size": 4547,
+      "sha256": "de780d5b9136227da607592b49bc6a0eba54f657172bba66d42d7a9d77374c6e"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/sidebar.tsx",
+      "size": 21129,
+      "sha256": "c35bf31ffead47952984316b94f7198ab97536b5d07c0cbc77ab027a610289d3"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/skeleton.tsx",
+      "size": 266,
+      "sha256": "4c2af7fa9c645358a0fb188779deab6f0b981733b62befc25e18aaebea1350dc"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/table.tsx",
+      "size": 1545,
+      "sha256": "1248a30ad1d3189a5025b63d065ff1d1d8ea83dcf1b7f5bb7255f87040b6a753"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/textarea.tsx",
+      "size": 890,
+      "sha256": "c788eccfd2cfc556a3cd9f81f88ee7d2ed4a8d3d63d56e2486f551b7536f796c"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/tooltip.tsx",
+      "size": 2101,
+      "sha256": "e94530dd6877132d5eda73f6fb0d217f345477232f140f2ca6e024d790177f6a"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/LICENSE",
+      "size": 11340,
+      "sha256": "946abdea6fc8a61f2a2beedc6fd3101c27c9ab0d932a2f176f9a9619543ab49c"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.1.woff2",
+      "size": 752,
+      "sha256": "409e4d6538237efa7d7ceca92a753c40aae47dd89dcdd1ffe8088447e2df794e"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.10.woff2",
+      "size": 58620,
+      "sha256": "43146e8d9c3c725c97c118e8e3813e26fc4682d6360c53ee82f87de3c087b328"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.11.woff2",
+      "size": 61688,
+      "sha256": "452e960421e8b5adce0185bcb2147b962f35534b26bad005fa1e9eb130e1bd99"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.12.woff2",
+      "size": 72988,
+      "sha256": "3a01dc5cecc6648351d971d9fb4bf2a772ce0d7acfbcf83f72e94025707faea3"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.13.woff2",
+      "size": 40960,
+      "sha256": "755e3ba6ce45c2fc4d33430f20979f4773ab8365b5a58f437eb28d5a4b5e8d6e"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.14.woff2",
+      "size": 66628,
+      "sha256": "9a8a4d7993b73c6576a955ba01cc6bd8b0ac992f295b36dc46f39f5898af4a62"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.15.woff2",
+      "size": 60616,
+      "sha256": "5a4779c85d0db6f07c3e8d457185c24e0e42813eee153bc565dbe904c6a9c78a"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.16.woff2",
+      "size": 62316,
+      "sha256": "6db57cc386551b04c5cde140f18afc64affec475f1c68c314371794284d9bf85"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.17.woff2",
+      "size": 62528,
+      "sha256": "0d40e93f201707a7310b9013cb92c6cd0e0fba7959507dc3231d9339b004be2c"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.18.woff2",
+      "size": 61644,
+      "sha256": "fd0c946051833ec0b99071a70acc3ecb158ecc953995b5326653ee3cbf105c80"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.19.woff2",
+      "size": 56812,
+      "sha256": "6df294c1c182c022761901d0ee2c2100dc73690a85764f8333529c0a5541fa41"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.2.woff2",
+      "size": 9732,
+      "sha256": "e8020b927212460870dba876c28cb47e82bd250dff00a9333d85114c07108de1"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.20.woff2",
+      "size": 71020,
+      "sha256": "159670cd47a7ab57e40c7f2f590934aa54d18c1a37488a4caa562bbc8d3ac5a6"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.21.woff2",
+      "size": 74380,
+      "sha256": "68ee7f680888f48b6d5f275b38ed3ee0d498ce4bcba2bedafe4388219dfa5a53"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.22.woff2",
+      "size": 65720,
+      "sha256": "d306e71c62f2fee82985dc7dccc5e447ed350bb9b24d4cb7a00e393c301a785e"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.23.woff2",
+      "size": 55480,
+      "sha256": "76c0efa088bbfae0a6b4cc74fd1cf291a8456251f8f0f3fb2d0b7a3dca9a6106"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.24.woff2",
+      "size": 41728,
+      "sha256": "3428b2d05882cf02163f1853d895774580d7bee53f5cdfff21061631e58cc5ae"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.25.woff2",
+      "size": 58532,
+      "sha256": "e06092aa3d93078c0e72cddab3e389e9a0b747999c2381f49c1101c43f423206"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.26.woff2",
+      "size": 58604,
+      "sha256": "31f7d50fbef2078aaaf717e9812bf17f60899ffe595bd8169ed2ac75182a1a4a"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.27.woff2",
+      "size": 67340,
+      "sha256": "b13d99d307decb74de46c553fdc9b31da7476fbe41f97a6a240da5377e53c297"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.28.woff2",
+      "size": 85344,
+      "sha256": "497e2f44988a140d37a5dac7df74a10e2b9b846fe7dc991d39dbeeeef7b82878"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.29.woff2",
+      "size": 75888,
+      "sha256": "132f80651032031bb91bd4f3776c43c62e0a257610f6f068b9e291a1608d51e7"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.3.woff2",
+      "size": 7956,
+      "sha256": "cc04deecdb83a33ddabe2b7de706744cec06b6098b83b24bd5048aa962378647"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.30.woff2",
+      "size": 75876,
+      "sha256": "c611b86723ac43f8998a2bd4f618580940ff4a9c4e57db6d5d4428a72eccd434"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.31.woff2",
+      "size": 63828,
+      "sha256": "b3bfb1102134a4a078f776acf11ff1ac1c7590521c7797df435759f6a5df3152"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.32.woff2",
+      "size": 69144,
+      "sha256": "62f9430b959a25bb3aadf37a353d22939f17990f0284f5e694f9992fec6ea369"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.33.woff2",
+      "size": 59888,
+      "sha256": "1860cc25c688794cd07b79aa047c7d72498cf4b8624616782d989b7d1f410f1f"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.34.woff2",
+      "size": 51384,
+      "sha256": "96c6108e12eabff8ef4e2f02e5d69d9e8a4705475b84a44a69159ea05198ab35"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.35.woff2",
+      "size": 69072,
+      "sha256": "784e2587e8172f947f56c3b45b584e9cd960f8862aaadc1b030fee8544bf894b"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.36.woff2",
+      "size": 55120,
+      "sha256": "a11cc93fed932fb2a320143dd7c5c96c56a4fdd008627a81f8b52570d6f0d14d"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.37.woff2",
+      "size": 64612,
+      "sha256": "af62ad17b59633dad1b3bf62eb939a89640842105c50b355cf071cae2531c975"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.38.woff2",
+      "size": 60444,
+      "sha256": "559cf67e7902ad42970707419359a48c5aab30babd1295420254de5bc0d88649"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.39.woff2",
+      "size": 70764,
+      "sha256": "32e2a1268fe17c1a5ed277c289647ef9bacd74502bc825246e28fc7afd1171ac"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.4.woff2",
+      "size": 21976,
+      "sha256": "7a89ca981dff52d21435779e1a5c5b723dc2d3c916f9a619f09df40c8d786250"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.40.woff2",
+      "size": 72040,
+      "sha256": "5d4b78a5ffebb2e66120a9d443d84cb1a8f4c834cf47095c32e3f7d9b56c7bae"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.41.woff2",
+      "size": 75904,
+      "sha256": "f9724b0c15fdcd628ae6266ba370993b47bd745470d2368e177727ba72cc18f5"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.42.woff2",
+      "size": 65548,
+      "sha256": "cb26af6b9a79f1bea393637c6ec3d382beab5dfbb3e1776fd425753683e5c471"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.43.woff2",
+      "size": 56068,
+      "sha256": "82a4ea1ab5312b15ff966db7df043a800ef6ae8f30ff9742ca5a0cea9fed898d"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.44.woff2",
+      "size": 57624,
+      "sha256": "4a8ce8d22d75bb24853d3707a881e5d876b1f905eaa72f04f4b1ccd41fcf7cac"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.45.woff2",
+      "size": 74564,
+      "sha256": "12edfa6a64aa72930dbf03d856c56f4fa74771b68ea14e7b18100be0b5961276"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.46.woff2",
+      "size": 62100,
+      "sha256": "0d78eb0c85cab120be7cf85eaf8129976760b6542b69d9eec2d46fdb428f93ac"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.47.woff2",
+      "size": 50436,
+      "sha256": "a6babf80e79f8e2f1ab5212a734d341e4484241cfa2238b2cf0d0662d388c241"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.48.woff2",
+      "size": 51744,
+      "sha256": "ef86f8890e79d9c1cc98b31ada247bef4857ac7766cbb17af2adcd2787d369c6"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.49.woff2",
+      "size": 62904,
+      "sha256": "eaf5bfb2cbcac60610727bf96112117bad107ea4380bc02641f076bf604dfa8b"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.5.woff2",
+      "size": 86496,
+      "sha256": "4d60b1cdf0ae99475b34db7847066718d57730b009d05be4c328b241d095ba5c"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.50.woff2",
+      "size": 70924,
+      "sha256": "514e0a5c80e10d2beb700337565f7d50e7e3c1689f7513d8a820c17bafaeca30"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.51.woff2",
+      "size": 53712,
+      "sha256": "5cb1ca320bc82ac4e3fbd5a7d4d36666538faf053217a87b42fd7e3dff0a6571"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.52.woff2",
+      "size": 76124,
+      "sha256": "901b88bc1e470ae02539f3e30c3b3c79394fa9e7e8bb3230b809942cb4e4cf1b"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.53.woff2",
+      "size": 54888,
+      "sha256": "12b6f2ba193a140da450f3044bd8d7927cea285a139c7e9e4d923fd8bf4451e0"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.54.woff2",
+      "size": 57240,
+      "sha256": "d437772211b0c743101ac749593baa12f87f5026c51c4e4ca5768a3b701118ab"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.55.woff2",
+      "size": 58404,
+      "sha256": "b55ffda6a7e9eebb40aba1386560c818e97ce355449036256765c8f379621cb7"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.56.woff2",
+      "size": 46880,
+      "sha256": "b26e69d9d81f4c958a97600474e9b62102e712924cf8f0d238f5d2c7856b6091"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.57.woff2",
+      "size": 67464,
+      "sha256": "ae6538ae5dcdf54ad2acfcd0f79ba8660cbe1e41a5602e45ff85c795d7ecb03e"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.58.woff2",
+      "size": 54208,
+      "sha256": "52dbb377e06efe7d01972867480748289733c4b1aacd7feaa2f0cd7cc81fb70a"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.59.woff2",
+      "size": 59300,
+      "sha256": "89643be93941a0806d08c2f59c4934e52d78d60aa1a54c8aae05949a21c7d1bb"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.6.woff2",
+      "size": 78564,
+      "sha256": "b0ab417db1fbc9d63f92211994f8824223ee0d27c8933145d4c20218c49a2438"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.60.woff2",
+      "size": 46952,
+      "sha256": "72c49ceb8122068d528182a69d7384962e01f89245f339bb5d4a1c7b1b568c7d"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.61.woff2",
+      "size": 60224,
+      "sha256": "29c3166f18ffe77fdbca3c671743df705a78be4add8b305276b4787cde44401e"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.62.woff2",
+      "size": 50852,
+      "sha256": "c9e609cc1696c23c4f43ce76e8ec702f9eee7c25104f1b2b8dcab9dfffd2bb4f"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.63.woff2",
+      "size": 38316,
+      "sha256": "e5731be4215adb745e87468e6face96ca34abf971b4623c9fe3325dbdbc1afc8"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.64.woff2",
+      "size": 52888,
+      "sha256": "ea05d5fd03a4af40427042ba64734b899de5bed6850f298d2c9cf08aedb137ec"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.65.woff2",
+      "size": 55760,
+      "sha256": "1f26dea34ddb2efb3b296c94c98932cabb5dc3ce670807dd2d737f4874303f10"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.66.woff2",
+      "size": 55884,
+      "sha256": "d5ba9141c7fa040ddfa6a72220e5e5509693bca526014d2fa5883aa7e42a0363"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.67.woff2",
+      "size": 38508,
+      "sha256": "c85934698f8a338ddac433c2e0ba30023bef218343f144a95201c2482f632acd"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.68.woff2",
+      "size": 29464,
+      "sha256": "40954dde264f984fa17044315f4ce80bbbdb2a7610dac2a8ee6351a7af222ab7"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.69.woff2",
+      "size": 16040,
+      "sha256": "532003ecdb586a5333915737bc66495af4ff2eb908b69c72803b4ccead3b2729"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.7.woff2",
+      "size": 7833,
+      "sha256": "0f5f84b7770d42943750f3bf06892f1bbd5ec86c3defe3895d537350a0f4ae41"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.70.woff2",
+      "size": 2500,
+      "sha256": "57434b32f49b5028bc0f55164d1a9b85a77c3d27cfff2f1f4274a7b33acd8d2a"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.71.woff2",
+      "size": 2020,
+      "sha256": "3ef0e7da7544866f8097ab6e4c3d481a76fec1be2daba141e2b6e91019394642"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.72.woff2",
+      "size": 9300,
+      "sha256": "5af80ad3f5b15a1b581223781a880c6a9166da323241f7743ed080141a0f0335"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.73.woff2",
+      "size": 10068,
+      "sha256": "e1f8cad0e9b3f2408905673e91087e20b97bc22fcda62e8d1693edb6ae1b85ed"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.74.woff2",
+      "size": 11816,
+      "sha256": "de487db76ac5a18359a73085721352b45d4ede43959e46b57c369ce1906892a3"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.75.woff2",
+      "size": 3664,
+      "sha256": "d0c996f4735f832a6f857659051e2e010017d99ecf872068fea22a4ec656a6d7"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.76.woff2",
+      "size": 8632,
+      "sha256": "bda2eb40db9a6172fef66809eb142b83363c88cf69f893d3c984d70ec3829b63"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.77.woff2",
+      "size": 19648,
+      "sha256": "158eef1fc41d96cac5415e4958636f06c3a7d5280c18df5feebef31805ef6b22"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.78.woff2",
+      "size": 76448,
+      "sha256": "99b741257299586be4d78b0aed55bb94da227a5615be97a3047256b26ac37797"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.79.woff2",
+      "size": 67464,
+      "sha256": "09440b9b46f3b068e50d834a7a54065feb5ac3c7295b30945f139817af450176"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.8.woff2",
+      "size": 76532,
+      "sha256": "b05f6ceb7e7fbaf4009d5c9f9e28272ce3ce683d2e21289c6c711647a9058b03"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.80.woff2",
+      "size": 71148,
+      "sha256": "e2e31601cecae37f59285c7d51d59f7c4583c3663f970f0e6e0fcac19005c28c"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.81.woff2",
+      "size": 74716,
+      "sha256": "c74e7a4e95686795daa5ffac3e05294d9ee8b12c17ac2b865ae5712a0264a243"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.82.woff2",
+      "size": 70612,
+      "sha256": "ddac15391a59770dc92f27c747b960452df7d983c7197ef98ee7f73e32ad0702"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.83.woff2",
+      "size": 72984,
+      "sha256": "290b110b63c2becc3d79349260794401925dbf03746281648c379434305ad1f3"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.84.woff2",
+      "size": 73392,
+      "sha256": "7b1adc3daffef44967472e89519090b36c1b48f21e5c5339c5a306eac41a20c4"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.85.woff2",
+      "size": 72212,
+      "sha256": "d72838d052ad60a1e1a00e3d4c817b98ffb8dbe18b6ca8aeacf12f13e76d1fa5"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.86.woff2",
+      "size": 75252,
+      "sha256": "4a3ccb5e3aa9487e51cf0a13f675bafb4e77296b2f5cebcff8414f36e962cdf1"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.87.woff2",
+      "size": 69992,
+      "sha256": "cd43cb5fffcd75a103e6cc19837ce1670f4b29482d35d4a5e64a981e42389fe1"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.88.woff2",
+      "size": 71624,
+      "sha256": "451de938281351ececcc31b373ffd35b768d83689d314908a895d9fdd5180264"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.89.woff2",
+      "size": 74028,
+      "sha256": "00d8a02bd2981e29c37b00998c4e58a7fa66648a61c82855d9e83c4b7574074d"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.9.woff2",
+      "size": 69304,
+      "sha256": "3b400d7fccead8ce914e35c3f3304bf30675f4b432d4e6292bf62225db7ed055"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.90.woff2",
+      "size": 68416,
+      "sha256": "f72dbbe53e5ff4c48029337f64c7263ec44d95ceb85e418be62368c36ee990b2"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.91.woff2",
+      "size": 68892,
+      "sha256": "7e6b1ac9e0ebc81059cb5a4018fc27a882d2a7a595c0523dfeb8d82b470c87d6"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.92.woff2",
+      "size": 66828,
+      "sha256": "cc108327ec38c39911fdbe15c1c11b70de9272a2f9d9fd5d441fc5864c0d5879"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.93.woff2",
+      "size": 65304,
+      "sha256": "4662cdbe68dee7c6b6f85b6da09b1ec80592e9270f6cab0636bd544e52ed3b3e"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.94.woff2",
+      "size": 59888,
+      "sha256": "2411673bbb108b213da7c3ad966402980548db7ccf7a856e9b7649c913068baf"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.95.woff2",
+      "size": 59188,
+      "sha256": "8e360343c8d41c540566b3cd4ff145b88b7ce3729da46cda051adb364001093d"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.96.woff2",
+      "size": 52528,
+      "sha256": "bf58d1983e384d28853e4743607980a013e8f5b923b64b80a43ca218bbf35563"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.97.woff2",
+      "size": 21660,
+      "sha256": "684f25447d7d25c206b720a8f0a813a9264149b6979f76c89480fab0a0f616a4"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.98.woff2",
+      "size": 26596,
+      "sha256": "086c8f9e92d2bf22d6ada1b7944442113b7d0bb775dff57a0cfea25115794b30"
+    },
+    {
+      "path": "底层能力/文字/fonts/misans/MiSans.min.css",
+      "size": 87861,
+      "sha256": "fc328f64a177e355c1b2749a0d06622cdd51049cfa0a25490e35dfd3cac0e53b"
+    },
+    {
+      "path": "底层能力/文字/fonts/noto-sans-sc/OFL.txt",
+      "size": 4314,
+      "sha256": "18aabf190848725e2576eefb5c29ba06aac1029d02132252a7f312eac2e50cf3"
+    },
+    {
+      "path": "底层能力/文字/fonts/noto-sans-sc/noto-sans-sc-chinese-simplified-400-normal.woff2",
+      "size": 1141536,
+      "sha256": "eb385eca10dd39caff881c38338aefccecfaec6b42cc016fbe81434e388d6c3a"
+    },
+    {
+      "path": "底层能力/文字/fonts/noto-sans-sc/noto-sans-sc-chinese-simplified-500-normal.woff2",
+      "size": 1158564,
+      "sha256": "beb1344739bee4f45a96d019fbe37a0022848652a8016b3c2d8a8bf63fd6264f"
+    },
+    {
+      "path": "底层能力/文字/fonts/noto-sans-sc/noto-sans-sc-chinese-simplified-700-normal.woff2",
+      "size": 1171972,
+      "sha256": "70f78783862ce06f00424d43a5105475d49b3b61ad737b51bf5e561644845614"
+    },
+    {
+      "path": "底层能力/文字/fonts/noto-sans-sc/noto-sans-sc-latin-400-normal.woff2",
+      "size": 13432,
+      "sha256": "1b204530ab786f0a3bd02f411818ba1133019f3747965ab57a46d1aca7f4686e"
+    },
+    {
+      "path": "底层能力/文字/fonts/noto-sans-sc/noto-sans-sc-latin-500-normal.woff2",
+      "size": 13464,
+      "sha256": "cc326e2cfaf18d0a69ffe205ff2f457d1a4a49fef940c3ab7cbd0aa5c3440644"
+    },
+    {
+      "path": "底层能力/文字/fonts/noto-sans-sc/noto-sans-sc-latin-700-normal.woff2",
+      "size": 13504,
+      "sha256": "82c6fd5578763f9b15f3404a203b74bf4139b725ebf0d5d1534bfd05d0991419"
+    },
+    {
+      "path": "底层能力/文字/fonts/noto-sans-sc/noto-sans-sc.css",
+      "size": 1926,
+      "sha256": "7a9025c015cbd3e2d3f95acb75b5a854a00b0bf158000bb24cf4501824b103a2"
+    },
+    {
+      "path": "底层能力/表格组件/README.md",
+      "size": 1643,
+      "sha256": "41ecefa6219c77a1e5d5e3342777d3e0c2dd3b9820bcd8e1e6cc325463eb7ae7"
+    },
+    {
+      "path": "底层能力/表格组件/index.html",
+      "size": 1066,
+      "sha256": "e18dfaaa88cc136a44757733aa165e5904497b46453890d2e1832855206922e2"
+    },
+    {
+      "path": "底层能力/表格组件/package-lock.json",
+      "size": 204230,
+      "sha256": "5f9a1a8d6fee89dcc0483bff432e51d864c61e4d07c1ed4e8203020d3e5c4989"
+    },
+    {
+      "path": "底层能力/表格组件/package.json",
+      "size": 639,
+      "sha256": "0746910266d9c815ce7f4ea51f9cadcf0da2cb5e47dd9b7e5223fb1b6cbe911f"
+    },
+    {
+      "path": "底层能力/表格组件/src/contract.js",
+      "size": 10206,
+      "sha256": "ae3ba994ac4e30d13db86557c4e4884375de50282e5f7daf75bf534dbd0c2c9d"
+    },
+    {
+      "path": "底层能力/表格组件/src/data-table.tsx",
+      "size": 8423,
+      "sha256": "d20ab14da96f40c22f09d2fee24b72471ecaf4c42f03281df732060c351ff6c0"
+    },
+    {
+      "path": "底层能力/表格组件/src/fixtures.js",
+      "size": 7379,
+      "sha256": "fb345eeedc90d7e52dd2b88def01fed8e177bb00e22401e88632cfb2b03216cb"
+    },
+    {
+      "path": "底层能力/表格组件/src/io.js",
+      "size": 1547,
+      "sha256": "7bde1a7d4910be511f6fc4af6083d36e717217dbda2b43126ca69b014bb8ba85"
+    },
+    {
+      "path": "底层能力/表格组件/src/kernel.js",
+      "size": 18768,
+      "sha256": "3f8e89669522cbcb53c0fb4164e3fbf0deb1fe83e523fbcf935f3bba7f5dc37a"
+    },
+    {
+      "path": "底层能力/表格组件/src/preview.js",
+      "size": 2533,
+      "sha256": "03bca7137b7dbdef684fd26d39f8aacec38a07d1c19604ec86c0331f84f9386e"
+    },
+    {
+      "path": "底层能力/表格组件/src/style.css",
+      "size": 1676,
+      "sha256": "70ba082b69895b89744f2a1bd2408e53b89ff5454559ab055f9e4539bd8ff433"
+    },
+    {
+      "path": "底层能力/表格组件/test/contract.test.js",
+      "size": 4740,
+      "sha256": "77daac2618a9ac34a95498b680ce097cebf83b149846ba86e6fa07c9b1095f5d"
+    },
+    {
+      "path": "底层能力/表格组件/test/io.test.js",
+      "size": 609,
+      "sha256": "96ca2b9603e050a8b32e3c6be9f2e79170ae0a3e4a1c61e9a7989ddceb64bf34"
+    },
+    {
+      "path": "底层能力/表格组件/vite.config.js",
+      "size": 639,
+      "sha256": "1eabc9bf93085672d27f1b0a169fa747de9eaea5f218ccd80212add85a14ec71"
+    },
+    {
+      "path": "进度&规则.md",
+      "size": 2991,
+      "sha256": "d729bff8499f0d5a3e895f42bafd6ac68643433dacf3cae45352928f8f1ba95f"
+    }
+  ]
+}

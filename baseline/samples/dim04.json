@@ -1,0 +1,350 @@
+{
+  "format": "v1.1",
+  "rows": [
+    {
+      "id": "aes",
+      "name": "AES67 高性能网络音频互通机制",
+      "source": "AES67-2023\n专业网络音频互通标准",
+      "maturity": "标准体系成熟；具体设备互通需独立验证",
+      "leading": "具有行业互通参考价值；不代表采用者天然领先",
+      "barrier": "同步与流参数兼容\n跨设备配置及网络环境适配",
+      "value": "为异构网络音频设备接入和系统扩展提供技术框架",
+      "company": "",
+      "industry": "线性PCM；同步、传输、编码和连接管理的互通要求\n具体适用条件依AES67版本及实现而定",
+      "aiInitial": true,
+      "companyTouched": false
+    },
+    {
+      "id": "ptp",
+      "name": "IEEE 1588 精密时间同步机制",
+      "source": "IEEE 1588-2019\n分组网络时钟同步标准",
+      "maturity": "标准体系成熟；系统效果取决于网络及实现",
+      "leading": "支持精密同步技术路线，不等同具体产品领先",
+      "barrier": "时钟源管理\n网络延迟与非对称路径补偿\n设备实现及配置能力",
+      "value": "为分布式节点的统一时间基准和协同工作提供支持",
+      "company": "",
+      "industry": "基于分组网络的时钟同步机制\n精度取决于网络条件和设备实现",
+      "aiInitial": true,
+      "companyTouched": false
+    },
+    {
+      "id": "smpte",
+      "name": "SMPTE ST 2022-7 RTP 冗余恢复机制",
+      "source": "SMPTE ST 2022-7:2019\n媒体流冗余传输标准",
+      "maturity": "标准机制明确；目标场景应用须单独验证",
+      "leading": "跨媒体行业可借鉴技术；目标产品性能不作推断",
+      "barrier": "双路径同步与包恢复\n路径延迟差异处理\n接收端重构能力",
+      "value": "为关键音频流链路的连续性保障提供可研究的技术机制",
+      "company": "",
+      "industry": "冗余 RTP 数据报流及接收端重构\n实际恢复能力取决于接收机及链路条件",
+      "aiInitial": true,
+      "companyTouched": false
+    }
+  ],
+  "analysis": {
+    "aes": {
+      "id": "aes",
+      "category": "网络音频互通",
+      "subtitle": "跨协议网络音频流的互通框架",
+      "source": "AES67-2023 · AES 专业音频网络标准",
+      "overall": "AES67-2023 将高性能网络音频互通的同步、传输、编码与连接管理要求形成可核查的标准规则。",
+      "scope": "成立范围：AES67 标准定义及其适用网络条件；具体型号兼容性、实测时延与我司能力不在本分析范围。",
+      "points": [
+        {
+          "id": "a1",
+          "title": "标准化音频流互通机制",
+          "summary": "以共通传输与同步机制支持不同网络音频系统互操作。",
+          "performance": "标准定义同步、编码、传输与连接管理等技术要求。",
+          "benchmark": "对标不同厂商专有协议相互封闭的互通场景。",
+          "difference": "将高性能网络音频的关键互通要求组织为公开的标准化机制。",
+          "reason": "标准化互通要求为不同实现提供一致的技术参照，减少仅依靠某一私有实现互通的限制。",
+          "value": "适用于需要多厂商网络音频设备接入和长期兼容扩展的系统研究。",
+          "supplement": "注意：满足标准规定不等于所有设备、所有专有控制功能均可互通。",
+          "evidence": [
+            "aes01",
+            "aes02",
+            "aes04",
+            "aes05",
+            "aes06",
+            "aes09"
+          ]
+        },
+        {
+          "id": "a2",
+          "title": "专业音频传输的时延与格式要求",
+          "summary": "标准面向专业音频实时传输，对编码格式与时延能力提出范围要求。",
+          "performance": "标准说明专业音频需支持线性PCM及适于低时延传输的技术要求。",
+          "benchmark": "对标实时专业音频与普通非实时音频传输的功能要求。",
+          "difference": "关注可用于现场实时音频业务的性能条件，而非只解决普通数据可达性。",
+          "reason": "音频流传输需同时兼顾格式、同步、实时性等约束。",
+          "value": "可为网络音频设备的方案选型和互通测试定义可检查的要求。",
+          "supplement": "不据此生成我司或竞品具体产品的实测时延值。",
+          "evidence": [
+            "aes03",
+            "aes07",
+            "aes08",
+            "aes10"
+          ]
+        }
+      ]
+    },
+    "ptp": {
+      "id": "ptp",
+      "category": "时间同步",
+      "subtitle": "分布式节点的精密时钟同步技术",
+      "source": "IEEE 1588-2019 · IEEE 官方标准",
+      "overall": "IEEE 1588-2019 定义分组网络精密时钟同步机制，支持不同精度设备在统一时间基准下协同。",
+      "scope": "成立范围：IEEE 1588 标准原理及适用条件；目标音频系统的实测同步精度未在此示例验证。",
+      "points": [
+        {
+          "id": "p1",
+          "title": "异构设备统一时间基准",
+          "summary": "为不同性能和精度的网络节点提供精密时钟同步机制。",
+          "performance": "PTP 标准定义在分组网络中对设备时钟进行精确同步的方法。",
+          "benchmark": "对标分布式系统无法共享可靠时间基准时的协同限制。",
+          "difference": "通过网络同步机制协调异构时钟，而不仅依靠设备各自独立本地时钟。",
+          "reason": "统一时间基准为音频流时序、分布式协同等系统能力提供技术基础。",
+          "value": "适用于对多节点同步有明确要求的网络音频系统设计和技术论证。",
+          "supplement": "仅说明协议技术能力；实际精度必须结合拓扑与设备进行独立测试。",
+          "evidence": [
+            "ptp01",
+            "ptp02",
+            "ptp03",
+            "ptp04",
+            "ptp05"
+          ]
+        }
+      ]
+    },
+    "smpte": {
+      "id": "smpte",
+      "category": "媒体传输高可用",
+      "subtitle": "RTP 媒体流多路径保护与数据重构",
+      "source": "SMPTE ST 2022-7:2019 · SMPTE 标准",
+      "overall": "SMPTE ST 2022-7 规定基于冗余 RTP 媒体流的保护机制，并有广播网络部署案例可供查证。",
+      "scope": "成立范围：原标准与媒体传输场景；迁移至具体广播或会议网络仍须验证网络条件、接收端能力与实际业务连续性。",
+      "points": [
+        {
+          "id": "s1",
+          "title": "多路径 RTP 流无缝重构",
+          "summary": "将同一内容通过冗余传输路径提供给接收端进行数据报级重构。",
+          "performance": "标准规定了多个冗余 RTP 流与输出流重构的技术要求。",
+          "benchmark": "对标单路径发生丢包就可能影响媒体流业务的传输结构。",
+          "difference": "增加冗余数据流及接收侧恢复机制，以提升异常路径条件下的重构可能性。",
+          "reason": "在多个路径可用且满足标准条件时，接收端具备利用冗余数据报恢复媒体流的机制。",
+          "value": "对关键广播或大规模音频网络的高可用设计具有跨场景研究价值。",
+          "supplement": "这是标准机制的技术价值；目标场景实际零中断、故障切换时间等并无演示实测数据。",
+          "evidence": [
+            "smpte01",
+            "smpte02",
+            "smpte03",
+            "smpte04",
+            "smpte05"
+          ]
+        }
+      ]
+    }
+  },
+  "evidence": {
+    "aes01": {
+      "id": "E01",
+      "publisher": "Audio Engineering Society",
+      "title": "AES67-2023 · 标准条目",
+      "url": "https://aes.org/publications/standards-store/?id=140",
+      "where": "官方 Standards Store｜标题",
+      "excerpt": "High-performance streaming audio-over-IP interoperability",
+      "support": "技术定位",
+      "note": "标准标题直接表明研究对象是高性能流媒体音频在 IP 网络上的互操作性。"
+    },
+    "aes02": {
+      "id": "E02",
+      "publisher": "Audio Engineering Society",
+      "title": "AES67-2023 · 标准摘要",
+      "url": "https://aes.org/publications/standards-store/?id=140",
+      "where": "官方 Standards Store｜Abstract",
+      "excerpt": "synchronization, media clock identification, network transport",
+      "support": "标准覆盖范围",
+      "note": "列明音频流互通研究涉及同步、媒体时钟识别和网络承载等技术方面。"
+    },
+    "aes03": {
+      "id": "E03",
+      "publisher": "Audio Engineering Society",
+      "title": "AES67-2023 · 标准摘要",
+      "url": "https://aes.org/publications/standards-store/?id=140",
+      "where": "官方 Standards Store｜Abstract",
+      "excerpt": "16 bit, 44,1 kHz and higher",
+      "support": "音频格式条件",
+      "note": "说明标准讨论的专业质量音频范围；不可据此推断任何具体设备实测表现。"
+    },
+    "aes04": {
+      "id": "E04",
+      "publisher": "Audio Engineering Society",
+      "title": "AES 修订标准征求意见公告",
+      "url": "https://aes.org/standards-blog/call-for-comment-on-draft-revised-aes67-xxxx-high-performance-streaming-audio-over-ip-interoperability/",
+      "where": "AES Standards Blog｜2024-02-16",
+      "excerpt": "The standard focuses on defining how existing protocols are used",
+      "support": "互通技术机制",
+      "note": "明确标准的重点是已有协议如何协同使用，并非以新协议代替所有原有协议。"
+    },
+    "aes05": {
+      "id": "E05",
+      "publisher": "Audio Engineering Society",
+      "title": "AES 修订标准征求意见公告",
+      "url": "https://aes.org/standards-blog/call-for-comment-on-draft-revised-aes67-xxxx-high-performance-streaming-audio-over-ip-interoperability/",
+      "where": "AES Standards Blog｜2024-02-16",
+      "excerpt": "No new protocols have been developed to achieve this.",
+      "support": "先进原因的成立边界",
+      "note": "帮助解释互操作性来自规则组合与兼容约定，避免描述成创造了全新底层协议。"
+    },
+    "aes06": {
+      "id": "E06",
+      "publisher": "Audio Engineering Society",
+      "title": "AES70 与 AES67 连接管理项目",
+      "url": "https://aes.org/standards/standards-development/new-projects/",
+      "where": "AES-X243｜Rationale",
+      "excerpt": "alleviate current issues of AES67 interoperability",
+      "support": "应用边界与扩展需求",
+      "note": "后续项目仍讨论互通管理问题，因此不应把支持标准理解为控制功能自动完全互通。"
+    },
+    "aes07": {
+      "id": "E07",
+      "publisher": "Audio Engineering Society",
+      "title": "AES67-R 项目范围",
+      "url": "https://aes.org/project-status/aes67-r/",
+      "where": "AES67-R｜Project Scope",
+      "excerpt": "latency performance of 10 milliseconds or less",
+      "support": "低延时技术要求",
+      "note": "原文讨论标准范围与设计目标，不是我司或某竞品的时延测试结果。"
+    },
+    "aes08": {
+      "id": "E08",
+      "publisher": "European Broadcasting Union",
+      "title": "Audio in the Cloud with AES67",
+      "url": "https://tech.ebu.ch/publications/audio-in-the-cloud-with-aes67",
+      "where": "EBU Technology｜Presentation｜2021-06-15",
+      "excerpt": "delay, sync, reliability",
+      "support": "跨网络场景的适用边界",
+      "note": "EBU 讨论向广域网和云环境迁移时须处理的时延、同步与可靠性挑战。"
+    },
+    "aes09": {
+      "id": "E09",
+      "publisher": "Audio Engineering Society",
+      "title": "AES67 Interoperability PlugFest 项目报告",
+      "url": "https://aes.org/publications/standards-store/?p_page=4",
+      "where": "AES-R15-2015｜官方报告摘要",
+      "excerpt": "Eleven companies tested 13 products against each other",
+      "support": "行业互通验证案例",
+      "note": "可作为跨厂商互通测试曾开展的直接证据；这是2015年的测试案例，不等于当前所有产品兼容。"
+    },
+    "ptp01": {
+      "id": "E10",
+      "publisher": "IEEE Standards Association",
+      "title": "IEEE 1588-2019 · 标准摘要",
+      "url": "https://standards.ieee.org/ieee/1588/6825/",
+      "where": "IEEE 标准页面｜Abstract",
+      "excerpt": "precise synchronization of clocks in packet-based networked systems",
+      "support": "核心技术目的",
+      "note": "标准直接描述了在分组网络中精密同步设备时钟的技术目标。"
+    },
+    "ptp02": {
+      "id": "E11",
+      "publisher": "IEEE Standards Association",
+      "title": "IEEE 1588-2019 · 标准摘要",
+      "url": "https://standards.ieee.org/ieee/1588/6825/",
+      "where": "IEEE 标准页面｜Abstract",
+      "excerpt": "heterogeneous systems that include clocks of different inherent precision",
+      "support": "异构时钟适用性",
+      "note": "说明其设计目标覆盖天然精度不同的设备时钟，不能自动推出所有工程网络都能达到极限精度。"
+    },
+    "ptp03": {
+      "id": "E12",
+      "publisher": "IEEE Standards Association",
+      "title": "P1588 标准修订项目介绍",
+      "url": "https://standards.ieee.org/ieee/1588/11795/",
+      "where": "IEEE P1588｜Project Scope",
+      "excerpt": "synchronize to a grandmaster clock",
+      "support": "系统同步机制",
+      "note": "项目说明包含统一参考时钟与多类型设备协同机制。"
+    },
+    "ptp04": {
+      "id": "E13",
+      "publisher": "IEEE Standards Association",
+      "title": "IEEE 1588a-2023 修订标准",
+      "url": "https://standards.ieee.org/ieee/1588a/10395/",
+      "where": "IEEE 1588a-2023｜Abstract",
+      "excerpt": "best master clock algorithm (BMCA)",
+      "support": "时钟管理机制",
+      "note": "修订标准提及对最佳主时钟算法的澄清，体现同步系统中的主时钟选择管理要求。"
+    },
+    "ptp05": {
+      "id": "E14",
+      "publisher": "IEEE Standards Association",
+      "title": "IEEE 802.1AS 时间敏感网络标准项目",
+      "url": "https://standards.ieee.org/ieee/802.1AS/12553/",
+      "where": "IEEE P802.1AS｜Scope",
+      "excerpt": "audio, video, and time-sensitive control",
+      "support": "专业媒体应用关联",
+      "note": "项目页面列出音视频和时间敏感控制应用，作为精密网络时间同步的相关应用证据。"
+    },
+    "smpte01": {
+      "id": "E15",
+      "publisher": "Society of Motion Picture and Television Engineers",
+      "title": "SMPTE ST 2022 系列标准综述",
+      "url": "https://www.smpte.org/past-events/standards-smpte-st-2022",
+      "where": "SMPTE 官方技术讲座介绍｜2024-10-01",
+      "excerpt": "seamless protection system using packet redundancy",
+      "support": "冗余传输保护机制",
+      "note": "SMPTE 明确说明 ST 2022-7 采用包冗余用于无缝保护。"
+    },
+    "smpte02": {
+      "id": "E16",
+      "publisher": "Society of Motion Picture and Television Engineers",
+      "title": "Telemundo IP 广播设施实施案例",
+      "url": "https://www.smpte.org/blog/building-worlds-largest-ip-broadcast-facility",
+      "where": "SMPTE Blog｜IP 网络冗余段落",
+      "excerpt": "two separate SDN networks running to provide redundancy",
+      "support": "行业真实部署案例",
+      "note": "行业案例描述了两套并行网络实现冗余；这是视频广播应用，不直接证明目标音频业务结果。"
+    },
+    "smpte03": {
+      "id": "E17",
+      "publisher": "Society of Motion Picture and Television Engineers",
+      "title": "Telemundo IP 广播设施实施案例",
+      "url": "https://www.smpte.org/blog/building-worlds-largest-ip-broadcast-facility",
+      "where": "SMPTE Blog｜IP 网络冗余段落",
+      "excerpt": "both networks actively transport the video",
+      "support": "双路径传输事实",
+      "note": "原文指出两条网络路径都在传输媒体流；不能直接用来证明所有场景零中断。"
+    },
+    "smpte04": {
+      "id": "E18",
+      "publisher": "Society of Motion Picture and Television Engineers",
+      "title": "ST 2059 与 ST 2022-7 工程报告项目",
+      "url": "https://kws.smpte.org/higherlogic/ws/public/projects/554/details",
+      "where": "SMPTE Standards Project｜Scope",
+      "excerpt": "parallel redundant networks",
+      "support": "部署约束与时钟关联",
+      "note": "工程项目介绍专门讨论冗余网络场景下的时间同步设计与部署指导。"
+    },
+    "smpte05": {
+      "id": "E19",
+      "publisher": "Society of Motion Picture and Television Engineers",
+      "title": "SMPTE ST 2022-7:2019 正式标准",
+      "url": "https://pub.smpte.org/latest/st2022-7/st2022-7-2019.pdf",
+      "where": "标准原始 PDF｜具体正文请点开核对",
+      "excerpt": "",
+      "support": "正式标准全文入口",
+      "note": "本卡只提供标准全文入口及核验定位，不擅自截取或伪造未核对的条款原文。"
+    },
+    "aes10": {
+      "id": "E20",
+      "publisher": "Audio Engineering Society",
+      "title": "AES 音频游戏应用技术页面",
+      "url": "https://aes.org/aes-audio-for-games/",
+      "where": "AES Audio For Games｜AES67-2013 条目",
+      "excerpt": "high resolution, low noise and low latency",
+      "support": "高性能音频技术定位",
+      "note": "历史标准介绍使用高分辨率、低噪声和低延时描述应用目标；不属于设备实测结果。"
+    }
+  }
+}

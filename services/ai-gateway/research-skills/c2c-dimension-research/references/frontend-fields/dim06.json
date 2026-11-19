@@ -1,0 +1,204 @@
+{
+  "schemaVersion": "c2c-frontend-contract-v1",
+  "dimensionId": "DIM-06",
+  "name": "性能稳",
+  "snapshotFormat": "v5",
+  "sections": [
+    "性能指标总表（八列及合并布局）"
+  ],
+  "sources": [
+    {
+      "path": "modules/bg/server.py",
+      "sha256": "1a5ce5b32b34279dffaa7c092e1caf384b71c8cf3ee75540ed513487fe55ea60"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-multi-platform.js",
+      "sha256": "7905af768e85ea54995031d5ed848e1b24ff9c008203a00ec90fdd5a50b6e272"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim06-core.html",
+      "sha256": "b51da9717e9b4ebf4f671d4f877721debc3697ad9c63893d1a937617c6f79d47"
+    },
+    {
+      "path": "modules/bg/template-samples/dim06.json",
+      "sha256": "18fe980314ae37b433d925316a2db9a55790a15afe3f8ad2cd50ce54d63eb0f2"
+    }
+  ],
+  "nullableContainers": [],
+  "containers": [
+    {
+      "path": "",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/merges",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/merges/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/rowHeights",
+      "type": "object",
+      "optional": true
+    },
+    {
+      "path": "/rows",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/rows/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/widths",
+      "type": "array",
+      "optional": false
+    }
+  ],
+  "fields": [
+    {
+      "path": "/format",
+      "label": "format",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/merges/*/c",
+      "label": "c",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/merges/*/cs",
+      "label": "cs",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/merges/*/r",
+      "label": "r",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/merges/*/rs",
+      "label": "rs",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/rowHeights/*",
+      "label": "*",
+      "types": [
+        "number"
+      ],
+      "role": "structure",
+      "optional": true
+    },
+    {
+      "path": "/rows/*/category",
+      "label": "category",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/competitor",
+      "label": "竞品指标",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/design",
+      "label": "设计指标",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/experience",
+      "label": "体验指标",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/function",
+      "label": "function",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/functional",
+      "label": "功能性",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/rows/*/product",
+      "label": "产品名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/test",
+      "label": "测试指标",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/widths/*",
+      "label": "*",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    }
+  ],
+  "rules": [
+    "当前format=v5；rows每行id及八个业务列；widths八项合计98～102，每项5～40；merges含r/c/rs/cs，可选rowHeights。",
+    "指标需区分设计目标、测试方法及结果、竞品标称及其条件、体验要求；未实测不能把design直接复制成test实测结果。",
+    "合并单元格的显示值来自锚点，不能漏掉被合并行对应业务问题；布局字段由Codex整理，不能作为研究证据。"
+  ],
+  "requiredValues": {
+    "/format": "v5"
+  }
+}

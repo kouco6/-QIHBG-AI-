@@ -1,0 +1,18 @@
+:root { color:#203750; background:#f4f7fb; font:16px "Segoe UI","Microsoft YaHei","PingFang SC",sans-serif; }
+* { box-sizing:border-box; }
+html,body { margin:0; width:100%; height:100%; overflow:hidden; }
+body { display:grid; grid-template-rows:auto minmax(0,1fr); }
+.toolbar { display:flex; align-items:center; flex-wrap:wrap; gap:8px; padding:6px 10px; background:#fff; border-bottom:1px solid #dce5ef; }
+.toolbar button,.file { min-height:32px; padding:5px 12px; border:1px solid #d5dfeb; border-radius:5px; background:#fff; color:inherit; font-family:inherit; font-size:13px; white-space:nowrap; }
+.toolbar button { cursor:pointer; }
+.toolbar button:focus-visible,summary:focus-visible,.file:focus-within { outline:2px solid #2587de; outline-offset:2px; }
+.file { position:relative; display:inline-flex; align-items:center; overflow:hidden; cursor:pointer; }
+.file input { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; }
+.stage { min-width:0; min-height:0; display:grid; grid-template-rows:minmax(0,1fr) auto auto; background:#fff; }
+.sheet { min-width:0; min-height:0; height:100%; overflow:hidden; }
+.sheet>div { height:100%; }
+.notice { margin:0; min-height:25px; padding:5px 10px; color:#75869b; font-size:11px; border-top:1px solid #e4ebf3; }
+.notice.is-error { color:#a34b27; }
+.log { min-height:0; background:#fafcfe; border-top:1px solid #e4ebf3; }
+.log summary { padding:5px 10px; color:#5d7691; cursor:pointer; font-size:11px; }
+.log pre { margin:0; padding:6px 12px 12px; max-height:min(160px,25vh); overflow:auto; white-space:pre-wrap; word-break:break-word; color:#526b85; font:11px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace; }

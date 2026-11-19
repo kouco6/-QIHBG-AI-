@@ -1,0 +1,142 @@
+{
+  "schemaVersion": "c2c-frontend-contract-v1",
+  "dimensionId": "DIM-10",
+  "name": "应标能力强",
+  "snapshotFormat": "fixed-seed",
+  "sections": [
+    "全部招标参数整合",
+    "各品牌完整原始参数及应标属性"
+  ],
+  "sources": [
+    {
+      "path": "modules/bg/server.py",
+      "sha256": "1a5ce5b32b34279dffaa7c092e1caf384b71c8cf3ee75540ed513487fe55ea60"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-multi-platform.js",
+      "sha256": "7905af768e85ea54995031d5ed848e1b24ff9c008203a00ec90fdd5a50b6e272"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim10-seed.json",
+      "sha256": "d8c73bf3cbd9f499e17e176bd774c2d3e08a9686e8b7c6ae58aefd4210501d44"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-bid-core.js",
+      "sha256": "9e3eb97de1096d104ad32847efe93698b7a97f41dafc53b460e41ae0eebfbe0b"
+    }
+  ],
+  "nullableContainers": [],
+  "containers": [
+    {
+      "path": "",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/original",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/original/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/topics",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/topics/*",
+      "type": "object",
+      "optional": false
+    }
+  ],
+  "fields": [
+    {
+      "path": "/original/*/b",
+      "label": "b",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/original/*/cat",
+      "label": "cat",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/original/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/original/*/req",
+      "label": "招标参数原文",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/original/*/s",
+      "label": "我司应标属性",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "full",
+        "low",
+        "high",
+        "none"
+      ]
+    },
+    {
+      "path": "/original/*/t",
+      "label": "t",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/topics/*/cat",
+      "label": "cat",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/topics/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/topics/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    }
+  ],
+  "rules": [
+    "original每条id/b/cat/t/req/s以及topics的id/cat/name全部覆盖；b为A/B/C，t引用topics[].id。整合表由这些关联生成，不得只输出整合摘要。",
+    "s只支持full/low/high/none，没有未知枚举。证据不足在研究快照以null及pending保留，不能填none冒充不满足，也不能填full默认满足。",
+    "无真实招标文件只能给清楚标识的框架和缺口，不得复制虚构示例参数作为原文。平台固定样例结构和品牌标题变更需单独适配。"
+  ],
+  "requiredValues": {}
+}

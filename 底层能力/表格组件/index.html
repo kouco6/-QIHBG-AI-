@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>表格组件 · 交互演示</title></head>
+<body>
+  <div class="toolbar" role="toolbar" aria-label="表格操作">
+    <label class="file">导入 CSV<input id="import-csv" type="file" accept=".csv,text/csv" aria-label="导入 CSV"></label><label class="file">导入 Excel<input id="import-xlsx" type="file" accept=".xlsx" aria-label="导入 Excel"></label>
+    <button type="button" id="export-csv">导出 CSV</button><button type="button" id="export-xlsx">导出 Excel</button>
+  </div>
+  <main class="stage"><div id="sheet" class="sheet" aria-label="交互表格"></div><p id="notice" class="notice" role="status" aria-live="polite">临时演示 · 刷新后重置，请导出保留结果。</p><details class="log"><summary>最近一次提交</summary><pre id="commit">编辑单元格后可在这里查看提交的行数据。</pre></details></main>
+  <script type="module" src="./src/preview.js"></script>
+</body>
+</html>

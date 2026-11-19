@@ -1,0 +1,123 @@
+{
+  "schemaVersion": "c2c-frontend-contract-v1",
+  "dimensionId": "DIM-07",
+  "name": "AI智慧力",
+  "snapshotFormat": "fixed-seed",
+  "sections": [
+    "AI功能规划表（六列）"
+  ],
+  "sources": [
+    {
+      "path": "modules/bg/server.py",
+      "sha256": "1a5ce5b32b34279dffaa7c092e1caf384b71c8cf3ee75540ed513487fe55ea60"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-multi-platform.js",
+      "sha256": "7905af768e85ea54995031d5ed848e1b24ff9c008203a00ec90fdd5a50b6e272"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim07-seed.json",
+      "sha256": "d03d0628067600986109a999e80b622101e1441b8248327a857e109be0e6dbd9"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-multi-core.js",
+      "sha256": "36d28782a39437723140b2132e6cdedbb62e0bd744946c4546be30f7fde2466d"
+    }
+  ],
+  "nullableContainers": [],
+  "containers": [
+    {
+      "path": "",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/rows",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/rows/*",
+      "type": "object",
+      "optional": false
+    }
+  ],
+  "fields": [
+    {
+      "path": "/fields/*",
+      "label": "*",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/rows/*/AI功能名称",
+      "label": "AI功能名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/AI功能应用",
+      "label": "AI功能应用",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/业务场景",
+      "label": "业务场景",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/可行性",
+      "label": "可行性",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/解决用户痛点",
+      "label": "解决用户痛点",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/预期效果",
+      "label": "预期效果",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    }
+  ],
+  "rules": [
+    "fields固定六个中文列名，rows的每个字段均需覆盖；不是只列AI功能名称。",
+    "当前保存协议固定种子行数，新增/删除研究条目需明确平台适配，不能用18行会议示例充当PAGA结论。",
+    "可行性写明数据、算力、环境、误报漏报、回退与验证条件；可建议不纳首版。"
+  ],
+  "requiredValues": {
+    "/fields": [
+      "AI功能名称",
+      "业务场景",
+      "AI功能应用",
+      "解决用户痛点",
+      "预期效果",
+      "可行性"
+    ]
+  }
+}

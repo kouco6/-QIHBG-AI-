@@ -1,0 +1,1320 @@
+{
+  "schemaVersion": "c2c-frontend-contract-v1",
+  "dimensionId": "DIM-12",
+  "name": "体验感好",
+  "snapshotFormat": "fixed-seed",
+  "sections": [
+    "运维数据规划矩阵（四组、五类、十八项）"
+  ],
+  "sources": [
+    {
+      "path": "modules/bg/server.py",
+      "sha256": "1a5ce5b32b34279dffaa7c092e1caf384b71c8cf3ee75540ed513487fe55ea60"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-multi-platform.js",
+      "sha256": "7905af768e85ea54995031d5ed848e1b24ff9c008203a00ec90fdd5a50b6e272"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim12-seed.json",
+      "sha256": "717c3e0a475e36a9223ba6a572a09255d733ce1b4d70b4039e658fbded25927c"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-final-core.js",
+      "sha256": "d86d1027d3a7f10c04757174ff6a8385e40eac02246c71b31632ecf5647d1fe0"
+    }
+  ],
+  "nullableContainers": [],
+  "containers": [
+    {
+      "path": "",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/categories",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/categories/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/fields/0",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields/1",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields/10",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields/11",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields/12",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields/13",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields/14",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields/15",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields/16",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields/17",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields/2",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields/3",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields/4",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields/5",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields/6",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields/7",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields/8",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields/9",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/groups",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/groups/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/values",
+      "type": "array",
+      "optional": false
+    }
+  ],
+  "fields": [
+    {
+      "path": "/categories/*/count",
+      "label": "数量",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/categories/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/0/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/0/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/0/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/0/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/0/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/1/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/1/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/1/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/1/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/1/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/10/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/10/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/10/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/10/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/10/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/11/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/11/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/11/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/11/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/11/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/12/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/12/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/12/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/12/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/12/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/13/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/13/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/13/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/13/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/13/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/14/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/14/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/14/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/14/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/14/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/15/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/15/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/15/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/15/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/15/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/16/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/16/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/16/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/16/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/16/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/17/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/17/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/17/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/17/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/17/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/2/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/2/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/2/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/2/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/2/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/3/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/3/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/3/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/3/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/3/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/4/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/4/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/4/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/4/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/4/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/5/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/5/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/5/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/5/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/5/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/6/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/6/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/6/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/6/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/6/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/7/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/7/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/7/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/7/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/7/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/8/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/8/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/8/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/8/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/8/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/9/category",
+      "label": "category",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/9/group",
+      "label": "group",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/9/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/9/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/9/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/groups/*/count",
+      "label": "数量",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/groups/*/description",
+      "label": "本组业务规则及约束说明",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/groups/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/product",
+      "label": "产品名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/values/0",
+      "label": "功能操作/点击（规划状态）",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "yes",
+        "no",
+        "pending"
+      ]
+    },
+    {
+      "path": "/values/1",
+      "label": "任务执行（规划状态）",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "yes",
+        "no",
+        "pending"
+      ]
+    },
+    {
+      "path": "/values/10",
+      "label": "其他（规划状态）",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "yes",
+        "no",
+        "pending"
+      ]
+    },
+    {
+      "path": "/values/11",
+      "label": "自动上传（规划状态）",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "yes",
+        "no",
+        "pending"
+      ]
+    },
+    {
+      "path": "/values/12",
+      "label": "手动上传（规划状态）",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "yes",
+        "no",
+        "pending"
+      ]
+    },
+    {
+      "path": "/values/13",
+      "label": "不上传（规划状态）",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "yes",
+        "no",
+        "pending"
+      ]
+    },
+    {
+      "path": "/values/14",
+      "label": "外部应用市场（规划状态）",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "yes",
+        "no",
+        "pending"
+      ]
+    },
+    {
+      "path": "/values/15",
+      "label": "内部应用市场（文本）",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/values/16",
+      "label": "固件（规划状态）",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "yes",
+        "no",
+        "pending"
+      ]
+    },
+    {
+      "path": "/values/17",
+      "label": "应用程序（规划状态）",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "yes",
+        "no",
+        "pending"
+      ]
+    },
+    {
+      "path": "/values/2",
+      "label": "设备使用时长（规划状态）",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "yes",
+        "no",
+        "pending"
+      ]
+    },
+    {
+      "path": "/values/3",
+      "label": "其他（规划状态）",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "yes",
+        "no",
+        "pending"
+      ]
+    },
+    {
+      "path": "/values/4",
+      "label": "异常退出（规划状态）",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "yes",
+        "no",
+        "pending"
+      ]
+    },
+    {
+      "path": "/values/5",
+      "label": "异常断电（规划状态）",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "yes",
+        "no",
+        "pending"
+      ]
+    },
+    {
+      "path": "/values/6",
+      "label": "程序报错（规划状态）",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "yes",
+        "no",
+        "pending"
+      ]
+    },
+    {
+      "path": "/values/7",
+      "label": "数据库异常（规划状态）",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "yes",
+        "no",
+        "pending"
+      ]
+    },
+    {
+      "path": "/values/8",
+      "label": "设备状态（规划状态）",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "yes",
+        "no",
+        "pending"
+      ]
+    },
+    {
+      "path": "/values/9",
+      "label": "联网状态（规划状态）",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "yes",
+        "no",
+        "pending"
+      ]
+    }
+  ],
+  "rules": [
+    "本维当前页面实际是运维数据规划矩阵；不能用一般用户旅程分析替代十八项字段输出。",
+    "groups的名称/计数、categories和fields为展示定义；groups[].description含日志留存、同步等业务要求，也必须研究并给依据，不能保留示例当事实。values与fields逐项对应，严格十八项，第16项（索引15）为内部应用市场文本，其余十七项为状态。",
+    "yes/no/pending表示本次企划人工纳入/不纳入/未选择，不是已有产品能力。没有本次人工决定时状态保留pending，研究建议及理由记录在fieldCoverage，不能自动勾选yes/no。旧na在UI按pending显示，新输出使用pending。",
+    "研究必须对每项给建议、依据和待验证事项；人工最终选择另行记录。第16项未知可用空字符串并标pending，不能填示例应用市场冒充方案。"
+  ],
+  "requiredValues": {
+    "/categories": [
+      {
+        "name": "用户常规操作日志",
+        "count": 4
+      },
+      {
+        "name": "异常日志",
+        "count": 7
+      },
+      {
+        "name": "上传/下载配置次数",
+        "count": 3
+      },
+      {
+        "name": "下载数据",
+        "count": 2
+      },
+      {
+        "name": "软件更新",
+        "count": 2
+      }
+    ],
+    "/fields": [
+      {
+        "id": "metric-01",
+        "label": "功能操作/点击",
+        "group": 0,
+        "category": 0,
+        "type": "state"
+      },
+      {
+        "id": "metric-02",
+        "label": "任务执行",
+        "group": 0,
+        "category": 0,
+        "type": "state"
+      },
+      {
+        "id": "metric-03",
+        "label": "设备使用时长",
+        "group": 0,
+        "category": 0,
+        "type": "state"
+      },
+      {
+        "id": "metric-04",
+        "label": "其他",
+        "group": 0,
+        "category": 0,
+        "type": "state"
+      },
+      {
+        "id": "metric-05",
+        "label": "异常退出",
+        "group": 0,
+        "category": 1,
+        "type": "state"
+      },
+      {
+        "id": "metric-06",
+        "label": "异常断电",
+        "group": 0,
+        "category": 1,
+        "type": "state"
+      },
+      {
+        "id": "metric-07",
+        "label": "程序报错",
+        "group": 0,
+        "category": 1,
+        "type": "state"
+      },
+      {
+        "id": "metric-08",
+        "label": "数据库异常",
+        "group": 0,
+        "category": 1,
+        "type": "state"
+      },
+      {
+        "id": "metric-09",
+        "label": "设备状态",
+        "group": 0,
+        "category": 1,
+        "type": "state"
+      },
+      {
+        "id": "metric-10",
+        "label": "联网状态",
+        "group": 0,
+        "category": 1,
+        "type": "state"
+      },
+      {
+        "id": "metric-11",
+        "label": "其他",
+        "group": 0,
+        "category": 1,
+        "type": "state"
+      },
+      {
+        "id": "metric-12",
+        "label": "自动上传",
+        "group": 1,
+        "category": 2,
+        "type": "state"
+      },
+      {
+        "id": "metric-13",
+        "label": "手动上传",
+        "group": 1,
+        "category": 2,
+        "type": "state"
+      },
+      {
+        "id": "metric-14",
+        "label": "不上传",
+        "group": 1,
+        "category": 2,
+        "type": "state"
+      },
+      {
+        "id": "metric-15",
+        "label": "外部应用市场",
+        "group": 2,
+        "category": 3,
+        "type": "state"
+      },
+      {
+        "id": "metric-16",
+        "label": "内部应用市场",
+        "group": 2,
+        "category": 3,
+        "type": "text"
+      },
+      {
+        "id": "metric-17",
+        "label": "固件",
+        "group": 3,
+        "category": 4,
+        "type": "state"
+      },
+      {
+        "id": "metric-18",
+        "label": "应用程序",
+        "group": 3,
+        "category": 4,
+        "type": "state"
+      }
+    ],
+    "/groups/0/name": "日志内容维度",
+    "/groups/0/count": 11,
+    "/groups/1/name": "配置信息维度",
+    "/groups/1/count": 3,
+    "/groups/2/name": "应用市场维度",
+    "/groups/2/count": 2,
+    "/groups/3/name": "固件及应用",
+    "/groups/3/count": 2
+  }
+}

@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  
+  
+  
+  
+  <title>AI 员工工作台</title>
+  
+  
+</head>
+<body>
+  <div class="app" data-view="worksite">
+<div hidden aria-hidden="true">
+<span id="bm"></span>
+<span id="nav"></span>
+<span id="navCollab"></span>
+<span id="countArtifacts"></span>
+<span id="navRunnerDot"></span>
+<span id="navUpdate"></span>
+<span id="userChip"></span>
+<span id="userAvatar"></span>
+<span id="userName"></span>
+<span id="userRole"></span>
+<button id="logoutBtn"></button>
+<span id="todayDone"></span>
+<span id="todayFailed"></span>
+<span id="gwStatus"><i></i><span></span></span>
+<button class="nav-item" data-view="worksite"></button>
+<button class="nav-item" data-view="collab"></button>
+<button class="nav-item" data-view="artifacts"></button>
+<button class="nav-item" data-view="templates"></button>
+<button class="nav-item" data-view="runner"></button>
+<button class="nav-item" data-view="stats" id="navStats"></button>
+<button class="nav-item" data-view="settings"></button>
+</div>
+
+    <main class="main">
+
+      <header class="page-head">
+        <div><h1 id="viewTitle">任务执行</h1><p id="viewSub">说清要做什么，选一条流程，剩下的交给你的 AI 员工</p></div>
+        <div class="page-tools" id="pageTools"></div>
+      </header>
+
+      <section class="view" id="viewWorksite">
+
+        <!-- 任务页两个页签：临时任务（说一句就派活）/ 流程编排（多步流程） -->
+        <div class="ws-tabs" id="wsTabs" role="tablist" aria-label="任务页签">
+          <button type="button" class="ws-tab" data-tab="adhoc" role="tab" aria-selected="true">
+            <b>临时任务</b><em>说一句话，直接派给某个员工</em>
+          </button>
+          <button type="button" class="ws-tab" data-tab="flows" role="tab" aria-selected="false">
+            <b>流程编排</b><em>多步流程，上一步的产出自动交给下一步</em>
+          </button>
+        </div>
+
+        <!-- 临时任务：一句话派活 + 最近任务，点一行直接看执行详情 -->
+        <div class="page-scroll ws-pane" id="wsPaneAdhoc">
+          <form class="adhoc-card" id="adhocForm">
+            <textarea id="adhocPrompt" rows="3" maxlength="4000"
+                      placeholder="说清这次要做什么，例如：把这份招标文件的评分点整理成表格"
+                      aria-label="这次要做什么"></textarea>
+            <div class="adhoc-foot">
+              <label class="adhoc-field">
+                <span>交给</span>
+                <select id="adhocAgent" aria-label="选择 AI 员工"></select>
+              </label>
+              <label class="adhoc-check" title="勾上：AI 可以在工作目录里改文件；不勾：只读不改">
+                <input type="checkbox" id="adhocWrite" checked>
+                <span>允许写文件</span>
+              </label>
+              <label class="adhoc-field" id="adhocProjectWrap" title="跑完的产出文件会自动归档进这个协作项目" hidden>
+                <span>归档到</span>
+                <select id="adhocProject"><option value="">不归档</option></select>
+              </label>
+              <span class="adhoc-tip">Enter 派活 · Shift + Enter 换行</span>
+              <button type="submit" class="primary adhoc-go" id="adhocGo">派活</button>
+            </div>
+            <div class="adhoc-skills" id="adhocSkills" hidden></div>
+            <p class="adhoc-note" id="adhocNote" hidden></p>
+          </form>
+
+          <div class="adhoc-recent">
+            <div class="lib-bar">
+              <div class="lib-tabs" id="adhocTabs"></div>
+              <span class="lib-count" id="adhocCount"></span>
+            </div>
+            <div class="adhoc-list" id="adhocList"></div>
+          </div>
+        </div>
+
+        <!-- 启动台固定在顶部：说一句 → 选流程 → 开始，始终看得见，不跟内容一起滚走 -->
+        <form class="flow-launch" id="flowLaunch" hidden>
+          <div class="flow-launch-main">
+            <textarea id="flowLaunchInput" rows="2" maxlength="4000"
+                      placeholder="说清这次要做什么，例如：把这份招标文件的评分点整理成表格"
+                      aria-label="这次要做什么"></textarea>
+          </div>
+          <div class="flow-launch-vars" id="flowLaunchVars"></div>
+          <div class="flow-launch-foot">
+            <div class="flow-pick" id="flowPick">
+              <select id="flowLaunchSelect" class="sr-only" aria-label="选择编排流程" tabindex="-1"></select>
+              <button type="button" class="flow-pick-trigger" id="flowPickTrigger"
+                      aria-haspopup="listbox" aria-expanded="false" aria-controls="flowPickMenu">
+                <span class="flow-pick-label">流程</span>
+                <b id="flowPickName">还没有流程</b>
+                <em id="flowPickMeta"></em>
+                <span class="flow-pick-caret" aria-hidden="true"></span>
+              </button>
+              <div class="flow-pick-menu" id="flowPickMenu" role="listbox" aria-label="选择编排流程" hidden></div>
+            </div>
+            <span class="flow-launch-tip">Enter 开始 · Shift + Enter 换行</span>
+            <label class="flow-launch-project" title="跑完的产出文件会自动归档进这个协作项目">
+              <span>归档到</span>
+              <select id="flowLaunchProject"><option value="">不归档</option></select>
+            </label>
+            <button type="submit" class="primary flow-launch-go" id="flowLaunchGo">开始执行</button>
+          </div>
+          <p class="flow-launch-note" id="flowLaunchNote" hidden></p>
+        </form>
+
+        <!-- 流程编排并入同一页：页签切换，不再单独占一个导航位 -->
+        <div class="page-scroll flow-scroll ws-pane" id="wsPaneFlows" hidden>
+          <!-- 流程卡片：横向一排，超出左右滑动 -->
+          <div class="lib-bar flow-lib-bar">
+            <div class="lib-tabs" id="flowTabs"></div>
+            <button type="button" class="primary" id="flowNew">新建流程</button>
+          </div>
+          <div class="flow-rail" id="flowList"></div>
+
+          <!-- 执行区：左边小框列执行记录，右边大窗看详情
+               详情默认展开（进来就能看到步骤）；想多看几条记录时点标题条收起 -->
+          <div class="run-workbench">
+            <aside class="run-log" aria-label="执行记录">
+              <div class="run-log-head">
+                <h2>执行记录</h2>
+                <span id="flowRunCount"></span>
+              </div>
+              <div class="run-filters" id="flowRunFilters"></div>
+              <div class="run-log-list" id="flowRunTabs" hidden></div>
+              <p class="run-log-empty" id="flowRunEmpty" hidden>还没有跑过任务</p>
+            </aside>
+
+            <section class="run-panel" id="flowRunPanel" aria-label="执行详情">
+              <!-- 标题条：一条运行的状态纪要，同时是展开/收起的开关 -->
+              <button type="button" class="run-board-head" id="runBoardToggle"
+                      aria-expanded="true" aria-controls="runPanelInner" hidden>
+                <span class="run-dot" id="runBoardDot"></span>
+                <b id="runBoardName">—</b>
+                <span class="run-board-meta" id="runBoardMeta"></span>
+                <span class="run-board-caret" aria-hidden="true"></span>
+              </button>
+              <!-- 折叠状态把这个区域填住，否则右边看着像坏了一块 -->
+              <div class="run-collapsed-hint" id="runCollapsedHint" hidden>
+                <span class="run-collapsed-mark" aria-hidden="true">▴</span>
+                <b>执行详情已收起</b>
+                <span>点上方标题条展开 · 收起只是不看，任务照常往下跑</span>
+              </div>
+              <!-- 详情区直接长在页面里：原来弹窗里那套 DOM 原样搬过来，id 不变，
+                   渲染逻辑不用重写，也不再有「弹窗打开才看得到」的割裂感 -->
+              <div class="run-detail" id="runPanelInner" hidden>
+                <p class="muted" id="runSub"></p>
+                <p class="run-dirline" id="runDirLine" hidden>
+                  <span>运行目录</span>
+                  <code id="runDirPath" class="mono"></code>
+                  <button type="button" class="text-btn" id="runDirCopy">复制路径</button>
+                </p>
+                <p class="run-dirline" id="runWsLine" hidden>
+                  <span>工作副本</span>
+                  <code id="runWsPath" class="mono"></code>
+                  <button type="button" class="text-btn" id="runWsCopy">复制路径</button>
+                </p>
+                <p class="run-changes" id="runChanges" hidden></p>
+                <div id="runSteps" class="run-steps"></div>
+                <p class="agent-note" id="runNote"></p>
+                <div class="agent-form-foot">
+                  <button type="button" class="ghost" id="runApplyBtn" hidden>应用到原目录</button>
+                  <button type="button" class="ghost" id="runDropBtn" hidden>清理副本</button>
+                  <button type="button" class="danger" id="runCancelBtn">取消运行</button>
+                  <button type="button" class="ghost" id="runRetryBtn">从失败步重试</button>
+                  <button type="button" class="ghost" id="runIgnoreBtn" hidden>忽略失败，继续</button>
+                  <button type="button" class="ghost" id="runRejectBtn" hidden>打回重做</button>
+                  <button type="button" class="primary" id="runContinueBtn">确认并继续</button>
+                </div>
+              </div>
+              <div class="empty-state run-panel-empty" id="runPanelEmpty">
+                <b>还没有选中的运行</b><span>在左边点一条执行记录，详情就在这里展开</span>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="viewStats">
+        <div class="page-scroll">
+          <p class="stats-note" id="statsNote">按人员汇总 AI 执行数据：任务数、成败、耗时与用量。仅管理人员可见。</p>
+          <div class="stats-table" id="statsTable"></div>
+        </div>
+      </section>
+      <section class="view" id="viewFlowEdit">
+        <form class="flow-page" id="flowForm">
+          <header class="flow-page-head">
+            <button type="button" class="flow-back" id="flowCancel" title="返回流程列表">←</button>
+            <div class="flow-page-title">
+              <p class="eyebrow">FLOW</p>
+              <h1 id="flowDialogTitle">新建流程</h1>
+              <p class="muted" id="flowDialogSub">把要做的事拆成几步，每步交给一个 AI 员工；上一步的产出会自动带给下一步。</p>
+            </div>
+            <div class="flow-page-acts">
+              <button type="button" class="danger" id="flowDelete" hidden>删除流程</button>
+              <button type="button" class="ghost" id="flowSave">保存流程</button>
+            </div>
+          </header>
+
+          <div class="flow-page-body">
+            <div class="flow-main">
+              <div class="flow-meta">
+                <label class="field"><span>流程名称</span><input id="flowName" maxlength="30" autocomplete="off" placeholder="如 需求到代码"></label>
+                <label class="field"><span>流程说明</span><input id="flowDescription" maxlength="200" autocomplete="off" placeholder="一句话说明这条流程交付什么"></label>
+              </div>
+              <div class="flow-stage">
+                <div class="flow-stage-head">
+                  <span>执行步骤 <em class="flow-tip">点节点在右边改配置；按住节点拖摆放位置，顺序按连线从左到右走</em></span>
+                  <div class="flow-palette" id="flowPalette"></div>
+                </div>
+                <div class="flow-editor">
+                  <div class="flow-canvas-wrap" id="flowCanvasWrap">
+                    <svg class="flow-edges" id="flowEdges" aria-hidden="true"></svg>
+                    <div class="flow-canvas" id="flowCanvas"></div>
+                  </div>
+                </div>
+                <button type="button" class="ghost flow-add-step" id="flowAddStep">+ 添加一步</button>
+              </div>
+
+              <details class="agent-adv" id="flowVarBox">
+                <summary><b>每次运行需要我填的内容</b><em>可选；填了之后，运行时会出现对应的输入框</em></summary>
+                <div class="flow-vars" id="flowVars"></div>
+                <button type="button" class="ghost flow-add-var" id="flowAddVar">+ 再加一项要填的内容</button>
+              </details>
+              <p class="agent-note" id="flowNote"></p>
+            </div>
+
+            <aside class="flow-inspector flow-side" id="flowInspector"></aside>
+          </div>
+        </form>
+      </section>
+      <section class="view" id="viewArtifacts">
+        <div class="page-scroll">
+          <div class="fact-hero" id="artifactHero"></div>
+          <div class="lib-bar">
+            <div class="lib-tabs" id="artifactTabs"></div>
+            <span class="lib-count" id="artifactCount"></span>
+          </div>
+          <div id="artifactList" class="lib-groups"></div>
+        </div>
+      </section>
+      <section class="view" id="viewTemplates">
+        <div class="page-scroll">
+          <!-- 工作方法库：云端拉取 + 本机管理 + 卡片式编辑 -->
+          <section class="lib-panel" id="skillPanel">
+            <header class="lib-head">
+              <div>
+                <p class="panel-kicker">SKILL HUB</p>
+                <h2>工作方法库</h2>
+                <p id="skillPanelSub">从 AI 能力平台下载工作方法到本机，派活或编排流程时挂上，AI 按它的步骤干活</p>
+              </div>
+              <div class="lib-head-actions">
+                <span class="lib-hub-state" id="skillHubState"></span>
+                <button type="button" class="btn" id="skillRefresh">刷新云端</button>
+                <button type="button" class="btn ghost" id="skillHubConfig">平台连接</button>
+              </div>
+            </header>
+
+            <div class="lib-tabs" role="tablist">
+              <button type="button" class="lib-tab active" data-skill-tab="local" role="tab">本机工作方法<b id="skillLocalCount">0</b></button>
+              <button type="button" class="lib-tab" data-skill-tab="hub" role="tab">云端工作方法<b id="skillHubCount">0</b></button>
+            </div>
+
+            <div class="lib-toolbar" id="skillToolbar">
+              <input id="skillQuery" type="search" placeholder="搜索名称、说明或标签…" autocomplete="off">
+              <select id="skillSort">
+                <option value="new">最新上架</option>
+                <option value="hot">最热</option>
+              </select>
+              <button type="button" class="btn" id="skillPullAll" hidden>全部更新</button>
+            </div>
+
+            <div class="skill-card-grid" id="skillList"><div class="empty-state">还没连平台</div></div>
+          </section>
+        </div>
+      </section>
+      <section class="view" id="viewCollab"><div id="collabPage" class="collab-page"></div></section>
+      <section class="view" id="viewRunner"><div id="runnerPage" class="runner-page"></div></section>
+      <section class="view" id="viewSettings"><div id="settings" class="settings"></div></section>
+    </main>
+  </div>
+
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <header class="drawer-head">
+      <div class="drawer-head-main">
+        <h2 id="drawerTitle">任务</h2>
+        <p class="drawer-sub" id="drawerDomain"></p>
+      </div>
+      <button class="icon-btn" id="closeDrawer" aria-label="关闭详情">✕</button>
+    </header>
+    <div class="drawer-meta" id="drawerMeta"></div>
+    <div class="drawer-actions" id="drawerActions"></div>
+    <div class="drawer-body" id="drawerBody"></div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+
+  <dialog id="tokenDialog"><form method="dialog" id="tokenForm"><p class="eyebrow">LOCAL GATEWAY</p><h2>连接本地网关</h2><p class="muted">Token 只保存在当前浏览器会话。</p><label class="field"><span>Token</span><input id="tokenInput" type="password" autocomplete="off" required></label><button class="primary" value="connect">连接</button></form></dialog>
+
+
+  <dialog id="artifactPreview">
+    <div class="apreview">
+      <header class="apreview-head">
+        <div class="apreview-title">
+          <span class="lib-ico" id="apreviewIcon">?</span>
+          <div>
+            <b id="apreviewName">文件</b>
+            <small id="apreviewMeta"></small>
+          </div>
+        </div>
+        <div class="apreview-acts">
+          <button type="button" class="lib-act" id="apreviewDownload">下载</button>
+          <button type="button" class="lib-act" id="apreviewCopy">复制路径</button>
+          <button type="button" class="lib-act" id="apreviewClose">关闭 ✕</button>
+        </div>
+      </header>
+      <div class="apreview-body" id="apreviewBody"></div>
+    </div>
+  </dialog>
+
+  <dialog id="hubDialog">
+    <form id="hubForm">
+      <p class="eyebrow">SKILL HUB</p>
+      <h2>连接 AI 能力平台</h2>
+      <p class="muted">账号只存在本机网关的密钥文件里，不会写进页面或日志</p>
+      <label class="field"><span>平台地址</span><input id="hubBaseUrl" placeholder="http://8.138.91.205/hub/" autocomplete="off"></label>
+      <label class="field"><span>账号</span><input id="hubUser" autocomplete="username"></label>
+      <label class="field"><span>密码</span><input id="hubPass" type="password" autocomplete="current-password" placeholder="留空则不改"></label>
+      <p class="hub-test" id="hubTestResult"></p>
+      <div class="foot-row">
+        <button type="button" class="ghost" id="hubCancel">取消</button>
+        <button type="button" class="ghost" id="hubTest">测试连接</button>
+        <button type="button" class="primary" id="hubSave">保存</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="skillDialog">
+    <div class="skilldlg">
+      <header class="skilldlg-head">
+        <div><p class="eyebrow" id="skillDlgMeta">SKILL</p><h2 id="skillDlgTitle">技能</h2></div>
+        <button type="button" class="icon-btn" id="skillDlgClose">✕</button>
+      </header>
+
+      <div class="skilldlg-body" id="skillDlgBody"></div>
+
+      <form class="skilldlg-edit" id="skillEditForm" hidden>
+        <label class="field"><span>标题</span><input type="text" id="skillEditTitle" maxlength="60" placeholder="给人看的工作方法名"></label>
+        <div class="field-row">
+          <label class="field"><span>版本</span><input type="text" id="skillEditVersion" maxlength="20" placeholder="1.0.0"></label>
+          <label class="field"><span>分类</span><input type="text" id="skillEditCategory" maxlength="30" placeholder="调研 / 企划 / 设计"></label>
+        </div>
+        <label class="field"><span>一句话说明</span><textarea id="skillEditSummary" rows="3" maxlength="400" placeholder="说明什么时候该用它"></textarea></label>
+        <label class="field"><span>标签<em>逗号分隔，最多 10 个</em></span><input type="text" id="skillEditTags" placeholder="招标, 竞品, 参数"></label>
+        <label class="field grow"><span>正文<em>Markdown，保存后立即生效</em></span><textarea id="skillEditBody" spellcheck="false" placeholder="## 什么时候用&#10;…"></textarea></label>
+        <p class="skill-edit-note" id="skillEditNote"></p>
+      </form>
+
+      <footer class="skilldlg-foot">
+        <span class="skilldlg-hint" id="skillDlgHint"></span>
+        <button type="button" class="ghost" id="skillDlgEdit">编辑</button>
+        <button type="button" class="ghost" id="skillDlgCancelEdit" hidden>取消编辑</button>
+        <button type="button" class="primary" id="skillDlgSave" hidden>保存</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  
+</body>
+</html>

@@ -1,0 +1,146 @@
+{
+  "schemaVersion": "c2c-frontend-contract-v1",
+  "dimensionId": "DIM-08",
+  "name": "成本优势",
+  "snapshotFormat": "fixed-seed",
+  "sections": [
+    "我司成本及BOM明细",
+    "竞品材料成本对比",
+    "成本优势/劣势结论"
+  ],
+  "sources": [
+    {
+      "path": "modules/bg/server.py",
+      "sha256": "1a5ce5b32b34279dffaa7c092e1caf384b71c8cf3ee75540ed513487fe55ea60"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-multi-platform.js",
+      "sha256": "7905af768e85ea54995031d5ed848e1b24ff9c008203a00ec90fdd5a50b6e272"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim08-seed.json",
+      "sha256": "aad31c86f285cb4ebc3b1e92a7728755621e277d436363494a68405a8b93765f"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-bid-core.js",
+      "sha256": "9e3eb97de1096d104ad32847efe93698b7a97f41dafc53b460e41ae0eebfbe0b"
+    }
+  ],
+  "nullableContainers": [],
+  "containers": [
+    {
+      "path": "",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/bom",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/bom/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/competitors",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/competitors/*",
+      "type": "object",
+      "optional": false
+    }
+  ],
+  "fields": [
+    {
+      "path": "/bom/*/count",
+      "label": "数量",
+      "types": [
+        "number"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/bom/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/bom/*/unit",
+      "label": "单价",
+      "types": [
+        "number"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/competitors/*/model",
+      "label": "型号",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/competitors/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/competitors/*/price",
+      "label": "售价",
+      "types": [
+        "number"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/competitors/*/source",
+      "label": "来源",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/competitors/*/url",
+      "label": "来源链接",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/ownCost",
+      "label": "我司材料成本",
+      "types": [
+        "number"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/product",
+      "label": "产品名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    }
+  ],
+  "rules": [
+    "product/ownCost/competitors[].name/model/price/source/url/bom[].name/count/unit全部覆盖。ownCost/price/count/unit为数字，未知在研究快照中用null并登记pending，禁止用0、示例760或竞品价格冒充我方BOM。",
+    "当前UI固定人民币展示，竞品估算材料成本=售价×25%。这是现有展示假设，不是研究已验证的成本率；币种、税费、配置、日期、数量和估算依据写进证据/字段说明。非人民币须真实汇率及日期；无法统一口径时阻断平台可用结论。",
+    "派生展示含每项BOM小计、数量合计、BOM合计、竞品估算成本、差额/比例、优势/劣势/持平及汇总结论。未知输入时派生结论保持未知，不让Number(null)生成假零。",
+    "来源URL必须真实核验，不能为满足http约束编造报价链接。"
+  ],
+  "requiredValues": {}
+}

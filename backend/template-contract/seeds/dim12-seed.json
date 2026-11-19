@@ -1,0 +1,195 @@
+{
+  "product": "经济款音频处理器",
+  "groups": [
+    {
+      "name": "日志内容维度",
+      "description": "当设备不联网状态下，一旦联网，自动上传设备内日志，建议每分钟上传1天日志，各产品自定规则，原则上本地保存30天日志",
+      "count": 11
+    },
+    {
+      "name": "配置信息维度",
+      "description": "配置不包含资源信息，如音频等",
+      "count": 3
+    },
+    {
+      "name": "应用市场维度",
+      "description": "远程下载、更新应用",
+      "count": 2
+    },
+    {
+      "name": "固件及应用",
+      "description": "终端直连、专用客户端、专用WEB",
+      "count": 2
+    }
+  ],
+  "categories": [
+    {
+      "name": "用户常规操作日志",
+      "count": 4
+    },
+    {
+      "name": "异常日志",
+      "count": 7
+    },
+    {
+      "name": "上传/下载配置次数",
+      "count": 3
+    },
+    {
+      "name": "下载数据",
+      "count": 2
+    },
+    {
+      "name": "软件更新",
+      "count": 2
+    }
+  ],
+  "fields": [
+    {
+      "id": "metric-01",
+      "label": "功能操作/点击",
+      "group": 0,
+      "category": 0,
+      "type": "state"
+    },
+    {
+      "id": "metric-02",
+      "label": "任务执行",
+      "group": 0,
+      "category": 0,
+      "type": "state"
+    },
+    {
+      "id": "metric-03",
+      "label": "设备使用时长",
+      "group": 0,
+      "category": 0,
+      "type": "state"
+    },
+    {
+      "id": "metric-04",
+      "label": "其他",
+      "group": 0,
+      "category": 0,
+      "type": "state"
+    },
+    {
+      "id": "metric-05",
+      "label": "异常退出",
+      "group": 0,
+      "category": 1,
+      "type": "state"
+    },
+    {
+      "id": "metric-06",
+      "label": "异常断电",
+      "group": 0,
+      "category": 1,
+      "type": "state"
+    },
+    {
+      "id": "metric-07",
+      "label": "程序报错",
+      "group": 0,
+      "category": 1,
+      "type": "state"
+    },
+    {
+      "id": "metric-08",
+      "label": "数据库异常",
+      "group": 0,
+      "category": 1,
+      "type": "state"
+    },
+    {
+      "id": "metric-09",
+      "label": "设备状态",
+      "group": 0,
+      "category": 1,
+      "type": "state"
+    },
+    {
+      "id": "metric-10",
+      "label": "联网状态",
+      "group": 0,
+      "category": 1,
+      "type": "state"
+    },
+    {
+      "id": "metric-11",
+      "label": "其他",
+      "group": 0,
+      "category": 1,
+      "type": "state"
+    },
+    {
+      "id": "metric-12",
+      "label": "自动上传",
+      "group": 1,
+      "category": 2,
+      "type": "state"
+    },
+    {
+      "id": "metric-13",
+      "label": "手动上传",
+      "group": 1,
+      "category": 2,
+      "type": "state"
+    },
+    {
+      "id": "metric-14",
+      "label": "不上传",
+      "group": 1,
+      "category": 2,
+      "type": "state"
+    },
+    {
+      "id": "metric-15",
+      "label": "外部应用市场",
+      "group": 2,
+      "category": 3,
+      "type": "state"
+    },
+    {
+      "id": "metric-16",
+      "label": "内部应用市场",
+      "group": 2,
+      "category": 3,
+      "type": "text"
+    },
+    {
+      "id": "metric-17",
+      "label": "固件",
+      "group": 3,
+      "category": 4,
+      "type": "state"
+    },
+    {
+      "id": "metric-18",
+      "label": "应用程序",
+      "group": 3,
+      "category": 4,
+      "type": "state"
+    }
+  ],
+  "values": [
+    "yes",
+    "no",
+    "yes",
+    "pending",
+    "yes",
+    "yes",
+    "no",
+    "no",
+    "no",
+    "yes",
+    "pending",
+    "no",
+    "yes",
+    "no",
+    "pending",
+    "应用市场",
+    "yes",
+    "pending"
+  ]
+}

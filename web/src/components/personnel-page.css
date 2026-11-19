@@ -1,0 +1,6 @@
+.personnel-page { min-height: calc(100svh - 7rem); }
+.personnel-field { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 12px; align-items: start; }
+.personnel-field > label, .personnel-field > span { padding-top: 7px; font-size: 14px; text-align: right; }
+.personnel-active { background: color-mix(in srgb, #0f9d78 10%, var(--card)); border-color: color-mix(in srgb, #0f9d78 30%, var(--border)); color: #08775c; }
+.dark .personnel-active { color: #67e8bf; }
+@media (max-width: 480px) { .personnel-field { grid-template-columns: minmax(0, 1fr); gap: 6px; } .personnel-field > label, .personnel-field > span { padding-top: 0; text-align: left; } }

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>底层能力中心 · 表格组件</title>
+  <link rel="stylesheet" href="/platform/fonts/noto-sans-sc/noto-sans-sc.css">
+  <link rel="stylesheet" href="/capabilities/style.css">
+  <script defer src="/capabilities/app.js"></script>
+</head>
+<body>
+  <aside class="rail is-collapsed" aria-label="底层能力中心菜单">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">▦</span><div class="brand-copy"><h2>底层能力中心</h2><p>通用组件与基础能力</p></div></div>
+    <nav>
+      <a href="#table-component" data-view="table" aria-current="page" aria-label="表格组件" title="表格组件"><span aria-hidden="true">▦</span><span class="nav-text">表格组件</span></a>
+      <a href="#interaction" data-view="interaction" aria-label="交互组件" title="交互组件"><span aria-hidden="true">✧</span><span class="nav-text">交互组件</span></a>
+      <a href="#type" data-view="type" aria-label="文字" title="文字"><span aria-hidden="true">文</span><span class="nav-text">文字</span></a>
+    </nav>
+    <button type="button" class="rail-toggle" aria-label="展开侧栏" aria-expanded="false" title="展开侧栏">»</button>
+  </aside>
+  <main id="table-component">
+    <header class="breadcrumb"><div class="trail"><span>底层能力中心</span><span aria-hidden="true">›</span><h1>表格组件</h1><small>临时演示 · 可导出保留结果</small></div><button type="button" class="focus-toggle" aria-pressed="false">专注表格</button></header>
+    <div class="demo"><iframe src="/capabilities/table-kernel/" title="表格组件交互演示" allow="clipboard-read; clipboard-write"></iframe></div>
+  </main>
+  <main id="interaction" hidden>
+    <header class="breadcrumb"><div class="trail"><span>底层能力中心</span><span aria-hidden="true">›</span><h1>交互组件</h1><small>按来源分类 · 默认演示</small></div></header>
+    <div class="demo"><iframe title="交互组件分类" data-src="/capabilities/interaction/"></iframe></div>
+  </main>
+  <main id="type" hidden>
+    <header class="breadcrumb"><div class="trail"><span>底层能力中心</span><span aria-hidden="true">›</span><h1>文字</h1><small>平台当前支持的字体</small></div></header>
+    <div class="type-page">
+      <p class="type-lead">正文优先使用离线安装的 Noto Sans SC。后面的字体只在缺字时接上。</p>
+      <article class="type-card">
+        <header><b>Noto Sans SC</b><span class="type-tag is-on">离线内置 · 当前正文</span></header>
+        <p class="type-meta">SIL Open Font License 1.1 · 字重 400 / 500 / 700 · 简体中文与拉丁字母</p>
+        <p class="type-sample" style="font-family:'Noto Sans SC',sans-serif">产品企划中心　底层能力　0123456789　The quick brown fox</p>
+      </article>
+      <article class="type-card">
+        <header><b>MiSans</b><span class="type-tag">离线内置 · 后备</span></header>
+        <p class="type-meta">小米 MiSans 可变字体子集 · 平台已随包安装</p>
+        <p class="type-sample" style="font-family:'MiSans',sans-serif">产品企划中心　底层能力　0123456789　The quick brown fox</p>
+      </article>
+      <article class="type-card">
+        <header><b>PingFang SC</b><span class="type-tag">系统字体 · 后备</span></header>
+        <p class="type-meta">苹方。只使用本机已安装的字体，不把字体文件放进平台。</p>
+        <p class="type-sample" style="font-family:'PingFang SC',sans-serif">产品企划中心　底层能力　0123456789　The quick brown fox</p>
+      </article>
+      <article class="type-card">
+        <header><b>Microsoft YaHei</b><span class="type-tag">系统字体 · 后备</span></header>
+        <p class="type-meta">微软雅黑。Windows 上没有前三种字体时使用。</p>
+        <p class="type-sample" style="font-family:'Microsoft YaHei',sans-serif">产品企划中心　底层能力　0123456789　The quick brown fox</p>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

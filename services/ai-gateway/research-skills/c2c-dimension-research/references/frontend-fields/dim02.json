@@ -1,0 +1,321 @@
+{
+  "schemaVersion": "c2c-frontend-contract-v1",
+  "dimensionId": "DIM-02",
+  "name": "行业应用场景",
+  "snapshotFormat": "largeName/systems/scenes",
+  "sections": [
+    "大场景应用分析（全景图、系统及设备）",
+    "细分业务场景应用分析（拓扑、特点、需求、痛点、目标）"
+  ],
+  "sources": [
+    {
+      "path": "modules/bg/server.py",
+      "sha256": "1a5ce5b32b34279dffaa7c092e1caf384b71c8cf3ee75540ed513487fe55ea60"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-multi-platform.js",
+      "sha256": "7905af768e85ea54995031d5ed848e1b24ff9c008203a00ec90fdd5a50b6e272"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim02-core.html",
+      "sha256": "3b1c8a11b26d7dfb1edc217c123d7ce24bdeb8f098b3a261d18b7564633544f2"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim02-workmode.js",
+      "sha256": "541c7dffd10e156e009734b24476a70e680e43f7b7de9b8758002d6d314adef5"
+    },
+    {
+      "path": "modules/bg/template-samples/dim02.json",
+      "sha256": "8e2146911a23e808add861494f631eb80c72898700acb612fc846fdb7772d02d"
+    }
+  ],
+  "nullableContainers": [],
+  "containers": [
+    {
+      "path": "",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/enabled",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/scenes",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/scenes/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/scenes/*/features",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/scenes/*/features/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/scenes/*/goals",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/scenes/*/goals/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/scenes/*/needs",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/scenes/*/needs/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/scenes/*/pains",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/scenes/*/pains/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/systems",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/systems/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/systems/*/devices",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/systems/*/devices/*",
+      "type": "object",
+      "optional": false
+    }
+  ],
+  "fields": [
+    {
+      "path": "/enabled/large",
+      "label": "large",
+      "types": [
+        "boolean"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/enabled/scenes",
+      "label": "scenes",
+      "types": [
+        "boolean"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/largeImage",
+      "label": "大场景全景图",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/largeName",
+      "label": "大场景名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/scenes/*/features/*/description",
+      "label": "描述",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/scenes/*/features/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/scenes/*/features/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/scenes/*/goals/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/scenes/*/goals/*/text",
+      "label": "正文",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/scenes/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/scenes/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/scenes/*/needs/*/description",
+      "label": "描述",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/scenes/*/needs/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/scenes/*/needs/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/scenes/*/pains/*/description",
+      "label": "描述",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/scenes/*/pains/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/scenes/*/pains/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/scenes/*/topology",
+      "label": "场景拓扑图",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/systems/*/devices/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/systems/*/devices/*/image",
+      "label": "图片",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/systems/*/devices/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/systems/*/devices/*/status",
+      "label": "状态",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "planned",
+        "existing",
+        "missing"
+      ]
+    },
+    {
+      "path": "/systems/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/systems/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    }
+  ],
+  "rules": [
+    "当前格式 enabled/largeName/largeImage/systems/scenes；不输出旧macroTitle/hotspots。",
+    "设备status为planned/existing/missing；未知不能硬映射missing或existing。可以在研究快照以null保留，并记录当前平台枚举缺口。",
+    "largeImage、devices[].image、scenes[].topology要求空字符串或实际data:image/(png|jpeg|webp|gif);base64数据。资料URL不能直接充当这些字段；在证据中留URL，Codex有真实资源时转换。",
+    "enabled是展示开关，不是无资料时可以关闭研究字段的许可。全景图或拓扑未取得时仍须登记对应字段pending。"
+  ],
+  "requiredValues": {}
+}

@@ -1,0 +1,89 @@
+@import url("./v2-fonts/noto-sans-sc.css");
+/* Theme tokens synchronized from V2.0 web/src/index.css. */
+:root {
+    --gradient-primary: linear-gradient(112deg, #2c76f5, #8156f5 65%, #29c6d6);
+    --gradient-sidebar: linear-gradient(160deg, #111d49, #2c76f5, #8156f5);
+    --background: #edf2ff;
+    --foreground: #111d49;
+    --card: #ffffff;
+    --card-foreground: #111d49;
+    --popover: #ffffff;
+    --popover-foreground: #111d49;
+    --primary: #2c76f5;
+    --primary-foreground: #ffffff;
+    --secondary: #8156f5;
+    --secondary-foreground: #ffffff;
+    --muted: #e4ebff;
+    --muted-foreground: #5c6b8a;
+    --accent: #e5f8fb;
+    --accent-foreground: #0e7490;
+    --brand-accent: #29c6d6;
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: #d5def5;
+    --input: #d5def5;
+    --ring: #2c76f5;
+    --chart-1: #2c76f5;
+    --chart-2: #8156f5;
+    --chart-3: #29c6d6;
+    --chart-4: #111d49;
+    --chart-5: #7aa2ff;
+    --radius: 0.625rem;
+    --sidebar: #111d49;
+    --sidebar-foreground: #f4f7ff;
+    --sidebar-primary: #29c6d6;
+    --sidebar-primary-foreground: #111d49;
+    --sidebar-accent: oklch(1 0 0 / 16%);
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: oklch(1 0 0 / 16%);
+    --sidebar-ring: #29c6d6;
+}
+.dark {
+    --gradient-primary: none;
+    --gradient-sidebar: none;
+    --background: oklch(12.9% 0.042 264.695);
+    --foreground: oklch(98.4% 0.003 247.858);
+    --card: oklch(14% 0.04 259.21);
+    --card-foreground: oklch(98.4% 0.003 247.858);
+    --popover: oklch(20.8% 0.042 265.755);
+    --popover-foreground: oklch(98.4% 0.003 247.858);
+    --primary: oklch(92.9% 0.013 255.508);
+    --primary-foreground: oklch(20.8% 0.042 265.755);
+    --secondary: oklch(27.9% 0.041 260.031);
+    --secondary-foreground: oklch(98.4% 0.003 247.858);
+    --muted: oklch(27.9% 0.041 260.031);
+    --muted-foreground: oklch(70.4% 0.04 256.788);
+    --accent: oklch(27.9% 0.041 260.031);
+    --accent-foreground: oklch(98.4% 0.003 247.858);
+    --destructive: oklch(70.4% 0.191 22.216);
+    --border: oklch(100% 0 0 / 10%);
+    --input: oklch(100% 0 0 / 15%);
+    --ring: oklch(55.1% 0.027 264.364);
+    --chart-1: oklch(48.8% 0.243 264.376);
+    --chart-2: oklch(69.6% 0.17 162.48);
+    --chart-3: oklch(76.9% 0.188 70.08);
+    --chart-4: oklch(62.7% 0.265 303.9);
+    --chart-5: oklch(64.5% 0.246 16.439);
+    --sidebar: var(--background);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--accent);
+    --sidebar-accent-foreground: var(--accent-foreground);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring);
+}
+
+:root{--v2-font:"Noto Sans SC","MiSans","PingFang SC","Microsoft YaHei",sans-serif;--success:#17805f;--success-soft:#e2f5ec;--warning:#98651b;--warning-soft:#fff3d8;--danger:#b84f4a;--danger-soft:#fde9e8}
+.dark{--success:#6ee7b7;--success-soft:#123b32;--warning:#fcd34d;--warning-soft:#42331a;--danger:#fda4af;--danger-soft:#472530}
+html{font-family:var(--v2-font)!important;color:var(--foreground);background:var(--background);color-scheme:light}
+html.dark{color-scheme:dark}
+body{font-family:var(--v2-font)!important;font-size:14px;color:var(--foreground);background:var(--background)}
+button,input,textarea,select{font-family:var(--v2-font)!important}
+h1{font-size:24px!important;font-weight:700!important}h2{font-size:20px!important;font-weight:600!important}h3{font-size:16px!important;font-weight:500!important}
+button,input,textarea,select{border-radius:var(--radius)!important}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--ring)!important;outline-offset:2px}
+.intro,.hero{background:var(--primary)!important;color:var(--primary-foreground)!important}
+.intro :is(h1,p,small),.hero :is(h1,p,small){color:inherit!important}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+/* Retain the large-page table's readable column widths on narrow screens. */
+@media(max-width:600px){.table-outer{overflow-x:auto!important}.tech-table{min-width:960px}}

@@ -1,0 +1,155 @@
+{
+  "format": "qihbg-planning-template",
+  "formatVersion": 1,
+  "dataProtocol": "bg-showcase-v1",
+  "version": "1.0.0-v2",
+  "label": "现行页面标准模板 · V2.0",
+  "note": "以当前12维页面为起点，兼容现行数据与保存协议。",
+  "dimensions": {
+    "DIM-01": {
+      "name": "产品线齐全",
+      "entry": "assets/dim01-v7.html",
+      "sample": "samples/dim01.json",
+      "sections": [
+        [
+          "section01",
+          "行业生态布局全景"
+        ],
+        [
+          "section02",
+          "同类产品规划"
+        ]
+      ]
+    },
+    "DIM-02": {
+      "name": "行业应用场景",
+      "entry": "assets/dim02-core.html",
+      "sample": "samples/dim02.json",
+      "sections": [
+        [
+          "macro-scene",
+          "大场景应用分析"
+        ],
+        [
+          "business-scene",
+          "细分业务场景应用分析"
+        ]
+      ]
+    },
+    "DIM-03": {
+      "name": "证书资质全",
+      "entry": "assets/dim03-core.html",
+      "sample": "samples/dim03.json",
+      "sections": [
+        [
+          "table",
+          "资质信息总表"
+        ]
+      ]
+    },
+    "DIM-04": {
+      "name": "技术先进",
+      "entry": "assets/dim04-core.html",
+      "sample": "samples/dim04.json",
+      "sections": [
+        [
+          "moduleOne",
+          "技术先进"
+        ],
+        [
+          "moduleTwo",
+          "先进性分析"
+        ]
+      ]
+    },
+    "DIM-05": {
+      "name": "功能强",
+      "entry": "assets/dim-multi-core.html",
+      "sample": "samples/dim05.json",
+      "sections": [
+        [
+          "page01",
+          "产品功能架构"
+        ],
+        [
+          "page02",
+          "完整功能清单"
+        ],
+        [
+          "page03",
+          "核心功能与亮点"
+        ],
+        [
+          "page04",
+          "竞品功能对标"
+        ]
+      ]
+    },
+    "DIM-06": {
+      "name": "性能稳",
+      "entry": "assets/dim06-core.html",
+      "sample": "samples/dim06.json",
+      "sections": [
+        [
+          "table",
+          "性能指标总表"
+        ]
+      ]
+    },
+    "DIM-07": {
+      "name": "AI 智慧力",
+      "entry": "assets/dim-multi-core.html",
+      "sample": "samples/dim07.json",
+      "sections": []
+    },
+    "DIM-08": {
+      "name": "成本优势",
+      "entry": "assets/dim-bid-core.html",
+      "sample": "samples/dim08.json",
+      "sections": []
+    },
+    "DIM-09": {
+      "name": "控标能力强",
+      "entry": "assets/dim-bid-core.html",
+      "sample": "samples/dim09.json",
+      "sections": [
+        [
+          "raw",
+          "原始招标参数"
+        ],
+        [
+          "points",
+          "控标点"
+        ]
+      ]
+    },
+    "DIM-10": {
+      "name": "应标能力强",
+      "entry": "assets/dim-bid-core.html",
+      "sample": "samples/dim10.json",
+      "sections": [
+        [
+          "integrated",
+          "参数整合"
+        ],
+        [
+          "original",
+          "原始参数"
+        ]
+      ]
+    },
+    "DIM-11": {
+      "name": "外观高档大气",
+      "entry": "assets/dim-final-core.html",
+      "sample": "samples/dim11.json",
+      "sections": []
+    },
+    "DIM-12": {
+      "name": "体验感好",
+      "entry": "assets/dim-final-core.html",
+      "sample": "samples/dim12.json",
+      "sections": []
+    }
+  },
+  "v2Appearance": 1
+}

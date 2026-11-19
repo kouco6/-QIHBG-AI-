@@ -1,0 +1,168 @@
+openapi: 3.1.0
+info:
+  title: WorkBuddy Codex Gateway
+  version: 1.0.0
+  description: Dispatch, inspect, continue, and cancel local Codex tasks.
+servers:
+  - url: http://127.0.0.1:4317
+security:
+  - bearerAuth: []
+paths:
+  /v1/tasks:
+    post:
+      operationId: dispatchCodexTask
+      summary: Send a task to Codex
+      parameters:
+        - name: X-Idempotency-Key
+          in: header
+          required: false
+          description: Stable WorkBuddy message ID used to prevent duplicate execution.
+          schema: { type: string, maxLength: 200 }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateTask' }
+      responses:
+        '202':
+          description: Task accepted
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Task' }
+    get:
+      operationId: listCodexTasks
+      summary: List recent Codex tasks
+      responses:
+        '200':
+          description: Recent tasks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Task' }
+  /v1/tasks/{taskId}:
+    get:
+      operationId: getCodexTask
+      summary: Read task status and final result
+      parameters:
+        - $ref: '#/components/parameters/TaskId'
+      responses:
+        '200':
+          description: Task details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Task' }
+        '404': { description: Task not found }
+  /v1/tasks/{taskId}/cancel:
+    post:
+      operationId: cancelCodexTask
+      summary: Cancel a queued or running task
+      parameters:
+        - $ref: '#/components/parameters/TaskId'
+      responses:
+        '202':
+          description: Cancellation accepted
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Task' }
+        '404': { description: Task not found }
+  /v1/tasks/{taskId}/approvals/{approvalId}:
+    post:
+      operationId: resolveCodexApproval
+      summary: Resolve a pending command or file-change approval
+      parameters:
+        - $ref: '#/components/parameters/TaskId'
+        - name: approvalId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [decision]
+              properties:
+                decision:
+                  type: string
+                  enum: [accept, acceptForSession, decline, cancel]
+      responses:
+        '200':
+          description: Approval resolved
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Task' }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  parameters:
+    TaskId:
+      name: taskId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+  schemas:
+    CreateTask:
+      type: object
+      required: [prompt]
+      properties:
+        prompt:
+          type: string
+          description: A concrete task with an explicit finish condition.
+        cwd:
+          type: string
+          description: Existing directory under WORKBUDDY_ALLOWED_ROOTS.
+        mode:
+          type: string
+          enum: [read-only, workspace-write]
+          default: workspace-write
+        agent:
+          type: string
+          enum: [codex, doubao, kimi]
+          default: codex
+          description: AI employee that executes the task.
+        model:
+          type: string
+          description: Optional Codex model override.
+        threadId:
+          type: string
+          description: Existing Codex thread to continue.
+        label:
+          type: string
+          maxLength: 120
+    Task:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        label: { type: string }
+        prompt: { type: string }
+        cwd: { type: string }
+        mode: { type: string }
+        agent: { type: string, enum: [codex, doubao, kimi] }
+        model: { type: [string, 'null'] }
+        threadId: { type: [string, 'null'] }
+        status:
+          type: string
+          enum: [draft, queued, running, waiting_approval, completed, failed, interrupted, cancelled, archived]
+        runtimeMode: { type: [string, 'null'] }
+        turnId: { type: [string, 'null'] }
+        pendingApprovals:
+          type: array
+          items:
+            type: object
+            properties:
+              approvalId: { type: string, format: uuid }
+              method: { type: string }
+              requestedAt: { type: string, format: date-time }
+        createdAt: { type: string, format: date-time }
+        startedAt: { type: [string, 'null'], format: date-time }
+        finishedAt: { type: [string, 'null'], format: date-time }
+        finalResponse: { type: [string, 'null'] }
+        error: { type: [string, 'null'] }
+

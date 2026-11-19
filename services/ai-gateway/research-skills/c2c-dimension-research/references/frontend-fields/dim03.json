@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "c2c-frontend-contract-v1",
+  "dimensionId": "DIM-03",
+  "name": "证书资质全",
+  "snapshotFormat": "v5",
+  "sections": [
+    "资质信息总表（六个业务字段）"
+  ],
+  "sources": [
+    {
+      "path": "modules/bg/server.py",
+      "sha256": "1a5ce5b32b34279dffaa7c092e1caf384b71c8cf3ee75540ed513487fe55ea60"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-multi-platform.js",
+      "sha256": "7905af768e85ea54995031d5ed848e1b24ff9c008203a00ec90fdd5a50b6e272"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim03-core.html",
+      "sha256": "db3f68d527094d4a13fa5330aeb6a4b9bf1e70f0806523197729bc88789e1572"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim03-core.js",
+      "sha256": "c2e56391c5f43c2138405da28be6291b70a2abfcb4070207632b74cd8fedd37f"
+    },
+    {
+      "path": "modules/bg/template-samples/dim03.json",
+      "sha256": "e0ddd5a1a4d4f61efb2858d0b1a4ded02e123b47863d56c835c983fa047b95e8"
+    }
+  ],
+  "nullableContainers": [],
+  "containers": [
+    {
+      "path": "",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/rows",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/rows/*",
+      "type": "object",
+      "optional": false
+    }
+  ],
+  "fields": [
+    {
+      "path": "/format",
+      "label": "format",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/rows/*/barrier",
+      "label": "行业门槛/技术壁垒",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/difficulty",
+      "label": "获取难度",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/expiry",
+      "label": "有效期",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/grade",
+      "label": "资质等级",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/rows/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/owned",
+      "label": "公司是否拥有",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "是",
+        "否",
+        ""
+      ]
+    }
+  ],
+  "rules": [
+    "当前前端format=v5，每行id/name/grade/expiry/owned/difficulty/barrier，全部六个业务字段必须覆盖。",
+    "owned是/否仅在内部事实已确认时填写；未知用空字符串并登记pending。不得通过填否来满足发布要求。",
+    "技术标准作为要求/证据研究，不能冒充本公司已持认证。原生执行接口的证明和审核规则继续生效。"
+  ],
+  "requiredValues": {
+    "/format": "v5"
+  }
+}

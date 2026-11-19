@@ -1,0 +1,200 @@
+{
+  "schemaVersion": "c2c-frontend-contract-v1",
+  "dimensionId": "DIM-11",
+  "name": "外观高档大气",
+  "snapshotFormat": "fixed-seed",
+  "sections": [
+    "外观画廊",
+    "设计详情（四项）"
+  ],
+  "sources": [
+    {
+      "path": "modules/bg/server.py",
+      "sha256": "1a5ce5b32b34279dffaa7c092e1caf384b71c8cf3ee75540ed513487fe55ea60"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-multi-platform.js",
+      "sha256": "7905af768e85ea54995031d5ed848e1b24ff9c008203a00ec90fdd5a50b6e272"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim11-seed.json",
+      "sha256": "e4f57f7cc5f1e582d8fd79c2bc96eb44227ef975546234d25965aab518a07e3a"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-final-core.js",
+      "sha256": "d86d1027d3a7f10c04757174ff6a8385e40eac02246c71b31632ecf5647d1fe0"
+    }
+  ],
+  "nullableContainers": [],
+  "containers": [
+    {
+      "path": "",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/products",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/products/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/products/*/fields",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/products/*/fields/0",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/products/*/fields/1",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/products/*/fields/2",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/products/*/fields/3",
+      "type": "object",
+      "optional": false
+    }
+  ],
+  "fields": [
+    {
+      "path": "/products/*/fields/0/label",
+      "label": "设计定位·字段名",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/products/*/fields/0/value",
+      "label": "设计定位·研究描述",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/products/*/fields/1/label",
+      "label": "设计风格·字段名",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/products/*/fields/1/value",
+      "label": "设计风格·研究描述",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/products/*/fields/2/label",
+      "label": "应用环境·字段名",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/products/*/fields/2/value",
+      "label": "应用环境·研究描述",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/products/*/fields/3/label",
+      "label": "核心设计语言·字段名",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/products/*/fields/3/value",
+      "label": "核心设计语言·研究描述",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/products/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/products/*/imageUrl",
+      "label": "外观图片",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/products/*/index",
+      "label": "index",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/products/*/kind",
+      "label": "产品类别",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/products/*/model",
+      "label": "型号",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/products/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/products/*/svg",
+      "label": "svg",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    }
+  ],
+  "rules": [
+    "products含id/index/name/model/kind/imageUrl/svg及fields四项（设计定位、设计风格、应用环境、核心设计语言）；图片和四项详情必须同时覆盖。",
+    "真实图片须对应实际型号并给证据出处；imageUrl=sample与内置svg只能说明示意，不能作为真实竞品图片。缺图在研究快照用null并登记pending。",
+    "不请求模型生成或执行未经处理的SVG/HTML，svg保留现有受信示意资源并标structure；未知fullId或本机路径不得伪造。",
+    "当前页面六款、四详情等提示为固定文案；替换研究对象/数量时检查文案与实际数据一致性。"
+  ],
+  "requiredValues": {}
+}

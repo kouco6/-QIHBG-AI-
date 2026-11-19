@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "rows": [
+    {
+      "id": "r0",
+      "name": "高端",
+      "note": "专业级"
+    },
+    {
+      "id": "r1",
+      "name": "中端",
+      "note": "主流级"
+    },
+    {
+      "id": "r2",
+      "name": "低端",
+      "note": "入门级"
+    }
+  ],
+  "cols": [
+    {
+      "id": "c0",
+      "name": "一体式矩阵",
+      "base": true
+    },
+    {
+      "id": "c1",
+      "name": "插卡式矩阵",
+      "base": true
+    },
+    {
+      "id": "c2",
+      "name": "混合／拼接矩阵",
+      "base": true
+    }
+  ],
+  "fields": [
+    {
+      "id": "traits",
+      "name": "场景特点"
+    },
+    {
+      "id": "price",
+      "name": "价格倾向"
+    },
+    {
+      "id": "form",
+      "name": "产品形态"
+    },
+    {
+      "id": "features",
+      "name": "核心功能"
+    }
+  ],
+  "cards": {
+    "r0|c0": {
+      "title": "专业矩阵示例",
+      "status": "project",
+      "values": {
+        "traits": "大型多功能会议厅",
+        "price": "专业级配置",
+        "form": "一体式矩阵",
+        "features": "多路信号切换与协作"
+      }
+    }
+  },
+  "groups": [
+    {
+      "id": "sample-group",
+      "name": "会议矩阵产品示例",
+      "products": [
+        {
+          "id": "sample-product",
+          "name": "专业矩阵示例",
+          "project": true
+        }
+      ]
+    }
+  ]
+}

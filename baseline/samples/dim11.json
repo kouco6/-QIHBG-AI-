@@ -1,0 +1,166 @@
+{
+  "products": [
+    {
+      "id": "cp-01",
+      "index": "01",
+      "name": "竞品 A · 一体触控式",
+      "model": "外观样例 A01",
+      "kind": "会议单元",
+      "svg": "<svg viewBox=\"0 0 800 480\" role=\"img\" xmlns=\"http://www.w3.org/2000/svg\" aria-label=\"示意竞品外观图\" preserveAspectRatio=\"xMidYMid meet\"><defs>\n<linearGradient id=\"carbon\" x1=\"0\" x2=\"0.9\" y1=\"0\" y2=\"1\"><stop stop-color=\"#424d5c\"/><stop offset=\".35\" stop-color=\"#222b38\"/><stop offset=\"1\" stop-color=\"#080e16\"/></linearGradient>\n<linearGradient id=\"blackFace\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#303944\"/><stop offset=\".42\" stop-color=\"#151e29\"/><stop offset=\"1\" stop-color=\"#090f18\"/></linearGradient>\n<linearGradient id=\"titanium\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#f5f7f9\"/><stop offset=\".26\" stop-color=\"#d1d8de\"/><stop offset=\".6\" stop-color=\"#929ba5\"/><stop offset=\"1\" stop-color=\"#c8d0d7\"/></linearGradient>\n<linearGradient id=\"metalEdge\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop stop-color=\"#abb7c6\"/><stop offset=\".35\" stop-color=\"#576679\"/><stop offset=\"1\" stop-color=\"#1a2535\"/></linearGradient>\n<linearGradient id=\"screen\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#122838\"/><stop offset=\".55\" stop-color=\"#071322\"/><stop offset=\"1\" stop-color=\"#0e2134\"/></linearGradient>\n<linearGradient id=\"ivory\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop stop-color=\"#f7f8f8\"/><stop offset=\".6\" stop-color=\"#e6e8e9\"/><stop offset=\"1\" stop-color=\"#bfc6cd\"/></linearGradient>\n<linearGradient id=\"blueglow\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\"><stop stop-color=\"#70d1ff\"/><stop offset=\"1\" stop-color=\"#4c7bf2\"/></linearGradient>\n<filter id=\"shadow\" x=\"-100%\" y=\"-100%\" width=\"300%\" height=\"300%\"><feGaussianBlur stdDeviation=\"16\"/></filter>\n<filter id=\"glow\" x=\"-100%\" y=\"-100%\" width=\"300%\" height=\"300%\"><feGaussianBlur stdDeviation=\"4\"/></filter>\n<pattern id=\"grille\" width=\"8\" height=\"8\" patternUnits=\"userSpaceOnUse\"><circle cx=\"3.5\" cy=\"4\" r=\"1.3\" fill=\"#687789\" opacity=\".62\"/></pattern>\n<pattern id=\"mesh\" width=\"5\" height=\"5\" patternUnits=\"userSpaceOnUse\"><path d=\"M0 4.5 L5 4.5\" stroke=\"#414c58\" stroke-width=\".65\"/></pattern>\n</defs><ellipse cx=\"405\" cy=\"415\" rx=\"260\" ry=\"32\" fill=\"#68788c\" opacity=\".15\" filter=\"url(#shadow)\"/>\n<path d=\"M422 272 C419 221,442 185,440 136 C439 119,433 103,431 82\" fill=\"none\" stroke=\"#121b26\" stroke-width=\"16\" stroke-linecap=\"round\"/>\n<path d=\"M422 272 C419 221,442 185,440 136 C439 119,433 103,431 82\" fill=\"none\" stroke=\"#677586\" stroke-width=\"3\" opacity=\".85\"/>\n<rect x=\"418\" y=\"51\" width=\"28\" height=\"67\" rx=\"13\" fill=\"url(#blackFace)\" transform=\"rotate(-6 432 85)\"/>\n<rect x=\"424\" y=\"53\" width=\"3\" height=\"56\" rx=\"2\" fill=\"#8796a6\" opacity=\".55\" transform=\"rotate(-6 432 85)\"/>\n<rect x=\"418\" y=\"49\" width=\"28\" height=\"5\" rx=\"3\" fill=\"#d64b4c\" transform=\"rotate(-6 432 85)\"/>\n<path d=\"M170 300 L566 295 Q591 297 602 313 L662 387 Q671 404 640 409 L127 410 Q108 409 115 394 Z\" fill=\"url(#carbon)\" stroke=\"#465263\" stroke-width=\"3\"/>\n<path d=\"M170 302 L566 297 Q589 298 602 315 L648 386 L131 387 Z\" fill=\"url(#blackFace)\"/>\n<path d=\"M260 321 L511 319 Q526 320 534 328 L547 361 Q548 365 539 366 L242 366 Q233 365 237 360 Z\" fill=\"#0b121a\" stroke=\"#697a8b\" stroke-width=\"1.5\"/>\n<path d=\"M282 331 L496 329\" stroke=\"#3b90ba\" stroke-width=\"2\" opacity=\".7\"/>\n<path d=\"M284 340 L396 339\" stroke=\"#657a89\" stroke-width=\"5\" opacity=\".5\" stroke-linecap=\"round\"/>\n<path d=\"M284 352 L454 352\" stroke=\"#3b5367\" stroke-width=\"3\" opacity=\".55\"/>\n<g fill=\"#243342\" stroke=\"#7b8b9c\" stroke-width=\"1\"><circle cx=\"183\" cy=\"369\" r=\"14\"/><circle cx=\"589\" cy=\"367\" r=\"14\"/></g>\n<circle cx=\"183\" cy=\"369\" r=\"5\" fill=\"#5bd8a6\"/>\n<circle cx=\"589\" cy=\"367\" r=\"5\" fill=\"#4e8efc\"/>\n<path d=\"M126 398 L650 397\" stroke=\"#8c9bab\" stroke-width=\"3\" opacity=\".52\"/></svg>",
+      "fields": [
+        {
+          "label": "设计定位",
+          "value": "面向高规格会议空间的专业发言设备，强调稳定、秩序感与数字化操作体验。"
+        },
+        {
+          "label": "设计风格",
+          "value": "深色低反射外壳，硬朗轮廓与几何切面相结合，整体偏商务科技风格。"
+        },
+        {
+          "label": "应用环境",
+          "value": "董事会议室、专业会议中心、固定席位发言场景。"
+        },
+        {
+          "label": "核心设计语言",
+          "value": "低重心楔形底座、隐藏式触控区域、细长拾音杆及克制的状态灯效。"
+        }
+      ],
+      "imageUrl": "sample"
+    },
+    {
+      "id": "cp-02",
+      "index": "02",
+      "name": "竞品 B · 银灰交互式",
+      "model": "外观样例 B02",
+      "kind": "会议单元",
+      "svg": "<svg viewBox=\"0 0 800 480\" role=\"img\" xmlns=\"http://www.w3.org/2000/svg\" aria-label=\"示意竞品外观图\" preserveAspectRatio=\"xMidYMid meet\"><defs>\n<linearGradient id=\"carbon\" x1=\"0\" x2=\"0.9\" y1=\"0\" y2=\"1\"><stop stop-color=\"#424d5c\"/><stop offset=\".35\" stop-color=\"#222b38\"/><stop offset=\"1\" stop-color=\"#080e16\"/></linearGradient>\n<linearGradient id=\"blackFace\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#303944\"/><stop offset=\".42\" stop-color=\"#151e29\"/><stop offset=\"1\" stop-color=\"#090f18\"/></linearGradient>\n<linearGradient id=\"titanium\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#f5f7f9\"/><stop offset=\".26\" stop-color=\"#d1d8de\"/><stop offset=\".6\" stop-color=\"#929ba5\"/><stop offset=\"1\" stop-color=\"#c8d0d7\"/></linearGradient>\n<linearGradient id=\"metalEdge\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop stop-color=\"#abb7c6\"/><stop offset=\".35\" stop-color=\"#576679\"/><stop offset=\"1\" stop-color=\"#1a2535\"/></linearGradient>\n<linearGradient id=\"screen\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#122838\"/><stop offset=\".55\" stop-color=\"#071322\"/><stop offset=\"1\" stop-color=\"#0e2134\"/></linearGradient>\n<linearGradient id=\"ivory\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop stop-color=\"#f7f8f8\"/><stop offset=\".6\" stop-color=\"#e6e8e9\"/><stop offset=\"1\" stop-color=\"#bfc6cd\"/></linearGradient>\n<linearGradient id=\"blueglow\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\"><stop stop-color=\"#70d1ff\"/><stop offset=\"1\" stop-color=\"#4c7bf2\"/></linearGradient>\n<filter id=\"shadow\" x=\"-100%\" y=\"-100%\" width=\"300%\" height=\"300%\"><feGaussianBlur stdDeviation=\"16\"/></filter>\n<filter id=\"glow\" x=\"-100%\" y=\"-100%\" width=\"300%\" height=\"300%\"><feGaussianBlur stdDeviation=\"4\"/></filter>\n<pattern id=\"grille\" width=\"8\" height=\"8\" patternUnits=\"userSpaceOnUse\"><circle cx=\"3.5\" cy=\"4\" r=\"1.3\" fill=\"#687789\" opacity=\".62\"/></pattern>\n<pattern id=\"mesh\" width=\"5\" height=\"5\" patternUnits=\"userSpaceOnUse\"><path d=\"M0 4.5 L5 4.5\" stroke=\"#414c58\" stroke-width=\".65\"/></pattern>\n</defs><ellipse cx=\"405\" cy=\"415\" rx=\"260\" ry=\"32\" fill=\"#68788c\" opacity=\".15\" filter=\"url(#shadow)\"/>\n<path d=\"M540 272 C536 222 553 186 535 155 Q528 146 525 136\" stroke=\"#434c57\" stroke-width=\"12\" fill=\"none\" stroke-linecap=\"round\"/>\n<path d=\"M540 272 C536 222 553 186 535 155 Q528 146 525 136\" stroke=\"#bec5cc\" stroke-width=\"2.5\" fill=\"none\" opacity=\".9\"/>\n<rect x=\"511\" y=\"82\" width=\"29\" height=\"68\" rx=\"14\" fill=\"#364352\" transform=\"rotate(-18 526 116)\"/>\n<rect x=\"520\" y=\"82\" width=\"4\" height=\"58\" rx=\"2\" fill=\"#b2bbc7\" transform=\"rotate(-18 526 116)\"/>\n<path d=\"M190 320 L578 303 L660 391 L130 407 Z\" fill=\"url(#titanium)\" stroke=\"#a0a9b3\" stroke-width=\"3\"/>\n<path d=\"M198 320 L576 306 L630 381 L145 393 Z\" fill=\"#272f3b\"/>\n<path d=\"M220 326 L466 317 L496 370 L194 380 Z\" fill=\"url(#screen)\" stroke=\"#72879d\" stroke-width=\"2\"/>\n<path d=\"M234 338 L442 331\" stroke=\"#64b9de\" stroke-width=\"3\" opacity=\".7\"/>\n<path d=\"M234 351 L373 345\" stroke=\"#3d6077\" stroke-width=\"5\" stroke-linecap=\"round\"/>\n<path d=\"M233 363 L412 357\" stroke=\"#224d65\" stroke-width=\"3\"/>\n<path d=\"M521 321 L563 319 L611 378 L510 380 Z\" fill=\"url(#grille)\" opacity=\".95\"/>\n<circle cx=\"567\" cy=\"377\" r=\"7\" fill=\"#467fc8\"/>\n<path d=\"M132 404 L658 389\" stroke=\"#9da9b6\" stroke-width=\"3\"/></svg>",
+      "fields": [
+        {
+          "label": "设计定位",
+          "value": "以清晰信息呈现为重点的会议交互终端，兼顾专业属性和现代空间融合。"
+        },
+        {
+          "label": "设计风格",
+          "value": "银灰金属观感与深色界面形成对比，整体偏轻量、精密的现代工业美学。"
+        },
+        {
+          "label": "应用环境",
+          "value": "智能会议室、培训室、多用途讨论空间。"
+        },
+        {
+          "label": "核心设计语言",
+          "value": "大面积倾斜面板、金属框体、简洁触控界面与局部声学网孔纹理。"
+        }
+      ],
+      "imageUrl": "sample"
+    },
+    {
+      "id": "cp-03",
+      "index": "03",
+      "name": "竞品 C · 圆形极简单元",
+      "model": "外观样例 C03",
+      "kind": "桌面麦克风",
+      "svg": "<svg viewBox=\"0 0 800 480\" role=\"img\" xmlns=\"http://www.w3.org/2000/svg\" aria-label=\"示意竞品外观图\" preserveAspectRatio=\"xMidYMid meet\"><defs>\n<linearGradient id=\"carbon\" x1=\"0\" x2=\"0.9\" y1=\"0\" y2=\"1\"><stop stop-color=\"#424d5c\"/><stop offset=\".35\" stop-color=\"#222b38\"/><stop offset=\"1\" stop-color=\"#080e16\"/></linearGradient>\n<linearGradient id=\"blackFace\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#303944\"/><stop offset=\".42\" stop-color=\"#151e29\"/><stop offset=\"1\" stop-color=\"#090f18\"/></linearGradient>\n<linearGradient id=\"titanium\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#f5f7f9\"/><stop offset=\".26\" stop-color=\"#d1d8de\"/><stop offset=\".6\" stop-color=\"#929ba5\"/><stop offset=\"1\" stop-color=\"#c8d0d7\"/></linearGradient>\n<linearGradient id=\"metalEdge\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop stop-color=\"#abb7c6\"/><stop offset=\".35\" stop-color=\"#576679\"/><stop offset=\"1\" stop-color=\"#1a2535\"/></linearGradient>\n<linearGradient id=\"screen\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#122838\"/><stop offset=\".55\" stop-color=\"#071322\"/><stop offset=\"1\" stop-color=\"#0e2134\"/></linearGradient>\n<linearGradient id=\"ivory\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop stop-color=\"#f7f8f8\"/><stop offset=\".6\" stop-color=\"#e6e8e9\"/><stop offset=\"1\" stop-color=\"#bfc6cd\"/></linearGradient>\n<linearGradient id=\"blueglow\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\"><stop stop-color=\"#70d1ff\"/><stop offset=\"1\" stop-color=\"#4c7bf2\"/></linearGradient>\n<filter id=\"shadow\" x=\"-100%\" y=\"-100%\" width=\"300%\" height=\"300%\"><feGaussianBlur stdDeviation=\"16\"/></filter>\n<filter id=\"glow\" x=\"-100%\" y=\"-100%\" width=\"300%\" height=\"300%\"><feGaussianBlur stdDeviation=\"4\"/></filter>\n<pattern id=\"grille\" width=\"8\" height=\"8\" patternUnits=\"userSpaceOnUse\"><circle cx=\"3.5\" cy=\"4\" r=\"1.3\" fill=\"#687789\" opacity=\".62\"/></pattern>\n<pattern id=\"mesh\" width=\"5\" height=\"5\" patternUnits=\"userSpaceOnUse\"><path d=\"M0 4.5 L5 4.5\" stroke=\"#414c58\" stroke-width=\".65\"/></pattern>\n</defs><ellipse cx=\"405\" cy=\"415\" rx=\"260\" ry=\"32\" fill=\"#68788c\" opacity=\".15\" filter=\"url(#shadow)\"/>\n<path d=\"M400 302 C388 253 380 227 403 196 Q420 170 455 157\" stroke=\"#1b2939\" stroke-width=\"15\" fill=\"none\" stroke-linecap=\"round\"/>\n<path d=\"M400 302 C388 253 380 227 403 196 Q420 170 455 157\" stroke=\"#8493a1\" stroke-width=\"3\" fill=\"none\" opacity=\".8\"/>\n<rect x=\"443\" y=\"117\" width=\"26\" height=\"60\" rx=\"12\" fill=\"url(#carbon)\" transform=\"rotate(36 455 147)\"/>\n<rect x=\"447\" y=\"119\" width=\"3.5\" height=\"47\" rx=\"2\" fill=\"#8997a4\" transform=\"rotate(36 455 147)\"/>\n<ellipse cx=\"401\" cy=\"371\" rx=\"210\" ry=\"71\" fill=\"#161f2d\" stroke=\"#728396\" stroke-width=\"3\"/>\n<ellipse cx=\"401\" cy=\"360\" rx=\"203\" ry=\"60\" fill=\"url(#carbon)\" stroke=\"#515e70\" stroke-width=\"2\"/>\n<ellipse cx=\"401\" cy=\"359\" rx=\"151\" ry=\"39\" fill=\"#131e2c\" stroke=\"#40516a\" stroke-width=\"2\"/>\n<ellipse cx=\"401\" cy=\"361\" rx=\"117\" ry=\"28\" fill=\"url(#grille)\" opacity=\".65\"/>\n<path d=\"M265 374 Q401 428 548 374\" stroke=\"#4a9bd5\" stroke-width=\"4\" fill=\"none\" opacity=\".8\"/>\n<circle cx=\"401\" cy=\"359\" r=\"11\" fill=\"#277ca2\"/>\n<circle cx=\"401\" cy=\"359\" r=\"5.5\" fill=\"#80d8fb\"/>\n</svg>",
+      "fields": [
+        {
+          "label": "设计定位",
+          "value": "针对简洁桌面空间的轻量化语音输入终端，尽量减少可见操作元素。"
+        },
+        {
+          "label": "设计风格",
+          "value": "圆润、内敛、低视觉干扰；黑色同心圆与细节环形灯带构成识别特征。"
+        },
+        {
+          "label": "应用环境",
+          "value": "小型会议室、协作空间、灵活布置的会议桌面。"
+        },
+        {
+          "label": "核心设计语言",
+          "value": "圆盘底座、弧线杆体、同心网孔与低亮度环形状态指示。"
+        }
+      ],
+      "imageUrl": "sample"
+    },
+    {
+      "id": "cp-04",
+      "index": "04",
+      "name": "竞品 D · 浅色一体式",
+      "model": "外观样例 D04",
+      "kind": "会议单元",
+      "svg": "<svg viewBox=\"0 0 800 480\" role=\"img\" xmlns=\"http://www.w3.org/2000/svg\" aria-label=\"示意竞品外观图\" preserveAspectRatio=\"xMidYMid meet\"><defs>\n<linearGradient id=\"carbon\" x1=\"0\" x2=\"0.9\" y1=\"0\" y2=\"1\"><stop stop-color=\"#424d5c\"/><stop offset=\".35\" stop-color=\"#222b38\"/><stop offset=\"1\" stop-color=\"#080e16\"/></linearGradient>\n<linearGradient id=\"blackFace\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#303944\"/><stop offset=\".42\" stop-color=\"#151e29\"/><stop offset=\"1\" stop-color=\"#090f18\"/></linearGradient>\n<linearGradient id=\"titanium\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#f5f7f9\"/><stop offset=\".26\" stop-color=\"#d1d8de\"/><stop offset=\".6\" stop-color=\"#929ba5\"/><stop offset=\"1\" stop-color=\"#c8d0d7\"/></linearGradient>\n<linearGradient id=\"metalEdge\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop stop-color=\"#abb7c6\"/><stop offset=\".35\" stop-color=\"#576679\"/><stop offset=\"1\" stop-color=\"#1a2535\"/></linearGradient>\n<linearGradient id=\"screen\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#122838\"/><stop offset=\".55\" stop-color=\"#071322\"/><stop offset=\"1\" stop-color=\"#0e2134\"/></linearGradient>\n<linearGradient id=\"ivory\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop stop-color=\"#f7f8f8\"/><stop offset=\".6\" stop-color=\"#e6e8e9\"/><stop offset=\"1\" stop-color=\"#bfc6cd\"/></linearGradient>\n<linearGradient id=\"blueglow\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\"><stop stop-color=\"#70d1ff\"/><stop offset=\"1\" stop-color=\"#4c7bf2\"/></linearGradient>\n<filter id=\"shadow\" x=\"-100%\" y=\"-100%\" width=\"300%\" height=\"300%\"><feGaussianBlur stdDeviation=\"16\"/></filter>\n<filter id=\"glow\" x=\"-100%\" y=\"-100%\" width=\"300%\" height=\"300%\"><feGaussianBlur stdDeviation=\"4\"/></filter>\n<pattern id=\"grille\" width=\"8\" height=\"8\" patternUnits=\"userSpaceOnUse\"><circle cx=\"3.5\" cy=\"4\" r=\"1.3\" fill=\"#687789\" opacity=\".62\"/></pattern>\n<pattern id=\"mesh\" width=\"5\" height=\"5\" patternUnits=\"userSpaceOnUse\"><path d=\"M0 4.5 L5 4.5\" stroke=\"#414c58\" stroke-width=\".65\"/></pattern>\n</defs><ellipse cx=\"405\" cy=\"415\" rx=\"260\" ry=\"32\" fill=\"#68788c\" opacity=\".15\" filter=\"url(#shadow)\"/>\n<path d=\"M429 300 L427 113\" stroke=\"#5d6671\" stroke-width=\"13\" stroke-linecap=\"round\"/>\n<path d=\"M426 300 L424 116\" stroke=\"#c2c8cf\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n<rect x=\"413\" y=\"64\" width=\"29\" height=\"70\" rx=\"13\" fill=\"#798490\"/>\n<rect x=\"416\" y=\"69\" width=\"4\" height=\"56\" rx=\"2\" fill=\"#d0d6dd\"/>\n<rect x=\"413\" y=\"62\" width=\"29\" height=\"6\" rx=\"3\" fill=\"#b55d5e\"/>\n<path d=\"M185 323 L574 306 Q586 306 592 319 L651 383 Q660 403 634 409 L147 408 Q126 405 133 390 Z\" fill=\"url(#ivory)\" stroke=\"#abb2ba\" stroke-width=\"3\"/>\n<path d=\"M190 324 L567 308 L627 381 L155 387 Z\" fill=\"#ecf0f3\" stroke=\"#d8dde2\" stroke-width=\"1\"/>\n<path d=\"M249 334 L455 330 Q469 330 475 340 L486 367 L228 373 Z\" fill=\"#111d2c\" stroke=\"#657a8e\" stroke-width=\"2\"/>\n<path d=\"M269 345 L435 342\" stroke=\"#4baddc\" stroke-width=\"3\" opacity=\".75\"/>\n<path d=\"M280 356 L400 354\" stroke=\"#495d70\" stroke-width=\"5\"/>\n<path d=\"M545 349 L583 348\" stroke=\"#a2aab2\" stroke-width=\"5\" stroke-linecap=\"round\"/>\n<circle cx=\"567\" cy=\"371\" r=\"9\" fill=\"#a8b1bc\"/>\n<circle cx=\"567\" cy=\"371\" r=\"4\" fill=\"#3c83cd\"/>\n<path d=\"M148 403 L640 403\" stroke=\"#97a1ac\" stroke-width=\"3\" opacity=\".5\"/></svg>",
+      "fields": [
+        {
+          "label": "设计定位",
+          "value": "面向简洁办公和明亮会议环境的设备外观，突出空间协调与现代感。"
+        },
+        {
+          "label": "设计风格",
+          "value": "浅色科技风，轮廓柔和规整，整体体现轻量、通透、亲和的视觉观感。"
+        },
+        {
+          "label": "应用环境",
+          "value": "现代办公室、开放式培训空间、浅色家具会议室。"
+        },
+        {
+          "label": "核心设计语言",
+          "value": "明亮外壳、深色信息窗、平整接缝与统一的细长拾音结构。"
+        }
+      ],
+      "imageUrl": "sample"
+    },
+    {
+      "id": "cp-05",
+      "index": "05",
+      "name": "竞品 E · 低姿态工业式",
+      "model": "外观样例 E05",
+      "kind": "桌面麦克风",
+      "svg": "<svg viewBox=\"0 0 800 480\" role=\"img\" xmlns=\"http://www.w3.org/2000/svg\" aria-label=\"示意竞品外观图\" preserveAspectRatio=\"xMidYMid meet\"><defs>\n<linearGradient id=\"carbon\" x1=\"0\" x2=\"0.9\" y1=\"0\" y2=\"1\"><stop stop-color=\"#424d5c\"/><stop offset=\".35\" stop-color=\"#222b38\"/><stop offset=\"1\" stop-color=\"#080e16\"/></linearGradient>\n<linearGradient id=\"blackFace\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#303944\"/><stop offset=\".42\" stop-color=\"#151e29\"/><stop offset=\"1\" stop-color=\"#090f18\"/></linearGradient>\n<linearGradient id=\"titanium\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#f5f7f9\"/><stop offset=\".26\" stop-color=\"#d1d8de\"/><stop offset=\".6\" stop-color=\"#929ba5\"/><stop offset=\"1\" stop-color=\"#c8d0d7\"/></linearGradient>\n<linearGradient id=\"metalEdge\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop stop-color=\"#abb7c6\"/><stop offset=\".35\" stop-color=\"#576679\"/><stop offset=\"1\" stop-color=\"#1a2535\"/></linearGradient>\n<linearGradient id=\"screen\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#122838\"/><stop offset=\".55\" stop-color=\"#071322\"/><stop offset=\"1\" stop-color=\"#0e2134\"/></linearGradient>\n<linearGradient id=\"ivory\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop stop-color=\"#f7f8f8\"/><stop offset=\".6\" stop-color=\"#e6e8e9\"/><stop offset=\"1\" stop-color=\"#bfc6cd\"/></linearGradient>\n<linearGradient id=\"blueglow\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\"><stop stop-color=\"#70d1ff\"/><stop offset=\"1\" stop-color=\"#4c7bf2\"/></linearGradient>\n<filter id=\"shadow\" x=\"-100%\" y=\"-100%\" width=\"300%\" height=\"300%\"><feGaussianBlur stdDeviation=\"16\"/></filter>\n<filter id=\"glow\" x=\"-100%\" y=\"-100%\" width=\"300%\" height=\"300%\"><feGaussianBlur stdDeviation=\"4\"/></filter>\n<pattern id=\"grille\" width=\"8\" height=\"8\" patternUnits=\"userSpaceOnUse\"><circle cx=\"3.5\" cy=\"4\" r=\"1.3\" fill=\"#687789\" opacity=\".62\"/></pattern>\n<pattern id=\"mesh\" width=\"5\" height=\"5\" patternUnits=\"userSpaceOnUse\"><path d=\"M0 4.5 L5 4.5\" stroke=\"#414c58\" stroke-width=\".65\"/></pattern>\n</defs><ellipse cx=\"405\" cy=\"415\" rx=\"260\" ry=\"32\" fill=\"#68788c\" opacity=\".15\" filter=\"url(#shadow)\"/>\n<path d=\"M405 302 C407 251 397 198 390 151\" stroke=\"#111a24\" stroke-width=\"11\" fill=\"none\" stroke-linecap=\"round\"/>\n<path d=\"M404 298 C407 251 397 198 390 151\" stroke=\"#8793a2\" stroke-width=\"2\" fill=\"none\"/>\n<rect x=\"376\" y=\"87\" width=\"29\" height=\"80\" rx=\"14\" fill=\"url(#carbon)\" transform=\"rotate(-8 391 127)\"/>\n<path d=\"M386 87 L396 87\" stroke=\"#d75b64\" stroke-width=\"6\"/>\n<path d=\"M122 365 L361 302 L596 313 L684 379 L657 409 L139 408 Z\" fill=\"url(#carbon)\" stroke=\"#506174\" stroke-width=\"2.5\"/>\n<path d=\"M136 368 L362 307 L594 318 L662 379 L160 391 Z\" fill=\"#1b2533\"/>\n<path d=\"M262 356 L487 326 L538 370 L259 383 Z\" fill=\"#0d1724\" stroke=\"#42536b\" stroke-width=\"1.5\"/>\n<path d=\"M293 358 L460 337\" stroke=\"#607b91\" stroke-width=\"3\" opacity=\".7\"/>\n<path d=\"M173 383 L641 382\" stroke=\"#ef5967\" stroke-width=\"4\" stroke-linecap=\"round\"/>\n<g fill=\"#4c5c6d\"><circle cx=\"190\" cy=\"361\" r=\"7\"/><circle cx=\"582\" cy=\"360\" r=\"7\"/></g>\n<path d=\"M143 400 L652 400\" stroke=\"#75869a\" stroke-width=\"2\" opacity=\".6\"/></svg>",
+      "fields": [
+        {
+          "label": "设计定位",
+          "value": "偏向专业控制和严肃会议场景，强调设备识别度与使用状态的可感知性。"
+        },
+        {
+          "label": "设计风格",
+          "value": "深色硬朗、线条凌厉、局部点缀醒目的红色状态灯带。"
+        },
+        {
+          "label": "应用环境",
+          "value": "指挥调度空间、专业工作台、固定会议席位。"
+        },
+        {
+          "label": "核心设计语言",
+          "value": "斜切轮廓、宽扁基座、深浅层次和高对比度状态灯效。"
+        }
+      ],
+      "imageUrl": "sample"
+    },
+    {
+      "id": "cp-06",
+      "index": "06",
+      "name": "竞品 F · 宽屏商务式",
+      "model": "外观样例 F06",
+      "kind": "会议单元",
+      "svg": "<svg viewBox=\"0 0 800 480\" role=\"img\" xmlns=\"http://www.w3.org/2000/svg\" aria-label=\"示意竞品外观图\" preserveAspectRatio=\"xMidYMid meet\"><defs>\n<linearGradient id=\"carbon\" x1=\"0\" x2=\"0.9\" y1=\"0\" y2=\"1\"><stop stop-color=\"#424d5c\"/><stop offset=\".35\" stop-color=\"#222b38\"/><stop offset=\"1\" stop-color=\"#080e16\"/></linearGradient>\n<linearGradient id=\"blackFace\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#303944\"/><stop offset=\".42\" stop-color=\"#151e29\"/><stop offset=\"1\" stop-color=\"#090f18\"/></linearGradient>\n<linearGradient id=\"titanium\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#f5f7f9\"/><stop offset=\".26\" stop-color=\"#d1d8de\"/><stop offset=\".6\" stop-color=\"#929ba5\"/><stop offset=\"1\" stop-color=\"#c8d0d7\"/></linearGradient>\n<linearGradient id=\"metalEdge\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop stop-color=\"#abb7c6\"/><stop offset=\".35\" stop-color=\"#576679\"/><stop offset=\"1\" stop-color=\"#1a2535\"/></linearGradient>\n<linearGradient id=\"screen\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#122838\"/><stop offset=\".55\" stop-color=\"#071322\"/><stop offset=\"1\" stop-color=\"#0e2134\"/></linearGradient>\n<linearGradient id=\"ivory\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop stop-color=\"#f7f8f8\"/><stop offset=\".6\" stop-color=\"#e6e8e9\"/><stop offset=\"1\" stop-color=\"#bfc6cd\"/></linearGradient>\n<linearGradient id=\"blueglow\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\"><stop stop-color=\"#70d1ff\"/><stop offset=\"1\" stop-color=\"#4c7bf2\"/></linearGradient>\n<filter id=\"shadow\" x=\"-100%\" y=\"-100%\" width=\"300%\" height=\"300%\"><feGaussianBlur stdDeviation=\"16\"/></filter>\n<filter id=\"glow\" x=\"-100%\" y=\"-100%\" width=\"300%\" height=\"300%\"><feGaussianBlur stdDeviation=\"4\"/></filter>\n<pattern id=\"grille\" width=\"8\" height=\"8\" patternUnits=\"userSpaceOnUse\"><circle cx=\"3.5\" cy=\"4\" r=\"1.3\" fill=\"#687789\" opacity=\".62\"/></pattern>\n<pattern id=\"mesh\" width=\"5\" height=\"5\" patternUnits=\"userSpaceOnUse\"><path d=\"M0 4.5 L5 4.5\" stroke=\"#414c58\" stroke-width=\".65\"/></pattern>\n</defs><ellipse cx=\"405\" cy=\"415\" rx=\"260\" ry=\"32\" fill=\"#68788c\" opacity=\".15\" filter=\"url(#shadow)\"/>\n<path d=\"M583 292 C573 242 561 177 558 110\" stroke=\"#1b2633\" stroke-width=\"13\" stroke-linecap=\"round\" fill=\"none\"/>\n<path d=\"M582 290 C573 242 561 177 558 110\" stroke=\"#8b9ba9\" stroke-width=\"3\" stroke-linecap=\"round\" fill=\"none\"/>\n<rect x=\"544\" y=\"59\" width=\"28\" height=\"68\" rx=\"13\" fill=\"url(#blackFace)\" transform=\"rotate(1 558 93)\"/>\n<rect x=\"548\" y=\"59\" width=\"4\" height=\"55\" rx=\"2\" fill=\"#b8c3ca\"/>\n<path d=\"M138 334 L551 306 Q568 304 584 318 L662 390 L650 414 L131 412 L112 395 Z\" fill=\"url(#metalEdge)\" stroke=\"#606f7b\" stroke-width=\"2\"/>\n<path d=\"M142 335 L550 309 L635 384 L133 397 Z\" fill=\"url(#carbon)\"/>\n<path d=\"M182 338 L479 320 L531 379 L159 393 Z\" fill=\"url(#screen)\" stroke=\"#4f7389\" stroke-width=\"2\"/>\n<path d=\"M204 352 L447 333\" stroke=\"#57b0e2\" stroke-width=\"4\" opacity=\".8\"/>\n<path d=\"M209 368 L349 360\" stroke=\"#6d90a6\" stroke-width=\"6\" stroke-linecap=\"round\" opacity=\".7\"/>\n<path d=\"M378 360 L458 353\" stroke=\"#2e6e9a\" stroke-width=\"5\" stroke-linecap=\"round\"/>\n<path d=\"M540 345 L590 370\" stroke=\"#e1e7ed\" stroke-width=\"3\" opacity=\".8\"/>\n<circle cx=\"594\" cy=\"382\" r=\"6\" fill=\"#65c6ef\"/>\n<path d=\"M132 406 L651 408\" stroke=\"#b4bec9\" stroke-width=\"3\" opacity=\".65\"/></svg>",
+      "fields": [
+        {
+          "label": "设计定位",
+          "value": "以会议流程与信息交互为核心的台式终端，兼顾发言功能和桌面品质感。"
+        },
+        {
+          "label": "设计风格",
+          "value": "沉稳商务风，金属边界与深色宽屏形成精密、专业的视觉组合。"
+        },
+        {
+          "label": "应用环境",
+          "value": "大会场前排、正式会议室、多功能行政会议空间。"
+        },
+        {
+          "label": "核心设计语言",
+          "value": "宽屏布局、层叠边框、精细金属线条、偏置式拾音结构。"
+        }
+      ],
+      "imageUrl": "sample"
+    }
+  ]
+}

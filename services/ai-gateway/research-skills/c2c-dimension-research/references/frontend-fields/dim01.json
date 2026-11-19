@@ -1,0 +1,345 @@
+{
+  "schemaVersion": "c2c-frontend-contract-v1",
+  "dimensionId": "DIM-01",
+  "name": "产品线齐全",
+  "snapshotFormat": "version=1",
+  "sections": [
+    "行业生态布局全景",
+    "同类产品规划（含图片和覆盖状态）"
+  ],
+  "sources": [
+    {
+      "path": "modules/bg/server.py",
+      "sha256": "1a5ce5b32b34279dffaa7c092e1caf384b71c8cf3ee75540ed513487fe55ea60"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-multi-platform.js",
+      "sha256": "7905af768e85ea54995031d5ed848e1b24ff9c008203a00ec90fdd5a50b6e272"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim01-v7.html",
+      "sha256": "c483621b2403c0017fd49482e9363828a86af19db44dda802498d97fbd7e43b3"
+    }
+  ],
+  "nullableContainers": [
+    "/cards/*",
+    "/cards/*/image",
+    "/groups/*/products/*/image"
+  ],
+  "containers": [
+    {
+      "path": "",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/cards",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/cards/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/cards/*/image",
+      "type": "object",
+      "optional": true
+    },
+    {
+      "path": "/cards/*/values",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/cols",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/cols/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/fields",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/fields/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/groups",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/groups/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/groups/*/products",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/groups/*/products/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/groups/*/products/*/image",
+      "type": "object",
+      "optional": true
+    },
+    {
+      "path": "/rows",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/rows/*",
+      "type": "object",
+      "optional": false
+    }
+  ],
+  "fields": [
+    {
+      "path": "/cards/*/image/fileName",
+      "label": "fileName",
+      "types": [
+        "string"
+      ],
+      "role": "structure",
+      "optional": true
+    },
+    {
+      "path": "/cards/*/image/fullId",
+      "label": "fullId",
+      "types": [
+        "string"
+      ],
+      "role": "structure",
+      "optional": true
+    },
+    {
+      "path": "/cards/*/image/src",
+      "label": "图片资源",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "optional": true
+    },
+    {
+      "path": "/cards/*/image/w",
+      "label": "w",
+      "types": [
+        "number"
+      ],
+      "role": "structure",
+      "optional": true
+    },
+    {
+      "path": "/cards/*/image/x",
+      "label": "x",
+      "types": [
+        "number"
+      ],
+      "role": "structure",
+      "optional": true
+    },
+    {
+      "path": "/cards/*/image/y",
+      "label": "y",
+      "types": [
+        "number"
+      ],
+      "role": "structure",
+      "optional": true
+    },
+    {
+      "path": "/cards/*/status",
+      "label": "状态",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "covered",
+        "uncovered",
+        "project",
+        ""
+      ]
+    },
+    {
+      "path": "/cards/*/title",
+      "label": "标题",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/cards/*/values/*",
+      "label": "*",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/cols/*/base",
+      "label": "base",
+      "types": [
+        "boolean"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/cols/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/cols/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/fields/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/fields/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/groups/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/groups/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/groups/*/products/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/groups/*/products/*/image/fileName",
+      "label": "fileName",
+      "types": [
+        "string"
+      ],
+      "role": "structure",
+      "optional": true
+    },
+    {
+      "path": "/groups/*/products/*/image/fullId",
+      "label": "fullId",
+      "types": [
+        "string"
+      ],
+      "role": "structure",
+      "optional": true
+    },
+    {
+      "path": "/groups/*/products/*/image/src",
+      "label": "图片资源",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "optional": true
+    },
+    {
+      "path": "/groups/*/products/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/groups/*/products/*/project",
+      "label": "本次企划标记",
+      "types": [
+        "boolean"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/rows/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/note",
+      "label": "说明",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/version",
+      "label": "version",
+      "types": [
+        "number"
+      ],
+      "role": "structure"
+    }
+  ],
+  "rules": [
+    "当前格式 version=1；旧 matrix/catalog/ecos 仅历史兼容，不作为新研究输出。",
+    "rows 固定3行；cols 3～5列；fields 1～4项；cards键为rowId|colId，values键逐一对应fields[].id。字段名称可配置，应以任务提供的当前项目字段为准。",
+    "covered/uncovered 是我方现状，project 是企划标记；不能用行业资料猜测我方覆盖状态。未知状态用草稿空字符串并登记pending，不能默认未覆盖。",
+    "图片包含src及可选x/y/w/fullId/fileName。fullId由本机图片存储生成，研究端不能伪造；图片缺失用null，保留研究所需图片出处和说明。"
+  ],
+  "requiredValues": {
+    "/version": 1
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "product": "U段无线会议话筒单元",
+  "ownCost": 760,
+  "competitors": [
+    {
+      "name": "得胜 TAKSTAR",
+      "model": "TC-4R",
+      "price": 1415,
+      "source": "美音声光公开参考报价",
+      "url": "https://www.avl.top/product/lists/3-487-673-0-0-0-1.html"
+    },
+    {
+      "name": "雷麦 LEIMAI",
+      "model": "LM-770U",
+      "price": 2999,
+      "source": "美音声光公开参考报价",
+      "url": "https://www.avl.top/product/lists/3-487-673-519-0-0-1.html"
+    },
+    {
+      "name": "海天电子 HTDZ",
+      "model": "HT-868A",
+      "price": 9000,
+      "source": "美音声光公开参考报价",
+      "url": "https://www.avl.top/product/lists/3-487-673-0-0-0-1.html"
+    }
+  ],
+  "bom": [
+    {
+      "name": "U段射频模块",
+      "count": 1,
+      "unit": 180
+    },
+    {
+      "name": "主控PCB组件",
+      "count": 1,
+      "unit": 165
+    },
+    {
+      "name": "拾音咪芯",
+      "count": 1,
+      "unit": 95
+    },
+    {
+      "name": "结构件及外壳",
+      "count": 1,
+      "unit": 110
+    },
+    {
+      "name": "电池及供电",
+      "count": 1,
+      "unit": 90
+    },
+    {
+      "name": "显示及按键",
+      "count": 1,
+      "unit": 80
+    },
+    {
+      "name": "连接器及辅料",
+      "count": 1,
+      "unit": 40
+    }
+  ]
+}

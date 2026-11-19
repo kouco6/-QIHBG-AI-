@@ -1,0 +1,221 @@
+{
+  "format": "v5",
+  "rows": [
+    {
+      "id": "cert_101",
+      "name": "国家强制性产品认证（CCC）",
+      "grade": "强制性",
+      "expiry": "2028年",
+      "owned": "是",
+      "difficulty": "中",
+      "barrier": "高"
+    },
+    {
+      "id": "cert_102",
+      "name": "IEC 61508功能安全相关认证",
+      "grade": "行业",
+      "expiry": "2029年",
+      "owned": "否",
+      "difficulty": "高",
+      "barrier": "高"
+    },
+    {
+      "id": "cert_103",
+      "name": "ISO 9001质量管理体系认证",
+      "grade": "行业",
+      "expiry": "2028-12-31",
+      "owned": "是",
+      "difficulty": "低",
+      "barrier": "低"
+    },
+    {
+      "id": "cert_104",
+      "name": "CE符合性认证",
+      "grade": "强制性",
+      "expiry": "2029年",
+      "owned": "否",
+      "difficulty": "中",
+      "barrier": "中"
+    },
+    {
+      "id": "cert_105",
+      "name": "ISO 27001信息安全管理体系认证",
+      "grade": "行业",
+      "expiry": "2027年",
+      "owned": "是",
+      "difficulty": "中",
+      "barrier": "中"
+    },
+    {
+      "id": "cert_106",
+      "name": "RoHS符合性声明",
+      "grade": "行业",
+      "expiry": "长期有效",
+      "owned": "否",
+      "difficulty": "中",
+      "barrier": "低"
+    },
+    {
+      "id": "cert_107",
+      "name": "ISO 14001环境管理体系认证",
+      "grade": "行业",
+      "expiry": "2028年",
+      "owned": "是",
+      "difficulty": "低",
+      "barrier": "低"
+    },
+    {
+      "id": "cert_108",
+      "name": "EMC电磁兼容检测报告",
+      "grade": "行业",
+      "expiry": "2027年",
+      "owned": "否",
+      "difficulty": "中",
+      "barrier": "中"
+    },
+    {
+      "id": "cert_109",
+      "name": "EAC符合性认证",
+      "grade": "行业",
+      "expiry": "2028年",
+      "owned": "否",
+      "difficulty": "中",
+      "barrier": "中"
+    },
+    {
+      "id": "cert_110",
+      "name": "FCC符合性认证",
+      "grade": "行业",
+      "expiry": "长期有效",
+      "owned": "是",
+      "difficulty": "中",
+      "barrier": "中"
+    },
+    {
+      "id": "cert_111",
+      "name": "ISO 45001职业健康安全认证",
+      "grade": "行业",
+      "expiry": "2028年",
+      "owned": "是",
+      "difficulty": "低",
+      "barrier": "低"
+    },
+    {
+      "id": "cert_112",
+      "name": "产品环境可靠性检测报告",
+      "grade": "行业",
+      "expiry": "2029年",
+      "owned": "否",
+      "difficulty": "中",
+      "barrier": "中"
+    },
+    {
+      "id": "cert_113",
+      "name": "IEC 62368-1音视频设备安全认证",
+      "grade": "行业",
+      "expiry": "2028年",
+      "owned": "是",
+      "difficulty": "中",
+      "barrier": "高"
+    },
+    {
+      "id": "cert_114",
+      "name": "信息技术服务管理体系认证",
+      "grade": "行业",
+      "expiry": "2029年",
+      "owned": "否",
+      "difficulty": "中",
+      "barrier": "中"
+    },
+    {
+      "id": "cert_115",
+      "name": "ISO 50001能源管理体系认证",
+      "grade": "行业",
+      "expiry": "2028年",
+      "owned": "是",
+      "difficulty": "中",
+      "barrier": "中"
+    },
+    {
+      "id": "cert_116",
+      "name": "产品电磁辐射检测报告",
+      "grade": "行业",
+      "expiry": "2029年",
+      "owned": "否",
+      "difficulty": "中",
+      "barrier": "低"
+    },
+    {
+      "id": "cert_117",
+      "name": "企业知识产权管理体系认证",
+      "grade": "行业",
+      "expiry": "2028年",
+      "owned": "是",
+      "difficulty": "中",
+      "barrier": "中"
+    },
+    {
+      "id": "cert_118",
+      "name": "高新技术企业认定证书",
+      "grade": "国家级",
+      "expiry": "2029年",
+      "owned": "是",
+      "difficulty": "高",
+      "barrier": "高"
+    },
+    {
+      "id": "cert_119",
+      "name": "第三方电气安全检测报告",
+      "grade": "行业",
+      "expiry": "2028年",
+      "owned": "否",
+      "difficulty": "低",
+      "barrier": "中"
+    },
+    {
+      "id": "cert_120",
+      "name": "计算机软件著作权登记证书",
+      "grade": "国家级",
+      "expiry": "长期有效",
+      "owned": "是",
+      "difficulty": "低",
+      "barrier": "中"
+    },
+    {
+      "id": "cert_121",
+      "name": "声学性能测试报告",
+      "grade": "行业",
+      "expiry": "2029年",
+      "owned": "否",
+      "difficulty": "中",
+      "barrier": "中"
+    },
+    {
+      "id": "cert_122",
+      "name": "网络安全相关测评报告",
+      "grade": "行业",
+      "expiry": "2028年",
+      "owned": "否",
+      "difficulty": "高",
+      "barrier": "高"
+    },
+    {
+      "id": "cert_123",
+      "name": "软件产品登记证明",
+      "grade": "行业",
+      "expiry": "长期有效",
+      "owned": "是",
+      "difficulty": "低",
+      "barrier": "中"
+    },
+    {
+      "id": "cert_124",
+      "name": "环境适应性试验报告",
+      "grade": "行业",
+      "expiry": "2029年",
+      "owned": "否",
+      "difficulty": "中",
+      "barrier": "中"
+    }
+  ]
+}

@@ -1,0 +1,360 @@
+{
+  "schemaVersion": "c2c-frontend-contract-v1",
+  "dimensionId": "DIM-09",
+  "name": "控标能力强",
+  "snapshotFormat": "fixed-seed",
+  "sections": [
+    "三家品牌原始招标参数",
+    "候选控标点及原文关联"
+  ],
+  "sources": [
+    {
+      "path": "modules/bg/server.py",
+      "sha256": "1a5ce5b32b34279dffaa7c092e1caf384b71c8cf3ee75540ed513487fe55ea60"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-multi-platform.js",
+      "sha256": "7905af768e85ea54995031d5ed848e1b24ff9c008203a00ec90fdd5a50b6e272"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim09-seed.json",
+      "sha256": "bc4090b40f103bfead7805f180c7663a18da1df4aa6fedce7cd07bb22e4c008a"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-bid-core.js",
+      "sha256": "9e3eb97de1096d104ad32847efe93698b7a97f41dafc53b460e41ae0eebfbe0b"
+    }
+  ],
+  "nullableContainers": [],
+  "containers": [
+    {
+      "path": "",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/points",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/points/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/topics",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/topics/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/topics/*/clauses",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/topics/*/clauses/丙",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/topics/*/clauses/丙/*",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/topics/*/clauses/乙",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/topics/*/clauses/乙/*",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/topics/*/clauses/甲",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/topics/*/clauses/甲/*",
+      "type": "array",
+      "optional": false
+    }
+  ],
+  "fields": [
+    {
+      "path": "/points/*/arch",
+      "label": "arch",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/points/*/claim",
+      "label": "claim",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/points/*/contrast",
+      "label": "竞品情况",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/points/*/grade",
+      "label": "资质等级",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/points/*/gradeStyle",
+      "label": "gradeStyle",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/points/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/points/*/proof",
+      "label": "proof",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/points/*/proofStr",
+      "label": "proofStr",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/points/*/require",
+      "label": "控标要求",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/points/*/risk",
+      "label": "risk",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/points/*/title",
+      "label": "标题",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/points/*/topic",
+      "label": "topic",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/points/*/type",
+      "label": "type",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "性能",
+        "功能",
+        "架构",
+        "接口"
+      ]
+    },
+    {
+      "path": "/points/*/why",
+      "label": "应用价值",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/topics/*/cat",
+      "label": "cat",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/topics/*/clauses/丙/*/0",
+      "label": "0",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/topics/*/clauses/丙/*/1",
+      "label": "1",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/topics/*/clauses/丙/*/2",
+      "label": "2",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "完全满足",
+        "特做满足：低成本/短周期",
+        "特做满足：高成本/长周期",
+        "无法",
+        "待核实"
+      ]
+    },
+    {
+      "path": "/topics/*/clauses/乙/*/0",
+      "label": "0",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/topics/*/clauses/乙/*/1",
+      "label": "1",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/topics/*/clauses/乙/*/2",
+      "label": "2",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "完全满足",
+        "特做满足：低成本/短周期",
+        "特做满足：高成本/长周期",
+        "无法",
+        "待核实"
+      ]
+    },
+    {
+      "path": "/topics/*/clauses/甲/*/0",
+      "label": "0",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/topics/*/clauses/甲/*/1",
+      "label": "1",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/topics/*/clauses/甲/*/2",
+      "label": "2",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "enum": [
+        "完全满足",
+        "特做满足：低成本/短周期",
+        "特做满足：高成本/长周期",
+        "无法",
+        "待核实"
+      ]
+    },
+    {
+      "path": "/topics/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/topics/*/mine",
+      "label": "mine",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/topics/*/myStatus",
+      "label": "myStatus",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/topics/*/opp",
+      "label": "opp",
+      "types": [
+        "string"
+      ],
+      "role": "research",
+      "optional": true
+    },
+    {
+      "path": "/topics/*/title",
+      "label": "标题",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    }
+  ],
+  "rules": [
+    "topics包含id/cat/title/clauses/mine/myStatus及可选opp；points所有字段均列入契约，即使当前简版未显示部分字段也保留研究说明。",
+    "clauses按甲/乙/丙分组，每条严格三个位置：[原文编号,参数原文,我方应标状态]；空分组必须解释样本缺失，不能虚构招标原文。",
+    "条款状态允许完全满足、特做满足：低成本/短周期、特做满足：高成本/长周期、无法、待核实。控标类型性能/功能/架构/接口；前端性能显示参数、接口归功能，须保留原类型。",
+    "我方目标与已验证能力分开；控标证明、风险、应用理由及对比边界不能用强控标标签代替。"
+  ],
+  "requiredValues": {}
+}

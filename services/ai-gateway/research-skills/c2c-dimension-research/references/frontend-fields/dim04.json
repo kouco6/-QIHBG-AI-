@@ -1,0 +1,384 @@
+{
+  "schemaVersion": "c2c-frontend-contract-v1",
+  "dimensionId": "DIM-04",
+  "name": "技术先进",
+  "snapshotFormat": "v1.1",
+  "sections": [
+    "技术先进总表（八个业务字段）",
+    "先进性分析（逐技术、逐分析点、证据详情）"
+  ],
+  "sources": [
+    {
+      "path": "modules/bg/server.py",
+      "sha256": "1a5ce5b32b34279dffaa7c092e1caf384b71c8cf3ee75540ed513487fe55ea60"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-multi-platform.js",
+      "sha256": "7905af768e85ea54995031d5ed848e1b24ff9c008203a00ec90fdd5a50b6e272"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim04-core.html",
+      "sha256": "da597d361630e9503e993584df16666fd9b14e8859e093234042c474042600b3"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim04-core.js",
+      "sha256": "c79b4ecc956184550ccb64a83b75c3bb15486a11f9e420d88f1ef855c7715b95"
+    },
+    {
+      "path": "modules/bg/template-samples/dim04.json",
+      "sha256": "fc965822f6ab09d64e6cb656313d6a1725cd5407bc548e4ce99bb6537c3a99a5"
+    }
+  ],
+  "nullableContainers": [],
+  "containers": [
+    {
+      "path": "",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/analysis",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/analysis/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/analysis/*/points",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/analysis/*/points/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/analysis/*/points/*/evidence",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/evidence",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/evidence/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/rows",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/rows/*",
+      "type": "object",
+      "optional": false
+    }
+  ],
+  "fields": [
+    {
+      "path": "/analysis/*/category",
+      "label": "category",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/analysis/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/analysis/*/overall",
+      "label": "overall",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/analysis/*/points/*/benchmark",
+      "label": "对标",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/analysis/*/points/*/difference",
+      "label": "差异",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/analysis/*/points/*/evidence/*",
+      "label": "*",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/analysis/*/points/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/analysis/*/points/*/performance",
+      "label": "性能表现",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/analysis/*/points/*/reason",
+      "label": "原因",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/analysis/*/points/*/summary",
+      "label": "summary",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/analysis/*/points/*/supplement",
+      "label": "补充说明",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/analysis/*/points/*/title",
+      "label": "标题",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/analysis/*/points/*/value",
+      "label": "价值",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/analysis/*/scope",
+      "label": "scope",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/analysis/*/source",
+      "label": "来源",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/analysis/*/subtitle",
+      "label": "subtitle",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/evidence/*/excerpt",
+      "label": "原文摘录",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/evidence/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/evidence/*/note",
+      "label": "说明",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/evidence/*/publisher",
+      "label": "发布主体",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/evidence/*/support",
+      "label": "支持命题",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/evidence/*/title",
+      "label": "标题",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/evidence/*/url",
+      "label": "来源链接",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/evidence/*/where",
+      "label": "原文位置",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/format",
+      "label": "format",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/rows/*/aiInitial",
+      "label": "aiInitial",
+      "types": [
+        "boolean"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/rows/*/barrier",
+      "label": "行业门槛/技术壁垒",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/company",
+      "label": "我司技术情况",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/companyTouched",
+      "label": "companyTouched",
+      "types": [
+        "boolean"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/rows/*/id",
+      "label": "标识",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/rows/*/industry",
+      "label": "行业及竞品情况",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/leading",
+      "label": "领先程度",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/maturity",
+      "label": "成熟度",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/source",
+      "label": "来源",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/rows/*/value",
+      "label": "价值",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    }
+  ],
+  "rules": [
+    "当前format=v1.1，rows/analysis/evidence三部分都要输出；不能只返回技术总表。",
+    "每个rows[].id必须关联analysis同键且analysis.id相同；每个分析点evidence[]必须解析到evidence对象键。",
+    "company及companyTouched表示我方事实及人工确认；无授权材料时company空字符串、companyTouched=false。aiInitial=true不能冒充人工确认。",
+    "证据key及其展示id可以不同，但与通用研究档案证据ID的对应关系必须明确。来源、原文位置和实际支持命题均不得省略。"
+  ],
+  "requiredValues": {
+    "/format": "v1.1"
+  }
+}

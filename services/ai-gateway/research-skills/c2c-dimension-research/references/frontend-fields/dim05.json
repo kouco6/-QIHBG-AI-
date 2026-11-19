@@ -1,0 +1,755 @@
+{
+  "schemaVersion": "c2c-frontend-contract-v1",
+  "dimensionId": "DIM-05",
+  "name": "功能强",
+  "snapshotFormat": "fixed-seed",
+  "sections": [
+    "产品功能架构",
+    "完整功能清单（三产品槽位）",
+    "核心功能与亮点",
+    "竞品功能对标及统计口径"
+  ],
+  "sources": [
+    {
+      "path": "modules/bg/server.py",
+      "sha256": "1a5ce5b32b34279dffaa7c092e1caf384b71c8cf3ee75540ed513487fe55ea60"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-multi-platform.js",
+      "sha256": "7905af768e85ea54995031d5ed848e1b24ff9c008203a00ec90fdd5a50b6e272"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim05-seed.json",
+      "sha256": "4499a84cf8d32a001b1f78d86261112d879a90a0ebb5b7af91348d99c9601c96"
+    },
+    {
+      "path": "modules/bg/dimension-assets/dim-multi-core.js",
+      "sha256": "36d28782a39437723140b2132e6cdedbb62e0bd744946c4546be30f7fde2466d"
+    }
+  ],
+  "nullableContainers": [],
+  "containers": [
+    {
+      "path": "",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/architecture",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/architecture/pillars",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/architecture/pillars/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/architecture/pillars/*/module_internal_ids",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/comparisons",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/comparisons/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/comparisons/*/linked_feature_ids",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/display_policy",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/display_policy/do_not_display",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/display_policy/visible_page_headings",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/highlight_features",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/highlight_features/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/highlight_features/*/linked_feature_ids",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/inventory",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/inventory/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/inventory/*/features",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/inventory/*/features/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/inventory/*/features/*/products",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/inventory/*/features/*/products/a24",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/inventory/*/features/*/products/legacy",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/inventory/*/features/*/products/pro",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/scope",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/scope/products",
+      "type": "array",
+      "optional": false
+    },
+    {
+      "path": "/scope/products/*",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/stats",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/stats/status_count_by_product",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/stats/status_count_by_product/a24",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/stats/status_count_by_product/legacy",
+      "type": "object",
+      "optional": false
+    },
+    {
+      "path": "/stats/status_count_by_product/pro",
+      "type": "object",
+      "optional": false
+    }
+  ],
+  "fields": [
+    {
+      "path": "/architecture/pillars/*/module_internal_ids/*",
+      "label": "*",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/architecture/pillars/*/title",
+      "label": "标题",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/comparisons/*/comparison",
+      "label": "comparison",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/comparisons/*/feature",
+      "label": "feature",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/comparisons/*/legacy",
+      "label": "legacy",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/comparisons/*/linked_feature_ids/*",
+      "label": "*",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/comparisons/*/pro",
+      "label": "pro",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/dimension_id",
+      "label": "dimension_id",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/dimension_name",
+      "label": "dimension_name",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/display_policy/do_not_display/*",
+      "label": "*",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/display_policy/internal_ids_visible",
+      "label": "internal_ids_visible",
+      "types": [
+        "boolean"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/display_policy/notes",
+      "label": "notes",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/display_policy/preserve_critical_unknowns",
+      "label": "preserve_critical_unknowns",
+      "types": [
+        "boolean"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/display_policy/visible_page_headings/*",
+      "label": "*",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/highlight_features/*/behavior",
+      "label": "behavior",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/highlight_features/*/boundary",
+      "label": "boundary",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/highlight_features/*/category",
+      "label": "category",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/highlight_features/*/linked_feature_ids/*",
+      "label": "*",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/highlight_features/*/product_scope",
+      "label": "product_scope",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/highlight_features/*/title",
+      "label": "标题",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/highlight_features/*/value",
+      "label": "价值",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/feature_count",
+      "label": "feature_count",
+      "types": [
+        "number"
+      ],
+      "role": "derived"
+    },
+    {
+      "path": "/inventory/*/features/*/feature_name",
+      "label": "feature_name",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/internal_id",
+      "label": "internal_id",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/inventory/*/features/*/module_internal_id",
+      "label": "module_internal_id",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/inventory/*/features/*/module_name",
+      "label": "module_name",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/original_research_anchor",
+      "label": "original_research_anchor",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/a24/ability_state",
+      "label": "ability_state",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/a24/delivery_state",
+      "label": "delivery_state",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/a24/detail",
+      "label": "detail",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/a24/display_label",
+      "label": "display_label",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/a24/raw_research_statement",
+      "label": "raw_research_statement",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/a24/source_state",
+      "label": "source_state",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/legacy/ability_state",
+      "label": "ability_state",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/legacy/delivery_state",
+      "label": "delivery_state",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/legacy/detail",
+      "label": "detail",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/legacy/display_label",
+      "label": "display_label",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/legacy/raw_research_statement",
+      "label": "raw_research_statement",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/legacy/source_state",
+      "label": "source_state",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/pro/ability_state",
+      "label": "ability_state",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/pro/delivery_state",
+      "label": "delivery_state",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/pro/detail",
+      "label": "detail",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/pro/display_label",
+      "label": "display_label",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/pro/raw_research_statement",
+      "label": "raw_research_statement",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/features/*/products/pro/source_state",
+      "label": "source_state",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/inventory/*/internal_id",
+      "label": "internal_id",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/inventory/*/module_name",
+      "label": "module_name",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/report_key",
+      "label": "report_key",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/research_date",
+      "label": "research_date",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/schema_version",
+      "label": "schema_version",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/scope/external_competitor",
+      "label": "external_competitor",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/scope/products/*/key",
+      "label": "key",
+      "types": [
+        "string"
+      ],
+      "role": "structure"
+    },
+    {
+      "path": "/scope/products/*/label",
+      "label": "label",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/scope/products/*/name",
+      "label": "名称",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/scope/study_basis",
+      "label": "study_basis",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/stats/caveat",
+      "label": "caveat",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    },
+    {
+      "path": "/stats/module_count",
+      "label": "module_count",
+      "types": [
+        "number"
+      ],
+      "role": "derived"
+    },
+    {
+      "path": "/stats/product_family_count",
+      "label": "product_family_count",
+      "types": [
+        "number"
+      ],
+      "role": "derived"
+    },
+    {
+      "path": "/stats/researched_feature_count",
+      "label": "researched_feature_count",
+      "types": [
+        "number"
+      ],
+      "role": "derived"
+    },
+    {
+      "path": "/stats/status_count_by_product/a24/待核实",
+      "label": "待核实",
+      "types": [
+        "number"
+      ],
+      "role": "derived"
+    },
+    {
+      "path": "/stats/status_count_by_product/a24/支持",
+      "label": "支持",
+      "types": [
+        "number"
+      ],
+      "role": "derived"
+    },
+    {
+      "path": "/stats/status_count_by_product/a24/明确不支持",
+      "label": "明确不支持",
+      "types": [
+        "number"
+      ],
+      "role": "derived"
+    },
+    {
+      "path": "/stats/status_count_by_product/a24/部分支持",
+      "label": "部分支持",
+      "types": [
+        "number"
+      ],
+      "role": "derived"
+    },
+    {
+      "path": "/stats/status_count_by_product/legacy/待核实",
+      "label": "待核实",
+      "types": [
+        "number"
+      ],
+      "role": "derived"
+    },
+    {
+      "path": "/stats/status_count_by_product/legacy/支持",
+      "label": "支持",
+      "types": [
+        "number"
+      ],
+      "role": "derived"
+    },
+    {
+      "path": "/stats/status_count_by_product/legacy/部分支持",
+      "label": "部分支持",
+      "types": [
+        "number"
+      ],
+      "role": "derived"
+    },
+    {
+      "path": "/stats/status_count_by_product/pro/待核实",
+      "label": "待核实",
+      "types": [
+        "number"
+      ],
+      "role": "derived"
+    },
+    {
+      "path": "/stats/status_count_by_product/pro/支持",
+      "label": "支持",
+      "types": [
+        "number"
+      ],
+      "role": "derived"
+    },
+    {
+      "path": "/stats/status_count_by_product/pro/部分支持",
+      "label": "部分支持",
+      "types": [
+        "number"
+      ],
+      "role": "derived"
+    },
+    {
+      "path": "/subject",
+      "label": "subject",
+      "types": [
+        "string"
+      ],
+      "role": "research"
+    }
+  ],
+  "rules": [
+    "覆盖只读展示字段：subject/scope.products、架构标题和模块、模块名、feature_count、功能、逐产品状态、亮点、代际比较、stats和display_policy。不能只输出可编辑patch。",
+    "legacy/pro/a24目前是固定三产品槽位，默认标签及多处页面文案指向Yealink会议终端。研究PAGA等对象时要输出实际研究对象及槽位映射，不能把旧标签当成研究事实；变更只读字段/槽位需要平台适配。",
+    "同一功能各产品ability_state/delivery_state/display_label/source_state/detail/raw_research_statement六项都要覆盖，并保留型号/配件/交付条件。",
+    "module_internal_ids、linked_feature_ids、module_internal_id必须能找到关联模块或功能；统计按本次结果重算，不能沿用示例50项等数值。"
+  ],
+  "requiredValues": {
+    "/schema_version": "1.0",
+    "/dimension_id": "DIM-05"
+  }
+}
