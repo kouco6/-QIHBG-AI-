@@ -7553,11 +7553,14 @@ async function checkHealth() {
    ========================================================================= */
 async function start() {
   // 平台账号会话：未登录直接去登录页，登录后凭 cookie 访问 API
+  // 注意：本页面可能被门户嵌在 /ai/ 下，跳转一律用相对路径，别写 "/login"
   try {
     const me = await fetch("/api/auth/me").then((r) => (r.ok ? r.json() : null)).catch(() => null);
-    if (!me?.account) { location.replace("/login"); return; }
+    if (!me?.account) { location.replace("login"); return; }
     state.user = me.account;
-  } catch { location.replace("/login"); return; }
+    // 门户统一身份（无网关会话）：退出要交回平台，网关自己没得退
+    if (me.integration) state.user.integration = true;
+  } catch { location.replace("login"); return; }
   renderUserChip();
   try {
     await bootstrap();
@@ -7595,8 +7598,14 @@ function renderUserChip() {
   $("#userName").textContent = u.name;
   $("#userRole").textContent = ROLE_LABELS[u.role] || u.role;
   $("#logoutBtn").addEventListener("click", async () => {
+    // 门户内嵌时统一身份只在平台那一侧，网关没有会话 → 直接把退出交给平台并回到平台首页
+    if (state.user?.integration) {
+      await fetch("/platform/logout", { method: "POST" }).catch(() => {});
+      (window.top || window).location.replace("/");
+      return;
+    }
     await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
-    location.replace("/login");
+    location.replace("login");
   });
   // 「设置」对所有人开放：我的员工、我的执行器都在里面。
   // 人员管理、服务开关这些运维项在页面内部按角色隐藏（见 renderSettings）。

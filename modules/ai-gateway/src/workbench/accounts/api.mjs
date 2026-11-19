@@ -114,7 +114,8 @@ export function createAccountsApi({ service, authorized, integration }) {
     if (path === "/api/auth/me" && method === "GET") {
       const account = viewerAccount(req);
       if (!account) return fail(res, 401, "未登录");
-      return json(res, 200, { account });
+      // integration：账号来自平台门户（无网关会话），前端据此把「退出」交回平台
+      return json(res, 200, { account, integration: !sessionAccount(req) });
     }
 
     // ---------- 账号管理（管理员） ----------

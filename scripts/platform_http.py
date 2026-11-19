@@ -5,6 +5,7 @@ import json
 import mimetypes
 import re
 import secrets
+import sqlite3
 import threading
 import time
 from http.cookies import CookieError, SimpleCookie
@@ -12,6 +13,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, quote, unquote, urlsplit
 
+from planning_templates import Templates, TemplateError, PREFIX as TEMPLATE_PREFIX
 from platform_identity import DEFAULT_LOGIN, MODULES, REMEMBER_AGE
 from prepare_sources import ROOT
 from platform_research import ResearchError, PREFIX as RESEARCH_PREFIX, authorize as research_authorize, handle as research_handle
@@ -42,6 +44,8 @@ class Server(ThreadingHTTPServer):
         self.stop_key = stop_key
         self.launch_tickets = {}
         self.ticket_lock = threading.Lock()
+        self.template_lock = threading.RLock()
+        self.template_tickets = {}
         super().__init__(("127.0.0.1", settings.port), Handler)
 
     def launch_url(self):
@@ -316,6 +320,12 @@ class Handler(BaseHTTPRequestHandler):
         except (OSError, RuntimeError, http.client.HTTPException):
             return self._error(503, '研究协作服务暂不可用。')
 
+    def _public_host(self):
+        """反向代理后的真实访问域名：nginx 把 Host 改写成回环，原值在 X-Forwarded-Host。"""
+        host = self.headers.get("Host") or ""
+        forwarded = (self.headers.get("X-Forwarded-Host") or "").strip()
+        return forwarded or host
+
     def _dispatch(self):
         server = self.server
         host = self.headers.get("Host")
@@ -347,10 +357,11 @@ class Handler(BaseHTTPRequestHandler):
             return self._error(405, "操作方法无效。")
         member_entry = path.startswith('/platform/collab/research/')
         origin = self.headers.get('Origin')
-        if not read and origin != f"http://{host}" and not (member_entry and origin is None):
+        public = self._public_host()
+        if not read and origin != f"http://{public}" and not (member_entry and origin is None):
             return self._error(403, "请求来源与平台入口不一致。")
         if member_entry:
-            if origin is not None and origin != f'http://{host}':
+            if origin is not None and origin != f'http://{public}':
                 return self._error(403, '请求来源与平台入口不一致。')
             return self._research_member(parsed)
         identity = server.identity
@@ -378,7 +389,11 @@ class Handler(BaseHTTPRequestHandler):
             if cookie:
                 identity.logout(cookie)
             return self._json(200, {"status": "ok"}, self._cookie("", 0))
+        if path.startswith(TEMPLATE_PREFIX + "/preview/") and read:
+            return self._templates(parsed, None, cookie)
         account = identity.current(cookie)
+        if path == TEMPLATE_PREFIX or path.startswith(TEMPLATE_PREFIX + "/"):
+            return self._templates(parsed, account, cookie)
         if path == "/platform/session" and read:
             if not account:
                 return self._error(401, "登录已失效。")
@@ -420,6 +435,117 @@ class Handler(BaseHTTPRequestHandler):
                     return self._error(404, "资源不存在。")
                 return self._file(dist / "index.html")
         return self._proxy(module, parsed, rest, account, cookie, document)
+
+    def _templates(self, parsed, account, cookie):
+        server = self.server
+        parts = parsed.path[len(TEMPLATE_PREFIX):].strip('/').split('/')
+        preview = parts[0] == 'preview'
+        if preview:
+            if len(parts) < 4:
+                return self._error(404, '预览资源不存在。')
+            with server.template_lock:
+                session = server.template_tickets.get(parts[1], '')
+            account = server.identity.current(session)
+        if not account:
+            return self._error(401, '登录已失效，请重新打开模板管理。')
+        if account['must_change_password'] or 'bg' not in account['modules']:
+            return self._error(403, '当前账号没有企划模块的访问权限。')
+        try:
+            with server.template_lock:
+                if not hasattr(server, 'templates'):
+                    source = getattr(server.settings, 'runtime', ROOT / 'runtime') / 'bg'
+                    server.templates = Templates(server.settings.data, source if source.is_dir() else ROOT / 'modules/bg')
+                registry = server.templates
+            if preview or parts[0] == 'versions' and len(parts) >= 3:
+                if self.command not in {'GET', 'HEAD'}:
+                    return self._error(405, '模板资源仅支持读取。')
+                version_id = parts[2] if preview else parts[1]
+                name = '/'.join(parts[3:] if preview else parts[2:])
+                if preview and name == 'package.zip':
+                    return self._error(403, '预览链接不能下载模板包。')
+                path = registry.asset(version_id, name)
+                prefix = TEMPLATE_PREFIX + ('/preview/' + parts[1] if preview else '/versions') + '/' + version_id
+                payload = path.read_bytes()
+                headers = [('Access-Control-Allow-Origin', '*')] if preview else []
+                mime = mimetypes.guess_type(path.name)[0] or 'application/octet-stream'
+                if path.suffix in {'.html','.js','.css'}:
+                    source = payload.decode('utf-8')
+                    source = source.replace('/bg/dimension-assets/', prefix + '/assets/').replace('/dimension-assets/', prefix + '/assets/')
+                    payload = source.encode('utf-8')
+                    mime = {'.html':'text/html','.js':'text/javascript','.css':'text/css'}[path.suffix] + '; charset=utf-8'
+                if preview and path.suffix == '.html':
+                    # Sandboxed documents cannot bubble keys to the management page.
+                    # Keep Escape working without granting same-origin access.
+                    escape_bridge = '''<script>
+window.addEventListener('keydown', function(event) {
+  if (event.key !== 'Escape' || event.target.closest('input,textarea,select,[contenteditable="true"]') ||
+      document.querySelector('dialog[open],.modal,.edit-mask:not([hidden])')) return;
+  setTimeout(function() {
+    if (!event.defaultPrevented) window.parent.postMessage({type:'bg-template-preview-escape'}, location.origin);
+  }, 0);
+});
+</script>'''
+                    source = payload.decode('utf-8')
+                    closing_head = re.search(r'</head\s*>', source, re.IGNORECASE)
+                    if closing_head:
+                        source = source[:closing_head.start()] + escape_bridge + source[closing_head.start():]
+                    else:
+                        source += escape_bridge
+                    payload = source.encode('utf-8')
+                    prefix = 'http://' + self._public_host() + prefix
+                    headers.append(('Content-Security-Policy', "sandbox allow-scripts; default-src 'none'; script-src 'unsafe-inline' " + prefix + "/assets/; style-src 'unsafe-inline' " + prefix + "/assets/; img-src data: blob: " + prefix + "/assets/; font-src " + prefix + "/assets/; connect-src " + prefix + "/assets/; form-action 'none'; base-uri 'none'"))
+                if name == 'package.zip':
+                    headers.append(('Content-Disposition', 'attachment; filename="planning-template-' + version_id[:12] + '.zip"'))
+                self._headers(200, mime, len(payload), headers)
+                if self.command != 'HEAD':
+                    self.wfile.write(payload)
+                return
+            if parts == ['samples'] and self.command in {'GET','HEAD'}:
+                return self._json(200, {f'DIM-{i:02d}':json.loads((registry.source / 'template-samples' / f'dim{i:02d}.json').read_text(encoding='utf-8')) for i in range(1,13)})
+            if parts == [''] and self.command in {'GET','HEAD'}:
+                with server.template_lock:
+                    # Preview capabilities are session-bound and revalidated for every resource.
+                    for ticket, session in list(server.template_tickets.items()):
+                        if not server.identity.current(session):
+                            del server.template_tickets[ticket]
+                    ticket = next((t for t, value in server.template_tickets.items() if value == cookie), None)
+                    if not ticket:
+                        if len(server.template_tickets) >= 1024:
+                            raise TemplateError('预览会话过多，请稍后重试。',503)
+                        ticket = secrets.token_urlsafe(32)
+                        server.template_tickets[ticket] = cookie
+                return self._json(200, {**registry.listing(), 'canManage':account['role']=='admin', 'previewTicket':ticket})
+            if account['role'] != 'admin':
+                return self._error(403, '模板导入及应用仅向管理员开放。')
+            if parts == ['import'] and self.command == 'POST':
+                if self.headers.get('Content-Type','').split(';')[0] not in {'application/zip','application/octet-stream'}:
+                    raise TemplateError('请上传ZIP模板包。',415)
+                payload = self.rfile.read(self._length(32 * 1024 * 1024))
+                current = server.identity.current(cookie)
+                if not current or current['role'] != 'admin':
+                    return self._error(403, '管理员权限已失效。')
+                return self._json(201, registry.import_package(payload, account['name']))
+            if parts == ['apply'] and self.command == 'POST':
+                body = self._body_json()
+                current = server.identity.current(cookie)
+                if not current or current['role'] != 'admin':
+                    return self._error(403, '管理员权限已失效。')
+                return self._json(200, registry.apply(body.get('id'), body.get('revision'), account['name']))
+            return self._error(405 if self.command == 'DELETE' else 404, '第一版不提供删除模板版本。' if self.command == 'DELETE' else '模板操作不存在。')
+        except TemplateError as error:
+            return self._error(error.status, str(error))
+        except (ValueError, TypeError):
+            return self._error(400, '模板请求无效或内容过大。')
+        except (OSError, sqlite3.Error):
+            return self._error(503, '模板存储暂不可用，请检查磁盘后重试。')
+
+    def _body_json(self):
+        if self.headers.get('Content-Type', '').split(';', 1)[0].strip().lower() != 'application/json':
+            raise ValueError('请使用 JSON 提交。')
+        body = json.loads(self.rfile.read(self._length(8192)))
+        if not isinstance(body, dict):
+            raise ValueError('请求内容须为对象。')
+        return body
 
     def _handle(self):
         self.connection.settimeout(60)
