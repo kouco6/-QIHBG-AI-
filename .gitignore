@@ -16,6 +16,7 @@
 !/scripts/dev_environment.py
 !/scripts/dev_browser_smoke.mjs
 !/scripts/dev_support/
+!/scripts/planning_templates.py
 !/scripts/platform_http.py
 !/scripts/platform_local.py
 !/scripts/platform_research.py
