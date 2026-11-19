@@ -159,6 +159,10 @@ class Handler(BaseHTTPRequestHandler):
             headers["Origin"] = f"http://{peer}"
         if module == "ai":
             headers["Authorization"] = f"Bearer {ai_token}"
+            headers["X-Integration-Account"] = str(account.get("login") or account.get("id") or "")
+            headers["X-Integration-Name"] = str(account.get("name") or "")
+            if account.get("role") == "admin":
+                headers["X-Integration-Admin"] = "1"
         else:
             headers["X-Integration-Key"] = self.server.modules.key
         if module == "experience":

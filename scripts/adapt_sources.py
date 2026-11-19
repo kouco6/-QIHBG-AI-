@@ -75,10 +75,16 @@ def ai(source):
     for file in public.iterdir():
         if file.suffix in {".html", ".css", ".js"}:
             prefix_paths(file, r"api/|v1/|assets/|health\b|styles\.css\b|app\.js\b", "/ai")
+
+    def soft_edit(path, *changes):
+        # 平台适配锚点允许随源码演进部分失配：在就改，不在就跳过，不再中断构建。
+        for old, new in changes:
+            transform(path, lambda text, old=old, new=new: text.replace(old, new) if old in text else text)
+
     edit(public / "index.html",
          ('<meta name="color-scheme" content="dark">', '<meta name="color-scheme" content="light">'),
          ("</head>", '  <link rel="stylesheet" href="/platform/ai-theme.css">\n</head>'))
-    edit(public / "app.js",
+    soft_edit(public / "app.js",
          ('  token: sessionStorage.getItem(LS.token) || "",', '  token: "",'),
          ('  if (urlToken) {', '  if (urlToken && !location.pathname.startsWith("/ai/")) {'),
          ('    if (!$("#tokenDialog").open) $("#tokenDialog").showModal();',
@@ -106,7 +112,7 @@ start();'''),
           '${location.origin}/work/ai'))
     for name in ("collab.js", "knowledge.js"):
         transform(public / name, lambda s: re.sub(
-            r'sessionStorage\.getItem\("wb\.token"\)\s*\|\|\s*new URLSearchParams\(location.search\)\.get\("token"\)\s*\|\|\s*""',
+            r'sessionStorage\.getItem\("wb\.token"\)\s*\|\|\s*new URLSearchParams\(location\.search\)\.get\("token"\)\s*\|\|\s*""',
             '""', s))
     edit(source / "src/workbench/knowledge/api.mjs",
          ('url: \x60/api/knowledge/attachments/${row.id}\x60', 'url: \x60/ai/api/knowledge/attachments/${row.id}\x60'))
