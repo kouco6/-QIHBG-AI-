@@ -68,7 +68,7 @@ function lanIPv4() {
   return null;
 }
 
-export function createAccountsApi({ service, authorized }) {
+export function createAccountsApi({ service, authorized, integration }) {
   const json = (res, status, body, extraHeaders = {}) => {
     if (!res.headersSent) {
       res.writeHead(status, {
@@ -89,7 +89,10 @@ export function createAccountsApi({ service, authorized }) {
   /** 会话里的账号；主 Token 请求视为管理员（返回 null，由调用方按 admin 处理）。 */
   const sessionAccount = (req) => service.accountBySession(sessionToken(req));
 
-  const isAdminReq = (req) => authorized(req) || sessionAccount(req)?.role === "admin";
+  /** 当前请求的有效账号：网关会话优先，其次平台集成身份（portal 反代带 X-Integration-Account 时映射出来的账号）。 */
+  const viewerAccount = (req) => sessionAccount(req) ?? (integration ? integration(req) : null);
+
+  const isAdminReq = (req) => authorized(req) || viewerAccount(req)?.role === "admin";
 
   const handle = async (req, res, path, url) => {
     const method = req.method || "GET";
@@ -109,7 +112,7 @@ export function createAccountsApi({ service, authorized }) {
     }
 
     if (path === "/api/auth/me" && method === "GET") {
-      const account = sessionAccount(req);
+      const account = viewerAccount(req);
       if (!account) return fail(res, 401, "未登录");
       return json(res, 200, { account });
     }
@@ -160,5 +163,5 @@ export function createAccountsApi({ service, authorized }) {
     return false;
   };
 
-  return { handle, sessionAccount, isAdminReq, sessionToken };
+  return { handle, sessionAccount, viewerAccount, isAdminReq, sessionToken };
 }

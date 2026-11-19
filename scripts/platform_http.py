@@ -10,7 +10,7 @@ import time
 from http.cookies import CookieError, SimpleCookie
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import parse_qs, unquote, urlsplit
+from urllib.parse import parse_qs, quote, unquote, urlsplit
 
 from platform_identity import DEFAULT_LOGIN, MODULES, REMEMBER_AGE
 from prepare_sources import ROOT
@@ -159,8 +159,9 @@ class Handler(BaseHTTPRequestHandler):
             headers["Origin"] = f"http://{peer}"
         if module == "ai":
             headers["Authorization"] = f"Bearer {ai_token}"
-            headers["X-Integration-Account"] = str(account.get("login") or account.get("id") or "")
-            headers["X-Integration-Name"] = str(account.get("name") or "")
+            # 平台账号名可能是中文，HTTP 头只允许 latin-1，统一按 URL 编码下发（网关侧解码）
+            headers["X-Integration-Account"] = quote(str(account.get("login") or account.get("id") or ""), safe="")
+            headers["X-Integration-Name"] = quote(str(account.get("name") or ""), safe="")
             if account.get("role") == "admin":
                 headers["X-Integration-Admin"] = "1"
         else:
@@ -424,9 +425,11 @@ class Handler(BaseHTTPRequestHandler):
         self.connection.settimeout(60)
         try:
             self._dispatch()
+        except (BrokenPipeError, ConnectionResetError, ConnectionAbortedError, TimeoutError):
+            pass
         except ValueError:
             self._error(400, "请求内容或地址格式有误。")
-        except (BrokenPipeError, ConnectionResetError, TimeoutError):
-            pass
+        except Exception:
+            self._error(502, "业务服务响应异常，请稍后重试。")
 
     do_GET = do_HEAD = do_POST = do_PUT = do_PATCH = do_DELETE = _handle

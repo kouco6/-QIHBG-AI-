@@ -201,8 +201,13 @@ export function createRunnerApi({ manager, userAgents, accounts, accountsApi, au
 
     /* ---------------- 浏览器通道（会话 / 主 Token） ---------------- */
 
-    const sessionAccount = accountsApi.sessionAccount(req);
-    const isPrivileged = authorized(req) || sessionAccount?.role === "admin";
+    const gatewaySession = accountsApi.sessionAccount(req);
+    // 平台集成身份：portal 反代带主 Token + X-Integration-Account，用它映射出的账号落归属
+    const integrationViewer = gatewaySession ? null : (accountsApi.viewerAccount?.(req) ?? null);
+    const sessionAccount = gatewaySession ?? integrationViewer;
+    const isPrivileged = integrationViewer
+      ? integrationViewer.role === "admin"
+      : (authorized(req) || sessionAccount?.role === "admin");
     // 主 Token（程序化集成）没有会话，但操作要落在管理员名下，员工/任务才有归属
     const viewer = sessionAccount ?? (authorized(req) ? primaryAdmin() : null);
 

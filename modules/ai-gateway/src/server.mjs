@@ -150,7 +150,41 @@ const bootstrapAdmin = accountsService.ensureAdmin();
 if (bootstrapAdmin) {
   console.log(`[accounts] 首次启动已创建管理员账号 admin（初始密码 admin123，请尽快在「账号管理」里修改）`);
 }
-const accountsApi = createAccountsApi({ service: accountsService, authorized: (req) => authorized(req) });
+/**
+ * 平台集成身份桥：portal 反代时持网关主 Token，并带上 X-Integration-Account/Name/Admin
+ * （平台登录名 / 显示名 / 是否管理员）。这里把它映射成同名网关账号（缺则建），
+ * 让平台用户在 AI 网关里拥有自己的员工、模型池与任务归属。
+ * 名称类头部只能是 latin-1，portal 侧按 URL 编码下发，这里解码还原。
+ */
+const decodeIntegrationHeader = (value) => {
+  const text = String(value ?? "");
+  try { return decodeURIComponent(text); } catch { return text; }
+};
+
+function resolveIntegrationAccount(req) {
+  if (!authorized(req) || accountsApi.sessionAccount(req)) return null;
+  const login = decodeIntegrationHeader(req.headers["x-integration-account"]).trim().slice(0, 32);
+  if (!login) return null;
+  const found = accountsService.listAccounts().find((a) => a.username === login && a.active);
+  if (found) return found;
+  try {
+    const created = accountsService.createAccount({
+      username: login,
+      name: decodeIntegrationHeader(req.headers["x-integration-name"]).trim().slice(0, 40) || login,
+      role: req.headers["x-integration-admin"] === "1" ? "admin" : "other",
+      password: randomUUID(),
+    });
+    console.log(`[accounts] 平台集成账号已映射：${login}`);
+    return created;
+  } catch { /* 创建失败（如重名停用）时按无账号处理 */ }
+  return null;
+}
+
+const accountsApi = createAccountsApi({
+  service: accountsService,
+  authorized: (req) => authorized(req),
+  integration: resolveIntegrationAccount,
+});
 // 任务协作：成员推送走独立 Token，路由必须在主鉴权闸门之前接管 /api/collab/*
 const collabApi = createCollabApi({
   stateDir: dirname(config.stateFile),
@@ -446,26 +480,8 @@ const server = createServer(async (req, res) => {
 
     // API 鉴权：网关主 Token（程序化集成）或平台登录会话（浏览器）二选一
     const sessionAccount = accountsApi.sessionAccount(req);
-    // 平台集成身份桥：portal 反代持主 Token + X-Integration-Account（平台登录名）访问时，
-    // 自动映射（缺则建）同名网关账号，让平台用户在 AI 网关里拥有独立的员工/模型池身份。
-    let integrationAccount = null;
-    if (!sessionAccount && authorized(req)) {
-      const integrationLogin = String(req.headers["x-integration-account"] || "").trim().slice(0, 32);
-      if (integrationLogin) {
-        integrationAccount = accountsService.listAccounts().find((a) => a.username === integrationLogin && a.active) ?? null;
-        if (!integrationAccount) {
-          try {
-            integrationAccount = accountsService.createAccount({
-              username: integrationLogin,
-              name: String(req.headers["x-integration-name"] || integrationLogin).trim().slice(0, 40) || integrationLogin,
-              role: req.headers["x-integration-admin"] === "1" ? "admin" : "other",
-              password: randomUUID(),
-            });
-            console.log(`[accounts] 平台集成账号已映射：${integrationLogin}`);
-          } catch { /* 创建失败（如重名停用）时按无账号处理 */ }
-        }
-      }
-    }
+    // 平台集成身份桥：见 resolveIntegrationAccount 定义
+    const integrationAccount = resolveIntegrationAccount(req);
     if ((path.startsWith("/v1/") || path.startsWith("/api/")) && !authorized(req) && !sessionAccount) {
       return json(res, 401, { error: "Unauthorized" }, { "www-authenticate": "Bearer" });
     }
