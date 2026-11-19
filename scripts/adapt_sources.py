@@ -116,7 +116,7 @@ start();'''),
             '""', s))
     edit(source / "src/workbench/knowledge/api.mjs",
          ('url: \x60/api/knowledge/attachments/${row.id}\x60', 'url: \x60/ai/api/knowledge/attachments/${row.id}\x60'))
-    edit(source / "src/server.mjs",
+    soft_edit(source / "src/server.mjs",
          ("frame-ancestors 'none'", "frame-ancestors 'self'"),
          ('    json(res, 400, { error: error instanceof Error ? error.message : String(error) });',
           '''    if (res.headersSent || res.destroyed) {
