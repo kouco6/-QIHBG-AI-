@@ -1,5 +1,10 @@
 /** Shared metadata powers the capability center and future page authoring. */
 export const foundationComponents = [
+  ["native-collections", "NativeCollections", "卡片与集合桥接", "真实Card、Badge、Button组合；统计、筛选与内容卡片统一渲染"],
+  ["native-retained-dialog", "RetainedDialog", "保留节点弹窗", "共享Dialog接管焦点、遮罩和Esc，保留原表单节点与监听器"],
+  ["action-card", "ActionCard", "多行操作卡片", "复用Button，标题和说明自适应换行与高度"],
+  ["native-forms", "NativeForms", "原生选择与勾选桥接", "原生控制器复用 Select、Checkbox，保留值、事件和表单协议"],
+  ["native-surfaces", "NativeSurfaces", "原生抽屉与菜单桥接", "任务控制器复用 Sheet、DropdownMenu，统一焦点和键盘交互"],
   ["native-dialog", "NativeDialog", "原生表单弹窗桥接", "原生业务控制器直接复用共享 Radix Dialog、焦点与键盘管理"],
   ["checkbox", "Checkbox", "复选框", "记录选择、全选与部分选中状态"],
   ["popover", "Popover", "浮层", "轻量筛选及辅助操作面板"],

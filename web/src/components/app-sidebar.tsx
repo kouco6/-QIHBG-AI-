@@ -128,7 +128,7 @@ function SidebarMenuList({
                 className="h-9"
                 isActive={item.id === activeId}
                 tooltip={item.title}
-                onClick={item.id.startsWith("ai-") || item.id === "overview" || item.id === "templates" || item.id === "people" || label === "底层能力" ? () => onSelect(item.id) : undefined}
+                onClick={item.id.startsWith("ai-") || item.id === "overview" || item.id === "templates" || item.id === "exhibitions" || item.id === "dashboard" || item.id === "people" || label === "底层能力" ? () => onSelect(item.id) : undefined}
               >
                 <item.icon />
                 <span>{item.title}</span>

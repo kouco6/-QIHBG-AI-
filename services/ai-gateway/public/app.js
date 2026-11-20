@@ -624,7 +624,7 @@ function renderAdhocSkills() {
   const names = state.composer.skills ?? [];
   box.hidden = !names.length;
   box.innerHTML = names.map((name) => `
-    <span class="adhoc-skill">${esc(name)}<button type="button" data-drop-skill="${esc(name)}" aria-label="摘掉 ${esc(name)}">×</button></span>`).join("");
+    <span class="adhoc-skill">${esc(name)}<button type="button" data-native-size="content" data-drop-skill="${esc(name)}" aria-label="摘掉 ${esc(name)}">×</button></span>`).join("");
   box.querySelectorAll("[data-drop-skill]").forEach((btn) => {
     btn.addEventListener("click", () => {
       state.composer.skills = (state.composer.skills ?? []).filter((name) => name !== btn.dataset.dropSkill);
@@ -687,7 +687,7 @@ function renderAdhocList() {
     const artifacts = (task.artifacts ?? []).length;
     const conclusion = String(task.summary || task.finalResponse || "").replace(/\s+/g, " ").trim().slice(0, 70);
     const sub = conclusion || `${who} · ${when}${artifacts ? ` · ${artifacts} 个产出` : ""}`;
-    return `<button type="button" class="adhoc-row" data-task="${esc(task.id)}">
+    return `<button type="button" class="adhoc-row" data-native-size="content" data-native-focus-key="task-${esc(task.id)}" data-task="${esc(task.id)}">
       ${pill}
       <span class="adhoc-row-main"><b>${esc(task.label || "未命名任务")}</b><em>${esc(sub)}</em></span>
       <span class="adhoc-row-meta"><b>${esc(who)}</b><i>${esc(when)}${artifacts ? ` · ${artifacts} 个产出` : ""}</i></span>
@@ -1051,7 +1051,7 @@ function renderLiveContent(task) {
   wrap.append(renderExecCard(task));
 
   const block = document.createElement("div");
-  block.className = "block";
+  block.className = "scheduler-section";
   const head = document.createElement("div");
   head.className = "block-head";
   head.innerHTML = `<h3>实时动作流</h3><span>${esc(STATUS_TEXT[task.status] || task.status)}</span>`;
@@ -1181,6 +1181,7 @@ async function openDrawer(id) {
   state.lastSeq = 0;
   $("#drawer").classList.add("open");
   $("#drawer").setAttribute("aria-hidden", "false");
+  window.platformTaskDrawer?.setOpen(true);
   $("#scrim").classList.add("show");
   $("#drawerBody").replaceChildren();
   renderBoard();
@@ -1205,6 +1206,7 @@ function closeDrawer() {
   closeStream();
   state.selectedId = null;
   $("#drawer").classList.remove("open");
+  window.platformTaskDrawer?.setOpen(false);
   $("#drawer").setAttribute("aria-hidden", "true");
   $("#scrim").classList.remove("show");
   renderBoard();
@@ -1313,6 +1315,7 @@ function renderActions(task) {
 
 /** 「更多」下拉：点外面、按 Esc、选完都收起来。 */
 function moreMenu(items) {
+  if (window.platformCreateMenu) return window.platformCreateMenu("更多", items);
   const wrap = document.createElement("div");
   wrap.className = "more-wrap";
   const trigger = document.createElement("button");
@@ -1708,7 +1711,6 @@ function releasePreviewBlob() {
 
 async function openArtifactPreview(task, artifact) {
   previewTarget = { task, artifact };
-  const dialog = $("#artifactPreview");
   const body = $("#apreviewBody");
   const meta = artifactType(artifact.type);
   $("#apreviewName").textContent = artifact.name || "未命名文件";
@@ -1718,7 +1720,7 @@ async function openArtifactPreview(task, artifact) {
   icon.textContent = meta.code;
   $("#apreviewDownload").hidden = false;
   body.innerHTML = `<div class="apreview-note">正在打开…</div>`;
-  if (!dialog.open) dialog.showModal();
+  window.platformDialogs.artifactPreview.setOpen(true);
 
   releasePreviewBlob();
   const ext = extOf(artifact.name);
@@ -1775,7 +1777,7 @@ async function downloadArtifact(task, artifact) {
 // 弹窗按钮是一次性绑定；task/artifact 存在按钮上下文里
 $("#apreviewClose")?.addEventListener("click", () => {
   releasePreviewBlob();
-  $("#artifactPreview").close();
+  window.platformDialogs.artifactPreview.setOpen(false);
 });
 $("#artifactPreview")?.addEventListener("close", releasePreviewBlob);
 $("#apreviewCopy")?.addEventListener("click", () => {
@@ -1841,7 +1843,7 @@ function renderStages(task) {
 /* 空闲态的空舱门：五段全部空心，明确说明不代表完成比例 */
 function renderIdleHatch() {
   const box = document.createElement("div");
-  box.className = "block";
+  box.className = "scheduler-section";
   const list = document.createElement("div");
   list.className = "stage-list";
   list.style.setProperty("--stage-progress", "0%");
@@ -1898,7 +1900,7 @@ function renderQuickAssign() {
 
 function renderAttentionPanel() {
   const block = document.createElement("div");
-  block.className = "block";
+  block.className = "scheduler-section";
   const head = document.createElement("div");
   head.className = "block-head";
   const attention = state.tasks.filter((task) => ["failed", "interrupted"].includes(task.status));
@@ -1954,7 +1956,7 @@ function renderAttentionPanel() {
 
 function renderRecentScene(task) {
   const block = document.createElement("div");
-  block.className = "block";
+  block.className = "scheduler-section";
   const head = document.createElement("div");
   head.className = "block-head";
   head.innerHTML = `<h3>最近现场</h3><span>最近 ${Math.min(3, state.tasks.length)} 次任务</span>`;
@@ -1993,7 +1995,7 @@ function renderExecCard(task) {
 
 function renderBlockerPanel(task) {
   const wrap = document.createElement("div");
-  wrap.className = "block";
+  wrap.className = "scheduler-section";
   const head = document.createElement("div");
   head.className = "block-head";
   const alerts = state.events.filter((event) => {
@@ -2037,7 +2039,7 @@ function renderBlockerPanel(task) {
 /* 已完成：四格量化结果 */
 function renderResultMetrics(task) {
   const box = document.createElement("div");
-  box.className = "block";
+  box.className = "scheduler-section";
   const head = document.createElement("div");
   head.className = "block-head";
   head.innerHTML = `<h3>结果摘要</h3><span>${esc(STATUS_TEXT[task.status] || task.status)}</span>`;
@@ -2081,7 +2083,7 @@ function renderReplay(task) {
   const rows = stageTimeline(state.events, task);
   if (rows.length < 2) return null;
   const box = document.createElement("div");
-  box.className = "block";
+  box.className = "scheduler-section";
   const head = document.createElement("div");
   head.className = "block-head";
   head.innerHTML = '<h3>执行回放</h3><span>按真实事件时间还原</span>';
@@ -2103,7 +2105,7 @@ function renderReplay(task) {
 
 function renderReviewPanel(task) {
   const box = document.createElement("div");
-  box.className = "block";
+  box.className = "scheduler-section";
   const head = document.createElement("div");
   head.className = "block-head";
   head.innerHTML = '<h3>复盘与后续</h3><span>基于本次记录</span>';
@@ -2135,7 +2137,7 @@ function renderFailureContent(task) {
   const wrap = document.createElement("div");
 
   const summary = document.createElement("div");
-  summary.className = "block";
+  summary.className = "scheduler-section";
   summary.innerHTML = `<div class="block-head"><h3>故障摘要</h3><span>${esc(STATUS_TEXT[task.status] || task.status)}</span></div>`;
   const panel = document.createElement("div");
   panel.className = "fault-panel";
@@ -2150,7 +2152,7 @@ function renderFailureContent(task) {
   wrap.append(summary);
 
   const diag = document.createElement("div");
-  diag.className = "block";
+  diag.className = "scheduler-section";
   diag.innerHTML = '<div class="block-head"><h3>诊断证据</h3><span>最后几条动作</span></div>';
   const feed = document.createElement("div");
   feed.className = "action-feed";
@@ -2166,7 +2168,7 @@ function renderFailureContent(task) {
   wrap.append(diag);
 
   const recovery = document.createElement("div");
-  recovery.className = "block";
+  recovery.className = "scheduler-section";
   recovery.innerHTML = '<div class="block-head"><h3>恢复方案</h3><span>按推荐顺序</span></div>';
   const list = document.createElement("div");
   list.className = "recovery-list";
@@ -2359,10 +2361,6 @@ const skillNameOf = (name) => state.skills.find((item) => item.name === name)?.t
 const hubConfigured = () => Boolean(state.hub?.configured);
 
 function renderSkillLibrary() {
-  const hubCount = $("#skillHubCount");
-  const localCount = $("#skillLocalCount");
-  if (hubCount) hubCount.textContent = String(state.hubSkills.length);
-  if (localCount) localCount.textContent = String(state.skills.length);
   renderSkillHubState();
   renderSkillList();
   renderSkillPicker();
@@ -2413,14 +2411,18 @@ const filteredLocalSkills = () => {
 function renderSkillList() {
   const box = $("#skillList");
   if (!box) return;
-  for (const tab of $$("[data-skill-tab]")) tab.classList.toggle("active", tab.dataset.skillTab === state.skillTab);
+  window.platformRenderSegments($("#skillTabs"), {
+    label: "工作方法来源", value: state.skillTab,
+    items: [{ value: "local", label: "本机工作方法", count: state.skills.length }, { value: "hub", label: "云端工作方法", count: state.hubSkills.length }],
+    onValueChange: value => { state.skillTab = value; renderSkillList(); },
+  });
 
   const toolbar = $("#skillToolbar");
   const pullAll = $("#skillPullAll");
   const sort = $("#skillSort");
   const isHub = state.skillTab === "hub";
   if (toolbar) toolbar.hidden = false;
-  if (sort) sort.hidden = isHub;
+  if (sort) sort.hidden = !isHub;
   if (pullAll) {
     const upgradable = state.hubSkills.filter((item) => item.upgradable).length;
     pullAll.hidden = !isHub || !upgradable;
@@ -2459,12 +2461,13 @@ function renderHubSkills(box) {
     version: item.version,
     downloads: item.downloads,
     flags: [
-      item.upgradable ? `<span class="sk-flag up">可升级 ${esc(item.localVersion || "")}→${esc(item.version || "")}</span>` : "",
-      item.installed && !item.upgradable ? '<span class="sk-flag">已装</span>' : "",
-    ].join(""),
-    actions: `
-      <button type="button" class="sk-btn" data-skill-view="${esc(item.name)}">详情</button>
-      <button type="button" class="sk-btn primary" data-skill-pull="${esc(item.name)}">${item.installed ? (item.upgradable ? "升级" : "重装") : "拉到本机"}</button>`,
+      ...(item.upgradable ? [{ label: `可升级 ${item.localVersion || ""}→${item.version || ""}`, variant: "default" }] : []),
+      ...(item.installed && !item.upgradable ? [{ label: "已装" }] : []),
+    ],
+    actions: [
+      { label: "详情", attributes: { "data-skill-view": item.name } },
+      { label: item.installed ? (item.upgradable ? "升级" : "重装") : "拉到本机", variant: "default", attributes: { "data-skill-pull": item.name } },
+    ],
   })));
 }
 
@@ -2478,15 +2481,14 @@ function skillCardHtml(item, index) {
     tags: item.tags,
     version: item.version,
     index,
-    flags: item.hub?.version && item.hub.version !== item.version
-      ? `<span class="sk-flag up">平台有 v${esc(item.hub.version)}</span>`
-      : "",
-    meta: `${item.files} 个文件 · ${size} · ${esc(relTime(item.updatedAt || item.installedAt))}`,
-    actions: `
-      <button type="button" class="sk-btn primary" data-skill-edit="${esc(item.name)}">编辑</button>
-      <button type="button" class="sk-btn" data-skill-read="${esc(item.name)}">看内容</button>
-      <button type="button" class="sk-btn" data-skill-use="${esc(item.name)}">派活</button>
-      <button type="button" class="sk-btn danger" data-skill-remove="${esc(item.name)}">删除</button>`,
+    flags: item.hub?.version && item.hub.version !== item.version ? [{ label: `平台有 v${item.hub.version}`, variant: "default" }] : [],
+    meta: `${item.files} 个文件 · ${size} · ${relTime(item.updatedAt || item.installedAt)}`,
+    actions: [
+      { label: "编辑", variant: "default", attributes: { "data-skill-edit": item.name } },
+      { label: "看内容", attributes: { "data-skill-read": item.name } },
+      { label: "派活", attributes: { "data-skill-use": item.name } },
+      { label: "删除", variant: "destructive", attributes: { "data-skill-remove": item.name } },
+    ],
   });
 }
 
@@ -2504,36 +2506,19 @@ function renderLocalSkills(box) {
 }
 
 /** 一张工作方法卡片：图标 + 标题 + 说明 + 标签 + 底部动作。 */
-function skillCard({ name, title, summary, category, tags = [], version, downloads, flags = "", meta = "", actions = "", index = 0 }) {
-  const card = document.createElement("article");
-  card.className = "sk-card";
-  card.style.setProperty("--i", String(Math.min(index, 12)));
-  const initial = (title || name || "?").trim().slice(0, 1);
-  card.innerHTML = `
-    <div class="sk-top">
-      <span class="sk-ico">${esc(initial)}</span>
-      <div class="sk-head">
-        <h3 class="sk-title" title="${esc(title)}">${esc(title)}</h3>
-        <code class="sk-name">${esc(name)}</code>
-      </div>
-      ${flags}
-    </div>
-    <p class="sk-sum">${esc(summary || "没有写说明")}</p>
-    <div class="sk-tags">
-      ${category ? `<span class="sk-tag cat">${esc(category)}</span>` : ""}
-      ${version ? `<span class="sk-tag">v${esc(version)}</span>` : ""}
-      ${(tags ?? []).slice(0, 3).map((tag) => `<span class="sk-tag">${esc(tag)}</span>`).join("")}
-      ${downloads ? `<span class="sk-tag dim">↓${downloads}</span>` : ""}
-      ${(tags ?? []).length > 3 ? `<span class="sk-tag dim">+${tags.length - 3}</span>` : ""}
-    </div>
-    ${meta ? `<span class="sk-meta" title="${esc(meta)}">${meta}</span>` : ""}
-    <div class="sk-foot">
-      <div class="sk-acts">${actions}</div>
-    </div>`;
-  return card;
+function skillCard({ name, title, summary, category, tags = [], version, downloads, flags = [], meta = "", actions = [] }) {
+  return window.platformCreateRecordCard({
+    title, name, description: summary || "没有写说明", meta, actions,
+    tags: [
+      ...flags,
+      ...(category ? [{ label: category, variant: "default" }] : []),
+      ...(version ? [{ label: `v${version}` }] : []),
+      ...tags.slice(0, 3).map(label => ({ label })),
+      ...(downloads ? [{ label: `↓${downloads}`, variant: "secondary" }] : []),
+      ...(tags.length > 3 ? [{ label: `+${tags.length - 3}`, variant: "secondary" }] : []),
+    ],
+  });
 }
-
-
 
 /** 派活面板里的技能勾选：只列本机已装的，没装就提示去拉。 */
 function renderSkillPicker() {
@@ -2674,7 +2659,7 @@ function openSkillDialog({ title, meta, body, editable = false, name = "" }) {
   $("#skillDlgMeta").textContent = meta;
   $("#skillDlgBody").innerHTML = `<pre>${esc(body)}</pre>`;
   setSkillDialogMode("read");
-  $("#skillDialog").showModal();
+  window.platformDialogs.skillDialog.setOpen(true);
 }
 
 /** 查看 / 编辑两种形态：本机技能才能切到编辑，云端那份是只读的。 */
@@ -2729,7 +2714,7 @@ async function openSkillEditor(name) {
     $("#skillEditBody").value = body;
     $("#skillEditNote").textContent = "";
     setSkillDialogMode("edit");
-    $("#skillDialog").showModal();
+    window.platformDialogs.skillDialog.setOpen(true);
   } catch (error) {
     toast(error.message);
   }
@@ -2780,7 +2765,7 @@ function openHubDialog() {
   $("#hubPass").placeholder = hub.configured ? `已保存 ${hub.passwordMasked || ""}，留空不改` : "平台登录密码";
   $("#hubTestResult").textContent = "";
   $("#hubTestResult").className = "hub-test";
-  $("#hubDialog").showModal();
+  window.platformDialogs.hubDialog.setOpen(true);
 }
 
 async function testHub() {
@@ -2817,7 +2802,7 @@ async function saveHub() {
   if ($("#hubPass").value.trim()) body.password = $("#hubPass").value.trim();
   try {
     state.hub = await api("/api/hub/settings", { method: "PATCH", body: JSON.stringify(body) });
-    $("#hubDialog").close();
+    window.platformDialogs.hubDialog.setOpen(false);
     toast("平台连接已保存");
     await loadHubSkills();
     await refreshLocalSkills();
@@ -2827,11 +2812,6 @@ async function saveHub() {
 }
 
 function bindSkillLibrary() {
-  $$("[data-skill-tab]").forEach((tab) => tab.addEventListener("click", () => {
-    state.skillTab = tab.dataset.skillTab;
-    renderSkillList();
-  }));
-
   let timer = null;
   $("#skillQuery")?.addEventListener("input", (event) => {
     state.skillQuery = event.target.value;
@@ -2855,18 +2835,18 @@ function bindSkillLibrary() {
     pullSkills(state.hubSkills.filter((item) => item.upgradable).map((item) => item.name));
   });
 
-  $("#hubCancel")?.addEventListener("click", () => $("#hubDialog").close());
+  $("#hubCancel")?.addEventListener("click", () => window.platformDialogs.hubDialog.setOpen(false));
   $("#hubTest")?.addEventListener("click", testHub);
   $("#hubSave")?.addEventListener("click", saveHub);
   $("#hubDialog")?.addEventListener("click", (event) => {
-    if (event.target === $("#hubDialog")) $("#hubDialog").close();
+    if (event.target === $("#hubDialog")) window.platformDialogs.hubDialog.setOpen(false);
   });
-  $("#skillDlgClose")?.addEventListener("click", () => $("#skillDialog").close());
+  $("#skillDlgClose")?.addEventListener("click", () => window.platformDialogs.skillDialog.setOpen(false));
   $("#skillDlgEdit")?.addEventListener("click", () => setSkillDialogMode("edit"));
   $("#skillDlgCancelEdit")?.addEventListener("click", () => setSkillDialogMode("read"));
   $("#skillDlgSave")?.addEventListener("click", saveSkillEdit);
   $("#skillDialog")?.addEventListener("click", (event) => {
-    if (event.target === $("#skillDialog")) $("#skillDialog").close();
+    if (event.target === $("#skillDialog")) window.platformDialogs.skillDialog.setOpen(false);
   });
 
   // 列表里的动作走委托：列表是整块重渲染的，逐个绑事件在几十条时会越来越慢
@@ -2917,54 +2897,44 @@ function renderArtifacts() {
     counts.set(key, (counts.get(key) ?? 0) + 1);
   }
   const types = [...counts.keys()].sort((a, b) => counts.get(b) - counts.get(a));
-  if (tabBox) {
-    tabBox.replaceChildren(...[
-      { key: "", label: "全部", n: rows.length },
-      ...types.map((key) => ({ key, label: artifactType(key).label, n: counts.get(key) })),
-    ].map((item) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = `lib-tab${state.libType === item.key ? " active" : ""}`;
-      btn.innerHTML = `${esc(item.label)}<i>${item.n}</i>`;
-      btn.addEventListener("click", () => { state.libType = item.key; renderArtifacts(); });
-      return btn;
-    }));
-  }
+  if (tabBox) window.platformRenderSegments(tabBox, {
+    label: "文件类型", value: state.libType,
+    items: [{ value: "", label: "全部", count: rows.length }, ...types.map(key => ({ value: key, label: artifactType(key).label, count: counts.get(key) }))],
+    onValueChange: value => { state.libType = value; renderArtifacts(); },
+  });
 
   const shown = state.libType ? rows.filter(({ artifact }) => (artifact.type || "file") === state.libType) : rows;
   if (counter) counter.textContent = `显示 ${shown.length} / ${rows.length} 个文件`;
 
-  if (!shown.length) {
-    const empty = document.createElement("div");
-    empty.className = "empty-state";
-    empty.textContent = rows.length ? "这个类型下还没有文件。" : "还没有产出物。任务生成文件后会自动登记在这里。";
-    box.replaceChildren(empty);
-    return;
-  }
-
-  // 以来源任务为单位分组：先找到任务，再取件，符合“按文件取件 + 定位来源”的用法
-  const byTask = new Map();
-  for (const row of shown) {
-    if (!byTask.has(row.task.id)) byTask.set(row.task.id, { task: row.task, items: [] });
-    byTask.get(row.task.id).items.push(row.artifact);
-  }
-  const groups = [...byTask.values()].sort((a, b) => new Date(b.task.updatedAt || b.task.createdAt || 0) - new Date(a.task.updatedAt || a.task.createdAt || 0));
-
-  box.replaceChildren(...groups.map(({ task, items }) => {
-    const section = document.createElement("section");
-    section.className = "lib-group";
-
-    const head = document.createElement("header");
-    head.className = "lib-group-head";
-    head.innerHTML = `<b>${esc(task.label || "未命名任务")}</b><small>${esc(relTime(task.updatedAt || task.createdAt))}</small><span>${items.length} 个文件</span><button type="button" class="lib-jump">定位任务</button>`;
-    head.querySelector(".lib-jump").addEventListener("click", () => openDrawer(task.id));
-
-    const list = document.createElement("div");
-    list.className = "lib-rows";
-    list.append(...items.map((artifact) => renderLibraryRow(task, artifact)));
-    section.append(head, list);
-    return section;
-  }));
+  window.platformRenderDataTable(box, {
+    label: "产出文件", filterKey: state.libType,
+    rows: shown.map(({ task, artifact }) => ({ id: `${task.id}:${artifact.id}`, name: artifact.name, task, artifact })),
+    columns: [
+      { id: "file", title: "文件", value: row => row.name, cell: ({ task, artifact }) => {
+        const cell = document.createElement("div"); cell.className = "artifact-file-cell";
+        const name = document.createElement("button"); name.type = "button"; name.className = "text-btn";
+        name.dataset.nativeSize = "content"; name.textContent = artifact.name; name.disabled = artifact.exists === false;
+        name.onclick = () => openArtifactPreview(task, artifact);
+        const path = document.createElement("span"); path.textContent = (artifact.exists === false ? "路径失效 · " : "") + (artifact.relativePath || artifact.path); path.title = artifact.path;
+        cell.append(name, path); return cell;
+      } },
+      { id: "type", title: "类型", value: row => artifactType(row.artifact.type).label, cell: row => artifactType(row.artifact.type).label },
+      { id: "size", title: "大小", value: row => Number(row.artifact.size) || 0, cell: row => formatSize(row.artifact.size) },
+      { id: "source", title: "来源任务", cell: ({ task }) => {
+        const button = document.createElement("button"); button.type = "button"; button.className = "text-btn";
+        button.dataset.nativeSize = "content"; button.textContent = task.label || "未命名任务"; button.onclick = () => openDrawer(task.id); return button;
+      } },
+      { id: "time", title: "生成时间", value: row => row.artifact.createdAt || "", cell: row => relTime(row.artifact.createdAt) },
+      { id: "actions", title: "操作", cell: ({ task, artifact }) => {
+        const actions = document.createElement("div"); actions.className = "artifact-table-actions";
+        for (const [label, run] of [["预览", () => openArtifactPreview(task, artifact)], ["下载", () => downloadArtifact(task, artifact)], ["路径", () => copyPath(artifact.path)]]) {
+          const button = document.createElement("button"); button.type = "button"; button.textContent = label;
+          button.disabled = artifact.exists === false && label !== "路径"; button.onclick = run; actions.append(button);
+        }
+        return actions;
+      } },
+    ],
+  });
 }
 
 function renderArtifactHero() {
@@ -2976,70 +2946,12 @@ function renderArtifactHero() {
   const missing = rows.filter((row) => row.artifact.exists === false).length;
   const inline = rows.filter((row) => ["markdown", "text", "json", "csv"].includes(row.artifact.type)).length;
 
-  box.innerHTML = `
-    <div class="hero-cell">
-      <span>产出文件</span>
-      <b class="mono">${rows.length}<small> 个</small></b>
-      <em>来自 ${taskCount} 个任务</em>
-    </div>
-    <div class="hero-cell">
-      <span>合计体积</span>
-      <b class="mono">${rows.length ? esc(formatSize(bytes)) : "—"}</b>
-      <em>按登记的文件大小相加</em>
-    </div>
-    <div class="hero-cell">
-      <span>可内联预览</span>
-      <b class="mono">${inline}<small> 个</small></b>
-      <em>Markdown / 文本 / JSON / CSV</em>
-    </div>
-    <div class="hero-cell">
-      <span>路径失效</span>
-      <b class="mono ${missing ? "bad" : "ok"}">${missing}<small> 个</small></b>
-      <em>${missing ? "文件被移动或删除，行会标灰" : "所有登记路径都还在"}</em>
-    </div>`;
-}
-
-function renderLibraryRow(task, artifact) {
-  const type = artifactType(artifact.type);
-  const row = document.createElement("div");
-  row.className = `lib-row${artifact.exists === false ? " missing" : ""}`;
-  row.tabIndex = 0;
-  row.innerHTML = `
-    <span class="lib-ico ${type.tone}">${esc(type.code)}</span>
-    <div class="lib-main">
-      <b>${esc(artifact.name)}</b>
-      <small title="${esc(artifact.path)}">${esc(artifact.relativePath || artifact.path)}</small>
-    </div>
-    <span class="lib-size">${esc(formatSize(artifact.size))}</span>
-    <span class="lib-time">${esc(relTime(artifact.createdAt))}</span>
-    <div class="lib-acts"></div>`;
-
-  const acts = row.querySelector(".lib-acts");
-  const preview = document.createElement("button");
-  preview.type = "button";
-  preview.className = "lib-act";
-  preview.textContent = "预览";
-  preview.addEventListener("click", async (event) => {
-    event.stopPropagation();
-    if (artifact.exists === false) { toast("文件已被移动或删除，先到来源任务里重新生成"); return; }
-    await openArtifactPreview(task, artifact);
-  });
-  const download = document.createElement("button");
-  download.type = "button";
-  download.className = "lib-act";
-  download.textContent = "下载";
-  download.addEventListener("click", (event) => { event.stopPropagation(); downloadArtifact(task, artifact); });
-  const copy = document.createElement("button");
-  copy.type = "button";
-  copy.className = "lib-act";
-  copy.textContent = "路径";
-  copy.addEventListener("click", (event) => { event.stopPropagation(); copyPath(artifact.path); });
-  acts.append(preview, download, copy);
-
-  const open = () => openArtifactPreview(task, artifact);
-  row.addEventListener("click", open);
-  row.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); open(); } });
-  return row;
+  window.platformRenderMetrics(box, [
+    { label: "产出文件", value: `${rows.length} 个`, hint: `来自 ${taskCount} 个任务` },
+    { label: "合计体积", value: rows.length ? formatSize(bytes) : "—", hint: "按登记的文件大小相加" },
+    { label: "可内联预览", value: `${inline} 个`, hint: "Markdown / 文本 / JSON / CSV" },
+    { label: "路径失效", value: `${missing} 个`, hint: missing ? "文件被移动或删除，行会标灰" : "所有登记路径都还在" },
+  ]);
 }
 
 /** 员工头像：系统员工 UI 已下线，这里只给我的员工卡片和详情抽屉用。 */
@@ -3186,57 +3098,10 @@ function renderLaunch(list) {
   renderLaunchVars();
 }
 
-/**
- * 启动台里的流程选择器：原生 select 只当数据源藏着，
- * 露出来的是和全站同一套描边的按钮 + 弹出列表（原生下拉在深色主题里长得完全不一样）。
- */
+// The shared Select bridge observes this native source; retain value/change protocol.
 function syncFlowPick(usable) {
-  const trigger = $("#flowPickTrigger");
-  if (!trigger) return;
-  const current = usable.find((flow) => flow.id === $("#flowLaunchSelect")?.value) ?? null;
-  trigger.disabled = !usable.length;
-  trigger.classList.toggle("empty", !current);
-  const name = $("#flowPickName");
-  const meta = $("#flowPickMeta");
-  if (name) name.textContent = current?.name ?? "还没有流程";
-  if (meta) meta.textContent = current ? `${current.steps?.length ?? 0} 步` : "";
-  renderFlowPickMenu(usable);
-}
-
-function renderFlowPickMenu(usable) {
-  const menu = $("#flowPickMenu");
-  if (!menu) return;
-  if (!usable.length) {
-    menu.innerHTML = `<p class="flow-pick-empty">还没有可运行的流程，先点「新建流程」串一条</p>`;
-    return;
-  }
-  const current = $("#flowLaunchSelect")?.value ?? "";
-  menu.innerHTML = usable.map((flow) => `
-    <button type="button" class="flow-pick-item${flow.id === current ? " active" : ""}"
-            role="option" data-flow="${esc(flow.id)}" aria-selected="${flow.id === current}">
-      <b>${esc(flow.name)}</b>
-      <em>${flow.steps?.length ?? 0} 步 · v${esc(String(flow.version ?? 1))}</em>
-    </button>`).join("");
-}
-
-function closeFlowPick() {
-  const menu = $("#flowPickMenu");
-  const trigger = $("#flowPickTrigger");
-  if (!menu || menu.hidden) return;
-  menu.hidden = true;
-  trigger?.setAttribute("aria-expanded", "false");
-  $("#flowPick")?.classList.remove("open");
-}
-
-function toggleFlowPick() {
-  const menu = $("#flowPickMenu");
-  const trigger = $("#flowPickTrigger");
-  if (!menu || trigger?.disabled) return;
-  const open = menu.hidden;
-  menu.hidden = !open;
-  trigger?.setAttribute("aria-expanded", open ? "true" : "false");
-  $("#flowPick")?.classList.toggle("open", open);
-  if (open) menu.querySelector(".flow-pick-item.active")?.scrollIntoView({ block: "nearest" });
+  const select = $("#flowLaunchSelect");
+  if (select) select.disabled = !usable.length;
 }
 
 /** 选中流程的必填项：只在这一块里出现，不去弹窗里再填一次。 */
@@ -3521,6 +3386,7 @@ function renderRunTabs(runs) {
     const status = RUN_STATUS[run.status] ?? RUN_STATUS.running;
     const button = document.createElement("button");
     button.type = "button";
+    button.dataset.nativeSize = "content";
     button.className = `run-tab ${status.cls}${run.id === state.runTabId ? " active" : ""}`;
     button.dataset.run = run.id;
     // 同一个流程会跑很多次：记录里必须能分辨是哪一次，否则一堆同名条目没法点
@@ -3764,59 +3630,32 @@ function refreshPromptChips() {
 function renderFlowPalette() {
   const box = $("#flowPalette");
   if (!box) return;
-  // 只用「我的员工」：全局员工跑在服务器上，普通人员点了也只是个空步骤
   const agents = state.myAgents ?? [];
-  // 条件节点固定排在最前面：它不干活，只判断走哪条线
-  const gate = document.createElement("button");
-  gate.type = "button";
-  gate.className = "flow-agent-chip is-condition";
-  gate.draggable = true;
-  gate.title = "点一下加一个判断节点；拖到画布空白处也能加";
-  gate.innerHTML = `<b>◇ 条件判断</b><em>判断后按选项走不同的线</em>`;
-  gate.addEventListener("click", () => appendConditionNode());
-  gate.addEventListener("dragstart", (event) => {
-    dragPayload = { kind: "condition" };
-    event.dataTransfer.effectAllowed = "copy";
-    event.dataTransfer.setData("text/plain", "condition");
-    gate.classList.add("dragging");
-  });
-  gate.addEventListener("dragend", () => {
-    gate.classList.remove("dragging");
-    clearDropMarks();
-    dragPayload = null;
-  });
-  const chips = agents.map((agent) => {
-    const chip = document.createElement("button");
-    chip.type = "button";
-    chip.className = `flow-agent-chip${agent.available ? "" : " off"}`;
-    chip.draggable = true;
-    chip.dataset.agent = agent.id;
-    chip.title = "点一下加一步；拖到画布空白处也能加，拖到节点上 = 这一步换它来做";
-    chip.innerHTML = `<b>${esc(agent.name)}</b><em>${esc(agent.summary || (agent.kind === "builtin" ? `本机 ${agent.ref}` : agent.model || "云端模型"))}</em>`;
-    chip.addEventListener("click", () => appendStepWithAgent(agent.id));
-    chip.addEventListener("dragstart", (event) => {
+  const finishDrag = () => { clearDropMarks(); dragPayload = null; };
+  const actions = [{
+    id: "condition", title: "◇ 条件判断", description: "判断后按选项走不同的线",
+    onClick: () => appendConditionNode(),
+    onDragStart: (event) => {
+      dragPayload = { kind: "condition" };
+      event.dataTransfer.effectAllowed = "copy";
+      event.dataTransfer.setData("text/plain", "condition");
+    }, onDragEnd: finishDrag,
+  }, ...agents.map((agent) => ({
+    id: agent.id, title: agent.name,
+    description: agent.summary || (agent.kind === "builtin" ? `本机 ${agent.ref}` : agent.model || "云端模型"),
+    muted: !agent.available,
+    onClick: () => appendStepWithAgent(agent.id),
+    onDragStart: (event) => {
       dragPayload = { kind: "agent", agentId: agent.id };
       event.dataTransfer.effectAllowed = "copy";
       event.dataTransfer.setData("text/plain", `agent:${agent.id}`);
-      chip.classList.add("dragging");
-    });
-    chip.addEventListener("dragend", () => {
-      chip.classList.remove("dragging");
-      clearDropMarks();
-      dragPayload = null;
-    });
-    return chip;
+    }, onDragEnd: finishDrag,
+  }))];
+  if (!agents.length) actions.push({
+    id: "new-agent", title: "＋ 还没有员工", description: "点一下建一个，再回来加步骤",
+    onClick: () => openMyAgentDialog(null, () => renderFlowPalette()),
   });
-  // 一个员工都没有时，给个能直接建的入口，不用绕去设置页
-  if (!agents.length) {
-    const tip = document.createElement("button");
-    tip.type = "button";
-    tip.className = "flow-agent-chip is-empty";
-    tip.innerHTML = "<b>＋ 还没有员工</b><em>点一下建一个，再回来加步骤</em>";
-    tip.addEventListener("click", () => openMyAgentDialog(null, () => renderFlowPalette()));
-    chips.push(tip);
-  }
-  box.replaceChildren(gate, ...chips);
+  window.platformRenderActionCards(box, actions);
 }
 
 /** 节点默认摆位：从左到右一列排开，隔一个错半层，像流程图而不是清单。 */
@@ -3912,7 +3751,7 @@ function renderFlowSteps() {
       <div class="flow-node-head">
         <span class="flow-step-no">◇</span>
         <b class="flow-node-name" title="${esc(step.name)}">${esc(step.name || "条件判断")}</b>
-        <button type="button" data-act="del" title="删除这一步">✕</button>
+        <button type="button" data-native-size="content" data-act="del" title="删除这一步">✕</button>
       </div>
       <div class="flow-node-agent" title="谁来判断">${esc(agentNameOf(step.agentId))} 来判断</div>
       <div class="flow-node-meta"><span class="flow-node-q" title="${esc(step.question || "")}">${esc(step.question || "还没写判断问题")}</span></div>
@@ -3927,7 +3766,7 @@ function renderFlowSteps() {
       <div class="flow-node-head">
         <span class="flow-step-no">${index + 1}</span>
         <b class="flow-node-name" title="${esc(step.name)}">${esc(step.name || "未命名")}</b>
-        <button type="button" data-act="del" title="删除这一步">✕</button>
+        <button type="button" data-native-size="content" data-act="del" title="删除这一步">✕</button>
       </div>
       <div class="flow-node-agent" title="谁来做">${esc(agentNameOf(step.agentId))}</div>
       <div class="flow-node-meta">
@@ -4100,7 +3939,7 @@ function renderFlowInspector() {
           <b class="flow-step-no">◇ 判断</b>
           <input class="flow-step-name" maxlength="20" value="${esc(step.name)}" placeholder="这个判断叫什么（例：有没有报价）" autocomplete="off">
           <div class="flow-step-btns">
-            <button type="button" data-act="del" title="删除这一步">✕</button>
+            <button type="button" data-native-size="content" data-act="del" title="删除这一步">✕</button>
           </div>
         </div>
         <label class="flow-mini wide"><span>谁来判断</span><select class="flow-step-agent">${agentOptionsHtml(step.agentId)}</select></label>
@@ -4133,7 +3972,7 @@ function renderFlowInspector() {
         <b class="flow-step-no">第 ${index + 1} 步</b>
         <input class="flow-step-name" maxlength="20" value="${esc(step.name)}" placeholder="这一步做什么（例：出方案）" autocomplete="off">
         <div class="flow-step-btns">
-          <button type="button" data-act="del" title="删除这一步">✕</button>
+          <button type="button" data-native-size="content" data-act="del" title="删除这一步">✕</button>
         </div>
       </div>
       <div class="flow-step-row">
@@ -5324,17 +5163,17 @@ function ensureFlowPolling() {
 async function renderStats() {
   const table = $("#statsTable");
   if (!table) return;
-  let items = state.tasks ?? [];
+  let items = [];
+  let loadError = "";
   try {
     items = (await api("/api/tasks?range=all")).items ?? [];
   } catch (error) {
-    table.innerHTML = `<p class="empty-state">读取任务数据失败：${esc(error.message)}</p>`;
-    return;
+    loadError = `读取任务数据失败：${error.message}`;
   }
   const byOwner = new Map();
   for (const task of items) {
     const key = task.ownerAccountId || "(无主/历史)";
-    const row = byOwner.get(key) ?? { name: task.ownerName || "（历史任务）", total: 0, done: 0, failed: 0, busy: 0, tokens: 0, ms: 0 };
+    const row = byOwner.get(key) ?? { id: key, name: task.ownerName || "（历史任务）", total: 0, done: 0, failed: 0, busy: 0, tokens: 0, ms: 0 };
     row.total += 1;
     if (task.status === "completed") row.done += 1;
     if (["failed", "interrupted"].includes(task.status)) row.failed += 1;
@@ -5347,22 +5186,21 @@ async function renderStats() {
     byOwner.set(key, row);
   }
   const rows = [...byOwner.values()].sort((x, y) => y.total - x.total);
-  if (!rows.length) {
-    table.innerHTML = `<p class="empty-state">还没有任务数据。</p>`;
-    return;
-  }
   const fmtMs = (ms) => ms >= 3600_000 ? `${Math.floor(ms / 3600_000)} 小时 ${Math.round((ms % 3600_000) / 60_000)} 分` : ms >= 60_000 ? `${Math.round(ms / 60_000)} 分钟` : `${Math.round(ms / 1000)} 秒`;
-  table.innerHTML = `
-    <table class="stats-table-inner"><thead><tr>
-      <th>人员</th><th>任务数</th><th>完成</th><th>失败</th><th>进行中</th><th>累计 Tokens</th><th>累计执行时长</th>
-    </tr></thead><tbody>
-    ${rows.map((r) => `<tr>
-      <td><b>${esc(r.name)}</b></td><td class="mono">${r.total}</td>
-      <td class="mono ok">${r.done}</td><td class="mono ${r.failed ? "bad" : ""}">${r.failed}</td>
-      <td class="mono">${r.busy}</td><td class="mono">${r.tokens ? fmtTokens(r.tokens) : "—"}</td>
-      <td class="mono">${r.ms ? fmtMs(r.ms) : "—"}</td>
-    </tr>`).join("")}
-    </tbody></table>`;
+  window.platformRenderDataTable(table, {
+    label: "人员执行统计",
+    empty: loadError || "还没有任务数据。",
+    rows,
+    columns: [
+      { id: "name", title: "人员", value: row => row.name, cell: row => { const name = document.createElement("strong"); name.className = "stats-person"; name.textContent = row.name; return name; } },
+      { id: "total", title: "任务数", value: row => row.total, cell: row => String(row.total) },
+      { id: "done", title: "完成", value: row => row.done, cell: row => { const value = document.createElement("span"); value.className = "ok"; value.textContent = String(row.done); return value; } },
+      { id: "failed", title: "失败", value: row => row.failed, cell: row => { const value = document.createElement("span"); value.className = row.failed ? "bad" : ""; value.textContent = String(row.failed); return value; } },
+      { id: "busy", title: "进行中", value: row => row.busy, cell: row => String(row.busy) },
+      { id: "tokens", title: "累计 Tokens", value: row => row.tokens, cell: row => row.tokens ? fmtTokens(row.tokens) : "—" },
+      { id: "ms", title: "累计执行时长", value: row => row.ms, cell: row => row.ms ? fmtMs(row.ms) : "—" },
+    ],
+  });
 }
 /* =========================================================================
    settings view
@@ -5397,24 +5235,6 @@ function renderMyModels() {
 }
 
 function renderMyModelCard(model) {
-  const card = document.createElement("article");
-  card.className = `agent-card ua-card${model.enabled ? "" : " bucket-off"}`;
-  card.innerHTML = `
-    <header class="agent-card-head">
-      <div class="agent-ident">
-        <h3>${esc(model.name)}</h3>
-        <p class="mono" title="${esc(model.baseUrl)}">${esc(model.model)} · ${esc(shortUrl(model.baseUrl))}</p>
-      </div>
-    </header>
-    <div class="agent-tags">
-      <span class="tag state ${model.enabled ? "ready" : "off"}">${model.enabled ? "启用" : "停用"}</span>
-      ${model.apiKeyMasked
-        ? `<span class="tag quiet ok">${esc(model.apiKeyMasked)}</span>`
-        : `<span class="tag quiet bad">未配置密钥</span>`}
-      <span class="tag quiet" title="同一个模型同时最多跑几个任务">并发 ${Number(model.concurrency) || 1}</span>
-      <span class="tag ${model.agentCount ? "cap" : "quiet"}"
-            title="${esc((model.agentNames ?? []).join("、") || "还没有员工选它")}">${model.agentCount ? `${model.agentCount} 位员工在用` : "还没有员工用"}</span>
-    </div>`;
   const ops = document.createElement("div");
   ops.className = "ua-ops";
   const button = (label, cls, fn) => {
@@ -5451,8 +5271,18 @@ function renderMyModelCard(model) {
       } catch (error) { toast(error.message); }
     }),
   );
-  card.append(ops);
-  return card;
+  return window.platformCreateRecordCard({
+    title: model.name,
+    description: `${model.model} · ${shortUrl(model.baseUrl)}`,
+    tags: [
+      { label: model.enabled ? "启用" : "停用", tone: model.enabled ? "success" : undefined },
+      { label: model.apiKeyMasked || "未配置密钥", tone: model.apiKeyMasked ? undefined : "danger" },
+      { label: `并发 ${Number(model.concurrency) || 1}` },
+      { label: model.agentCount ? `${model.agentCount} 位员工在用` : "还没有员工用" },
+    ],
+    meta: model.baseUrl,
+    actions: [...ops.children].map(button => ({ label: button.textContent, variant: button.classList.contains("ua-danger") ? "destructive" : "outline", attributes: { "data-model-action": `${model.id}:${button.textContent}` }, onClick: () => button.click() })),
+  });
 }
 
 function openMyModelDialog(model, onDone) {
@@ -5674,11 +5504,11 @@ function openMyModelDialog(model, onDone) {
           const saved = creating
             ? await api("/api/models", { method: "POST", body: JSON.stringify(payload) })
             : await api(`/api/models/${model.id}`, { method: "PATCH", body: JSON.stringify(payload) });
-          close(true);
           toast(creating ? `已创建模型「${saved?.name ?? name}」` : "模型已保存");
           await loadMyModels();
           await loadMyAgents();
           if (state.view === "settings") renderSettings();
+          close(true);
           onDone?.(saved ?? null);
         } catch (error) {
           button.disabled = false;
@@ -5716,27 +5546,6 @@ function renderMyAgentCard(agent) {
     : (bound?.name ?? presetOfBase(agent.baseUrl)?.label);
   const upstream = bound?.model || agent.model || "";
   const skillCount = (agent.skills ?? []).length;
-  const card = document.createElement("article");
-  card.className = `agent-card ua-card${agent.enabled ? "" : " bucket-off"}`;
-  card.innerHTML = `
-    <header class="agent-card-head">
-      ${agentAvatar({ name: agent.name, avatar: agent.avatar })}
-      <div class="agent-ident">
-        <h3>${esc(agent.name)}</h3>
-        <p>${esc(agent.role || agent.summary || (local ? "在本机执行器上跑命令行 AI" : "云端模型 · 会搜索、读写文件，还能自己装工具跑命令"))}</p>
-      </div>
-    </header>
-    <div class="agent-tags">
-      <span class="tag state ${agent.enabled ? "ready" : "off"}">${agent.enabled ? "启用" : "停用"}</span>
-      ${vendor ? `<span class="tag quiet">${esc(vendor)}</span>` : ""}
-      ${upstream ? `<span class="tag quiet mono" title="上游模型名">${esc(upstream)}</span>` : ""}
-      ${!local && !bound ? `<span class="tag quiet bad">没绑模型</span>` : ""}
-      ${!local && bound && !bound.enabled ? `<span class="tag quiet bad">模型已停用</span>` : ""}
-      ${!local ? `<span class="tag ${agent.tools === false ? "quiet" : "cap"}" title="${agent.tools === false ? "已关闭工具：只会纯文本回答" : "联网搜索、读网页、白名单内文件读写，并能在执行器本机跑命令、自己安装工具（run_cmd）"}">${agent.tools === false ? "无工具" : "联网·文件·命令"}</span>` : ""}
-      ${skillCount ? `<span class="tag cap" title="${esc((agent.skills ?? []).join("、"))}">${skillCount} 个工作方法</span>` : ""}
-      ${agent.defaultMode === "read-only" ? `<span class="tag quiet" title="派活时默认只读，不会改文件">只读</span>` : ""}
-      ${(agent.capabilities ?? []).slice(0, 2).map((cap) => `<span class="tag cap">${esc(CAP_LABEL[cap] ?? cap)}</span>`).join("")}
-    </div>`;
   const ops = document.createElement("div");
   ops.className = "ua-ops";
   const button = (label, cls, fn) => {
@@ -5768,8 +5577,23 @@ function renderMyAgentCard(agent) {
       } catch (error) { toast(error.message); }
     }),
   );
-  card.append(ops);
-  return card;
+  return window.platformCreateRecordCard({
+    title: agent.name,
+    avatar: { src: agent.avatar ? `/assets/avatars/${agent.avatar}.svg` : undefined, fallback: (agent.name || "?").trim().slice(0, 1) },
+    description: agent.role || agent.summary || (local ? "在本机执行器上跑命令行 AI" : "云端模型 · 会搜索、读写文件，还能自己装工具跑命令"),
+    tags: [
+      { label: agent.enabled ? "启用" : "停用", tone: agent.enabled ? "success" : undefined },
+      ...(vendor ? [{ label: vendor }] : []),
+      ...(upstream ? [{ label: upstream }] : []),
+      ...(!local && !bound ? [{ label: "没绑模型", tone: "danger" }] : []),
+      ...(!local && bound && !bound.enabled ? [{ label: "模型已停用", tone: "danger" }] : []),
+      ...(!local ? [{ label: agent.tools === false ? "无工具" : "联网·文件·命令" }] : []),
+      ...(skillCount ? [{ label: `${skillCount} 个工作方法` }] : []),
+      ...(agent.defaultMode === "read-only" ? [{ label: "只读" }] : []),
+      ...(agent.capabilities ?? []).slice(0, 2).map(cap => ({ label: CAP_LABEL[cap] ?? cap })),
+    ],
+    actions: [...ops.children].map(button => ({ label: button.textContent, variant: button.classList.contains("ua-danger") ? "destructive" : "outline", attributes: { "data-employee-action": `${agent.id}:${button.textContent}` }, onClick: () => button.click() })),
+  });
 }
 
 /* 个人员工的能力标签：只影响卡片上那排小标签，不影响派活逻辑 */
@@ -5957,7 +5781,7 @@ function openMyAgentDialog(agent, onDone) {
   openDialog({
     title: creating ? "新增 AI 员工" : `编辑 · ${agent.name}`,
     subtitle: "员工 = 人格 + 技能 + 一个模型；模型在「我的模型」里配一次，多个员工共用",
-    width: 640,
+    width: 760,
     body,
     footer: `<button class="btn" data-dlg-cancel>取消</button>
              <button class="btn primary" data-dlg-ok>${creating ? "创建员工" : "保存"}</button>`,
@@ -6187,10 +6011,10 @@ function openMyAgentDialog(agent, onDone) {
           const saved = creating
             ? await api("/api/user-agents", { method: "POST", body: JSON.stringify(payload) })
             : await api(`/api/user-agents/${agent.id}`, { method: "PATCH", body: JSON.stringify(payload) });
-          close(true);
           toast(creating ? `已创建「${saved?.name ?? name}」` : "已保存");
           await loadMyAgents();
           if (state.view === "settings") renderSettings();
+          close(true);
           onDone?.(saved ?? null);
         } catch (error) {
           button.disabled = false;
@@ -6222,6 +6046,11 @@ async function renderRunnerCard() {
   }
 
   if (!items.length) {
+    if (state.user?.integration) {
+      box.innerHTML = '<p class="ppl-note">连接你自己的执行器后，这里会显示在线状态和运行配置。</p>';
+      wireRunnerPair(box);
+      return;
+    }
     box.innerHTML = `
       <p class="ppl-note">执行器跑在你自己的电脑上：领任务 → 用本机 Codex 执行 → 回传产物。服务器只记账，不碰你的代码和额度。</p>
       <pre class="runner-cmd">node runner-agent.mjs init --server http://网关地址:4317 --token 你的推送Token
@@ -6229,19 +6058,15 @@ node runner-agent.mjs start</pre>
       <p class="ppl-note">推送 Token 在「人员与账号」里；init 一次即可，之后 start 常驻领活。</p>`;
     return;
   }
-  box.innerHTML = `${isAdmin && items.length > 1 ? `<p class="ppl-note">全平台执行器总览：<strong>${online.length} 台在线 / 共 ${items.length} 台</strong>。只有你能看到别人的执行器，成员只能看见自己这台。</p>` : ""}
-  <section class="set-card">${items.map((item) => {
-    const runningLabel = item.currentTaskId
-      ? state.tasks.find((task) => task.id === item.currentTaskId)?.label ?? item.currentTaskId.slice(0, 8)
-      : null;
-    const roots = item.roots ?? [];
-    return `
-    <div class="set-row">
-      <span><i class="runner-dot ${item.online ? "on" : ""}"></i>${esc(item.accountName)}</span>
-      <b>${item.online ? "在线" : "离线"} · ${esc(item.platform || "—")} · v${esc(item.version || "?")}</b>
-      <em>${esc(item.host || "")} · 最近心跳 ${esc(relTime(item.lastSeen))}${runningLabel ? ` · 正在跑「${esc(runningLabel)}」` : ""}${roots.length ? ` · 目录 ${roots.length} 个` : ""}</em>
-    </div>`;
-  }).join("")}</section>`;
+  box.replaceChildren(...items.map(item => {
+    const runningLabel = item.currentTaskId ? state.tasks.find(task => task.id === item.currentTaskId)?.label ?? item.currentTaskId.slice(0, 8) : null;
+    return window.platformCreateRecordCard({
+      title: item.accountName,
+      description: `${item.platform || "—"} · v${item.version || "?"}`,
+      tags: [{ label: item.online ? "在线" : "离线", tone: item.online ? "success" : undefined }, { label: `目录 ${(item.roots ?? []).length} 个` }],
+      meta: `${item.host || ""} · 最近心跳 ${relTime(item.lastSeen)}${runningLabel ? ` · 正在跑「${runningLabel}」` : ""}`,
+    });
+  }));
 }
 
 /* ---- 平台侧目录白名单编辑：本人或管理员改完，执行器下次心跳生效 ---- */
@@ -6293,11 +6118,11 @@ async function openRunnerRootsDialog(accountId) {
             method: "PUT",
             body: JSON.stringify({ accountId: accountId || undefined, roots }),
           });
-          close(true);
           toast("已保存，执行器下一次心跳生效");
           await refreshRunnerStatus();
           await renderRunnerPage({ quiet: true });
-          renderRunnerCard();
+          await renderRunnerCard();
+          close(true);
         } catch (error) {
           toast(error.message);
         }
@@ -6336,23 +6161,25 @@ function runnerTasksOf(accountId) {
     .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
 }
 
-function renderRunnerTaskRow(task) {
-  const label = task.label || task.prompt?.slice(0, 60) || "未命名任务";
-  return `
-    <button type="button" class="rp-task" data-task="${esc(task.id)}">
-      <i class="rp-task-dot ${esc(task.status)}"></i>
-      <span class="rp-task-copy">
-        <strong>${esc(label)}</strong>
-        <small>${esc(STATUS_TEXT[task.status] ?? task.status)} · ${esc(duration(task) || "—")} · ${esc(relTime(task.finishedAt || task.updatedAt || task.createdAt))}</small>
-      </span>
-      <span class="rp-task-go">查看</span>
-    </button>`;
+/** Shared surfaces retain the controller's original DOM and event ownership. */
+function mountRunnerSurfaces(box) {
+  box.querySelectorAll(".rp-tasks").forEach(list => {
+    window.platformRenderActionCards(list, runnerTasksOf(list.dataset.account).slice(0, 8).map(task => ({
+      id: task.id, title: task.label || task.prompt?.slice(0, 60) || "未命名任务",
+      description: `${STATUS_TEXT[task.status] ?? task.status} · ${duration(task) || "—"} · ${relTime(task.finishedAt || task.updatedAt || task.createdAt)}`,
+      onClick: () => openDrawer(task.id),
+    })));
+  });
+  box.querySelectorAll(".rp-hero,.rp-card").forEach(content => {
+    const marker = document.createElement("span"); content.before(marker);
+    marker.replaceWith(window.platformWrapCard(content));
+  });
 }
 
 function wireRunnerPair(box) {
   if (!state.user?.integration || !box || box.querySelector('[data-runner-pair]')) return;
   const button = document.createElement("button");
-  button.type = "button"; button.className = "primary"; button.dataset.runnerPair = "";
+  button.type = "button"; button.className = "primary"; button.dataset.runnerPair = ""; button.dataset.nativeFocusKey = "runner-pair:" + box.id;
   button.textContent = "连接我的执行器";
   button.onclick = async () => {
     button.disabled = true;
@@ -6370,6 +6197,8 @@ node runner-agent.mjs start</pre><textarea rows="5" readonly aria-label="执行�
 async function renderRunnerPage({ quiet = false } = {}) {
   const box = $("#runnerPage");
   if (!box) return;
+  const focusKey = box.contains(document.activeElement) ? document.activeElement?.dataset.nativeFocusKey : null;
+  const restoreFocus = () => { if (focusKey) requestAnimationFrame(() => { if (document.activeElement === document.body) box.querySelector(`[data-native-focus-key="${CSS.escape(focusKey)}"]`)?.focus({ preventScroll: true }); }); };
   let items = [];
   try {
     items = await refreshRunnerStatus();
@@ -6400,7 +6229,14 @@ async function renderRunnerPage({ quiet = false } = {}) {
 node runner-agent.mjs run</pre>
         <p class="ppl-note">更省事的方式：直接用分发包里的「启动执行器.bat」，首次运行会自动问你四个问题。</p>
       </div>`;
+    if (state.user?.integration) {
+      box.querySelector(".rp-hero-main p").textContent = "在本机执行器运行 init，粘贴平台生成的一次性配置码，再启动执行器。连接后，这里会显示在线状态、任务和目录配置。";
+      box.querySelector(".rp-hero-side").remove();
+      box.querySelector(".rp-card").remove();
+    }
+    mountRunnerSurfaces(box);
     wireRunnerPair(box);
+    restoreFocus();
     return;
   }
 
@@ -6446,8 +6282,8 @@ node runner-agent.mjs run</pre>
                <strong>${esc(running.label || running.prompt?.slice(0, 60) || "未命名任务")}</strong>
                <small>${esc(duration(running) || "刚开始")} · ${esc(running.model || (running.agent?.startsWith("ua-") ? (state.myAgents ?? []).find((a) => a.id === running.agent)?.name ?? "我的员工" : agentNameOf(running.agent)))}</small>
                <div class="rp-run-ops">
-                 <button type="button" class="set-action" data-runner-open="${esc(running.id)}">看实时输出</button>
-                 <button type="button" class="set-action danger" data-runner-cancel="${esc(running.id)}">取消任务</button>
+                 <button type="button" class="set-action" data-native-focus-key="runner-open:${esc(running.id)}" data-runner-open="${esc(running.id)}">看实时输出</button>
+                 <button type="button" class="set-action danger" data-native-focus-key="runner-cancel:${esc(running.id)}" data-runner-cancel="${esc(running.id)}">取消任务</button>
                </div>
              </div>`
           : `<p class="ppl-empty">当前没有任务，空闲待命。</p>
@@ -6468,7 +6304,7 @@ node runner-agent.mjs run</pre>
         ${override?.length ? `<div class="root-list root-list-override">${override.map((root) => `<code title="${esc(root)}">${esc(root)}</code>`).join("")}</div>` : ""}
         <p class="ppl-note">${note} 改完保存，执行器下一次心跳（约 4 秒）自动拿走，不用去本机重跑 init。</p>
         <div class="rp-run-ops">
-          <button type="button" class="set-action" data-runner-roots="${esc(item.accountId)}">在平台上改目录</button>
+          <button type="button" class="set-action" data-native-focus-key="runner-roots:${esc(item.accountId)}" data-runner-roots="${esc(item.accountId)}">在平台上改目录</button>
         </div>`;
         })()}
         <details class="rp-roots-help">
@@ -6483,7 +6319,7 @@ node runner-agent.mjs run</pre>
 
     <div class="rp-card">
       <header><h3>最近任务</h3><span class="rp-hint">这台执行器跑的，点一行看详情</span></header>
-      ${recent.length ? `<div class="rp-tasks">${recent.map(renderRunnerTaskRow).join("")}</div>` : `<p class="ppl-empty">还没有任务。去「任务」里派一个，执行员工选自己的本机员工。</p>`}
+      ${recent.length ? `<div class="rp-tasks" data-account="${esc(item.accountId)}"></div>` : `<p class="ppl-empty">还没有任务。去「任务」里派一个，执行员工选自己的本机员工。</p>`}
     </div>`;
   }).join("");
 
@@ -6514,7 +6350,9 @@ node runner-agent.mjs run</pre>
       }
     });
   });
+  mountRunnerSurfaces(box);
   wireRunnerPair(box);
+  restoreFocus();
 }
 
 function renderSettings() {
@@ -6554,28 +6392,7 @@ function renderSettings() {
   // 折叠是用户手动状态，重渲染前后必须留住
   const setFold = new Map([...box.querySelectorAll(".set-fold")].map((item) => [item.dataset.fold, item.open]));
   box.innerHTML = `
-    <div class="set-hero">
-      <div class="hero-cell ${healthState}">
-        <span>网关</span>
-        <b><i class="pulse-dot"></i>${healthText}</b>
-        <em>${esc(boot.service?.host === "0.0.0.0" ? "0.0.0.0（局域网）" : boot.service?.host ?? "127.0.0.1")}:${boot.service?.port ?? 4317}</em>
-      </div>
-      <div class="hero-cell">
-        <span>Codex</span>
-        <b class="mono">${esc(version)}</b>
-        <em>本机 CLI 版本</em>
-      </div>
-      <div class="hero-cell">
-        <span>并发占用</span>
-        <b class="mono">${boot.running ?? 0}<small> / ${boot.maxConcurrency}</small></b>
-        <em>${(boot.queue ?? 0) > 0 ? `${boot.queue} 个排队中` : "队列空闲"}</em>
-      </div>
-      <div class="hero-cell">
-        <span>近 7 天任务</span>
-        <b class="mono">${total}</b>
-        <em>${completed} 完成 · ${failed} 失败</em>
-      </div>
-    </div>
+    <div class="set-hero" id="settingsMetrics"></div>
 
     <!-- 我的模型：地址 + Key 只配一次，多个员工共用；同模型按并发上限排队 -->
     <details class="set-fold set-models" data-fold="models" open>
@@ -6649,6 +6466,21 @@ function renderSettings() {
       </div>
     </details>`;
 
+  window.platformRenderMetrics($("#settingsMetrics"), [
+    { label: "网关", value: healthText, tone: healthState === "bad" ? "danger" : healthState === "ok" ? "success" : undefined, hint: `${boot.service?.host ?? "127.0.0.1"}:${boot.service?.port ?? 4317}` },
+    { label: "Codex", value: version, hint: "本机 CLI 版本" },
+    { label: "并发占用", value: `${boot.running ?? 0} / ${boot.maxConcurrency ?? "—"}`, hint: (boot.queue ?? 0) > 0 ? `${boot.queue} 个排队中` : "队列空闲" },
+    { label: "近 7 天任务", value: total, hint: `${completed} 完成 · ${failed} 失败` },
+  ]);
+  // V2 lifecycle is managed by its independent launcher, not retained gateway controls.
+  if (state.user?.integration) {
+    box.querySelectorAll('[data-fold="people"],[data-fold="service"],[data-fold="update"]').forEach(item => item.remove());
+  }
+  box.querySelectorAll(".set-fold").forEach(content => {
+    const marker = document.createElement("span"); content.before(marker);
+    marker.replaceWith(window.platformWrapCard(content));
+  });
+
   // 折叠状态回填：用户展开过哪组，刷新后还是展开
   box.querySelectorAll(".set-fold").forEach((item) => {
     if (setFold.has(item.dataset.fold)) item.open = setFold.get(item.dataset.fold);
@@ -6656,7 +6488,7 @@ function renderSettings() {
 
   // 运维项只给管理人员：不只是藏起来，对应的数据也不去拉，免得普通账号刷一堆 403
   if (!isAdmin) {
-    box.querySelectorAll("[data-admin-only]").forEach((item) => { item.hidden = true; });
+    box.querySelectorAll("[data-admin-only]").forEach((item) => { item.hidden = true; const card = item.closest(".native-content-card"); if (card) card.hidden = true; });
     const hero = box.querySelector(".set-hero");
     if (hero) hero.hidden = true;
   }
@@ -6670,9 +6502,11 @@ function renderSettings() {
   loadMyModels();
   renderRunnerCard();
   if (isAdmin) {
-    renderPeopleSection($("#peoplePanel"));
-    renderServiceCard();
-    renderUpdateCard();
+    if (!state.user?.integration) {
+      renderPeopleSection($("#peoplePanel"));
+      renderServiceCard();
+      renderUpdateCard();
+    }
   } else {
     // 清掉管理块残留的骨架，避免人已经藏了、占位文字还在
     const people = $("#peoplePanel");
@@ -7066,6 +6900,7 @@ function wire() {
   });
 
   $("#closeDrawer").addEventListener("click", closeDrawer);
+  $("#drawer").addEventListener("native-sheet-close", closeDrawer);
   $("#scrim").addEventListener("click", closeDrawer);
 
   // ---------------------------------------------------------------- flows
@@ -7209,6 +7044,8 @@ function wire() {
   $("#flowVars").addEventListener("input", refreshPromptChips);
   // 检查器里任何字段改动都直接写回 draft；改名还要刷新占位符按钮
   $("#flowInspector").addEventListener("input", (event) => {
+    // This option opens a form; it is not an employee ID to persist in the draft.
+    if (event.target.matches(".flow-step-agent") && event.target.value === "__new__") return;
     syncInspectorToDraft();
     if (event.target.classList.contains("flow-step-name")) refreshPromptChips();
     if (event.target.classList.contains("flow-cond-option")) {
@@ -7405,33 +7242,11 @@ function wire() {
     renderLaunchVars();
   });
 
-  // 流程选择器：点触发器开列表，选一条 → 写回隐藏的 select 并触发同一条链路
-  $("#flowPickTrigger").addEventListener("click", (event) => {
-    event.stopPropagation();
-    toggleFlowPick();
-  });
-  $("#flowPickMenu").addEventListener("click", (event) => {
-    const item = event.target.closest("[data-flow]");
-    if (!item) return;
-    const select = $("#flowLaunchSelect");
-    select.value = item.dataset.flow;
-    closeFlowPick();
-    select.dispatchEvent(new Event("change"));
-    $("#flowLaunchInput")?.focus();
-  });
-  // 点别处 / Esc 收起，别让菜单挂在页面上
-  document.addEventListener("click", (event) => {
-    const pick = $("#flowPick");
-    if (pick && !pick.contains(event.target)) closeFlowPick();
-  });
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") closeFlowPick();
-  });
   // 输入框跟着内容长高，最多六行，别把下面的流程卡挤走
   $("#flowLaunchInput").addEventListener("input", (event) => {
     const box = event.target;
     box.style.height = "auto";
-    box.style.height = `${Math.min(box.scrollHeight, 116)}px`;
+    box.style.height = `${Math.max(128, Math.min(box.scrollHeight, 240))}px`;
   });
   // 回车提交，Shift+回车换行
   $("#flowLaunchInput").addEventListener("keydown", (event) => {
@@ -7546,8 +7361,8 @@ function wire() {
   });
 
   document.addEventListener("keydown", (event) => {
-    const typing = ["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement?.tagName);
-    if (event.key === "Escape") closeDrawer();
+    // Shared Sheet owns the Escape stack, including nested menus and dialogs.
+    if (event.key === "Escape" && !window.platformTaskDrawer) closeDrawer();
   });
 }
 

@@ -46,10 +46,10 @@
 
         <!-- 任务页两个页签：临时任务（说一句就派活）/ 流程编排（多步流程） -->
         <div class="ws-tabs" id="wsTabs" role="tablist" aria-label="任务页签">
-          <button type="button" class="ws-tab" data-tab="adhoc" role="tab" aria-selected="true">
+          <button type="button" class="ws-tab" data-native-size="content" data-tab="adhoc" role="tab" aria-selected="true">
             <b>临时任务</b><em>说一句话，直接派给某个员工</em>
           </button>
-          <button type="button" class="ws-tab" data-tab="flows" role="tab" aria-selected="false">
+          <button type="button" class="ws-tab" data-native-size="content" data-tab="flows" role="tab" aria-selected="false">
             <b>流程编排</b><em>多步流程，上一步的产出自动交给下一步</em>
           </button>
         </div>
@@ -98,17 +98,9 @@
           </div>
           <div class="flow-launch-vars" id="flowLaunchVars"></div>
           <div class="flow-launch-foot">
-            <div class="flow-pick" id="flowPick">
-              <select id="flowLaunchSelect" class="sr-only" aria-label="选择编排流程" tabindex="-1"></select>
-              <button type="button" class="flow-pick-trigger" id="flowPickTrigger"
-                      aria-haspopup="listbox" aria-expanded="false" aria-controls="flowPickMenu">
-                <span class="flow-pick-label">流程</span>
-                <b id="flowPickName">还没有流程</b>
-                <em id="flowPickMeta"></em>
-                <span class="flow-pick-caret" aria-hidden="true"></span>
-              </button>
-              <div class="flow-pick-menu" id="flowPickMenu" role="listbox" aria-label="选择编排流程" hidden></div>
-            </div>
+            <label class="flow-launch-project"><span>流程</span>
+              <select id="flowLaunchSelect" aria-label="选择编排流程"></select>
+            </label>
             <span class="flow-launch-tip">Enter 开始 · Shift + Enter 换行</span>
             <label class="flow-launch-project" title="跑完的产出文件会自动归档进这个协作项目">
               <span>归档到</span>
@@ -143,7 +135,7 @@
 
             <section class="run-panel" id="flowRunPanel" aria-label="执行详情">
               <!-- 标题条：一条运行的状态纪要，同时是展开/收起的开关 -->
-              <button type="button" class="run-board-head" id="runBoardToggle"
+              <button type="button" class="run-board-head" id="runBoardToggle" data-native-size="content"
                       aria-expanded="true" aria-controls="runPanelInner" hidden>
                 <span class="run-dot" id="runBoardDot"></span>
                 <b id="runBoardName">—</b>
@@ -271,14 +263,11 @@
               </div>
             </header>
 
-            <div class="lib-tabs" role="tablist">
-              <button type="button" class="lib-tab active" data-skill-tab="local" role="tab">本机工作方法<b id="skillLocalCount">0</b></button>
-              <button type="button" class="lib-tab" data-skill-tab="hub" role="tab">云端工作方法<b id="skillHubCount">0</b></button>
-            </div>
+            <div id="skillTabs"></div>
 
             <div class="lib-toolbar" id="skillToolbar">
-              <input id="skillQuery" type="search" placeholder="搜索名称、说明或标签…" autocomplete="off">
-              <select id="skillSort">
+              <input id="skillQuery" aria-label="搜索工作方法" type="search" placeholder="搜索名称、说明或标签…" autocomplete="off">
+              <select id="skillSort" aria-label="工作方法排序">
                 <option value="new">最新上架</option>
                 <option value="hot">最热</option>
               </select>
@@ -313,7 +302,7 @@
   <dialog id="tokenDialog"><form method="dialog" id="tokenForm"><p class="eyebrow">LOCAL GATEWAY</p><h2>连接本地网关</h2><p class="muted">Token 只保存在当前浏览器会话。</p><label class="field"><span>Token</span><input id="tokenInput" type="password" autocomplete="off" required></label><button class="primary" value="connect">连接</button></form></dialog>
 
 
-  <dialog id="artifactPreview">
+  <div id="artifactPreview" hidden>
     <div class="apreview">
       <header class="apreview-head">
         <div class="apreview-title">
@@ -331,12 +320,12 @@
       </header>
       <div class="apreview-body" id="apreviewBody"></div>
     </div>
-  </dialog>
+  </div>
 
-  <dialog id="hubDialog">
+  <div id="hubDialog" hidden>
     <form id="hubForm">
       <p class="eyebrow">SKILL HUB</p>
-      <h2>连接 AI 能力平台</h2>
+      <h2 id="hubDialogTitle">连接 AI 能力平台</h2>
       <p class="muted">账号只存在本机网关的密钥文件里，不会写进页面或日志</p>
       <label class="field"><span>平台地址</span><input id="hubBaseUrl" placeholder="http://8.138.91.205/hub/" autocomplete="off"></label>
       <label class="field"><span>账号</span><input id="hubUser" autocomplete="username"></label>
@@ -348,13 +337,13 @@
         <button type="button" class="primary" id="hubSave">保存</button>
       </div>
     </form>
-  </dialog>
+  </div>
 
-  <dialog id="skillDialog">
+  <div id="skillDialog" hidden>
     <div class="skilldlg">
       <header class="skilldlg-head">
         <div><p class="eyebrow" id="skillDlgMeta">SKILL</p><h2 id="skillDlgTitle">技能</h2></div>
-        <button type="button" class="icon-btn" id="skillDlgClose">✕</button>
+        <button type="button" class="icon-btn" id="skillDlgClose" aria-label="关闭工作方法">✕</button>
       </header>
 
       <div class="skilldlg-body" id="skillDlgBody"></div>
@@ -378,7 +367,7 @@
         <button type="button" class="primary" id="skillDlgSave" hidden>保存</button>
       </footer>
     </div>
-  </dialog>
+  </div>
 
   <div id="toast" role="status" aria-live="polite"></div>
   

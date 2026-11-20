@@ -1,10 +1,27 @@
 import "./index.css"
 import "./scheduler.css"
+import "@capability-ui/native-layout.css"
 import { openNativeDialog, type NativeDialogOptions } from "@capability-ui/native-dialog"
 import { enhanceNativeControls } from "@capability-ui/native-controls"
 
+import { renderNativeActionCards } from "@capability-ui/native-action-cards"
+import { enhanceNativeForms } from "@capability-ui/native-forms"
+import { createNativeMenu, mountNativeSheet } from "@capability-ui/native-surfaces"
+import { createNativeRecordCard, wrapNativeCard, renderNativeMetrics, renderNativeSegments } from "@capability-ui/native-collections"
+import { mountRetainedDialog } from "@capability-ui/native-retained-dialog"
+import { renderNativeDataTable } from "@capability-table/native-data-table"
+
 declare global {
   interface Window {
+    platformRenderActionCards?: typeof renderNativeActionCards
+    platformCreateRecordCard?: typeof createNativeRecordCard
+    platformWrapCard?: typeof wrapNativeCard
+    platformRenderMetrics?: typeof renderNativeMetrics
+    platformRenderSegments?: typeof renderNativeSegments
+    platformRenderDataTable?: typeof renderNativeDataTable
+    platformDialogs?: Record<string, ReturnType<typeof mountRetainedDialog>>
+    platformCreateMenu?: typeof createNativeMenu
+    platformTaskDrawer?: ReturnType<typeof mountNativeSheet>
     platformOpenDialog?: (options: NativeDialogOptions) => ReturnType<typeof openNativeDialog>
     platformAiOpenView?: (view: string) => void
     platformHasUnsavedWork?: () => boolean
@@ -33,8 +50,28 @@ async function connect() {
     page.querySelectorAll("script").forEach(script => script.remove())
     document.body.replaceChildren(...Array.from(page.body.childNodes))
     document.body.classList.add("scheduler-document")
+    document.body.dataset.nativeLayout = "comfortable"
     enhanceNativeControls(document.body)
     window.platformOpenDialog = openNativeDialog
+    window.platformCreateMenu = createNativeMenu
+    window.platformRenderActionCards = renderNativeActionCards
+    window.platformCreateRecordCard = createNativeRecordCard
+    window.platformWrapCard = wrapNativeCard
+    window.platformRenderMetrics = renderNativeMetrics
+    window.platformRenderSegments = renderNativeSegments
+    window.platformRenderDataTable = renderNativeDataTable
+    window.platformDialogs = {}
+    for (const [id, title, titleId, width] of [
+      ["artifactPreview", "文件预览", "apreviewName", 1000],
+      ["skillDialog", "工作方法", "skillDlgTitle", 880],
+      ["hubDialog", "连接 AI 能力平台", "hubDialogTitle", 560],
+    ] as const) {
+      const content = document.getElementById(id)
+      if (content) window.platformDialogs[id] = mountRetainedDialog(content, { title, titleId, width })
+    }
+    const drawer = document.querySelector<HTMLElement>("#drawer")
+    if (drawer) window.platformTaskDrawer = mountNativeSheet(drawer, () => drawer.dispatchEvent(new Event("native-sheet-close")))
+    enhanceNativeForms(document.body, '#viewWorksite select, #viewFlowEdit select, #viewWorksite input[type="checkbox"], #viewFlowEdit input[type="checkbox"], #drawer select, #drawer input[type="checkbox"], #viewCollab select, #viewTemplates select, #hubDialog select, #skillDialog select, #viewSettings select, #viewSettings input[type="checkbox"]')
     const script = document.createElement("script")
     script.type = "module"; script.src = "/ai/app.js"
     script.onerror = () => showError("调度页面加载失败，请重试。")

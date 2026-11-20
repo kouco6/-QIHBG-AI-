@@ -4,6 +4,8 @@ from http.cookies import CookieError, SimpleCookie
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, quote, unquote, urlsplit
 from identity import REMEMBER_AGE
+from exhibitions import Exhibitions, ExhibitionError, PREFIX as EXHIBITION_PREFIX
+from dashboard_snapshot import snapshot_dashboard, LedgerError
 from planning_templates import Templates, TemplateError, archive
 from planning_templates_v2 import PREFIX as V2_TEMPLATE_PREFIX, migrate_package
 ROOT = Path(__file__).resolve().parents[1]
@@ -182,6 +184,75 @@ class Handler(BaseHTTPRequestHandler):
                 finally: conn.close()
             except (OSError, RuntimeError, http.client.HTTPException, ValueError):
                 return self._error(503, '执行器服务暂不可用。')
+
+    def _exhibitions(self, parsed, account, cookie):
+        if not account:
+            return self._error(401, '登录已失效。')
+        if account['must_change_password'] or 'bg' not in account['modules']:
+            return self._error(403, '当前账号没有企划模块访问权限。')
+        try:
+            with self.server.template_lock:
+                if not hasattr(self.server, 'exhibitions'):
+                    self.server.exhibitions = Exhibitions(self.server.settings.data)
+                store = self.server.exhibitions
+            suffix = parsed.path[len(EXHIBITION_PREFIX):]
+            read = self.command in {'GET', 'HEAD'}
+            if suffix == '' and read:
+                return self._json(200, store.listing(account))
+            if suffix == '/maintainers':
+                if account['role'] != 'admin':
+                    return self._error(403, '只有管理员可以指定维护人员。')
+                people = [p for p in self.server.identity.list_accounts(cookie)
+                          if p['active'] and 'bg' in p['modules'] and p['role'] != 'admin']
+                if read:
+                    return self._json(200, {
+                        'items': [{'id': p['id'], 'name': p['name'], 'login': p['login']} for p in people],
+                        'selected': store.maintainers()})
+            if read:
+                return self._error(404, '展会接口不存在。')
+            if self.command != 'POST':
+                return self._error(405, '展会维护仅支持 POST。')
+            current = self.server.identity.current(cookie)
+            if (not current or current['must_change_password'] or 'bg' not in current['modules']
+                    or not store.can_manage(current)):
+                return self._error(403, '当前账号没有展会维护权限。')
+            if suffix == '/import':
+                from urllib.parse import parse_qs
+                name = parse_qs(parsed.query).get('filename', ['展会调研.xlsx'])[0]
+                if not name.lower().endswith('.xlsx'):
+                    raise ExhibitionError('请上传 .xlsx 文件。')
+                payload = self.rfile.read(self._length(10 * 1024 * 1024))
+                return self._json(200, store.import_xlsx(payload, name, current))
+            if self.headers.get('Content-Type', '').split(';')[0] != 'application/json':
+                raise ExhibitionError('请使用 JSON 提交。', 415)
+            raw = json.loads(self.rfile.read(self._length(256 * 1024)))
+            if not isinstance(raw, dict):
+                raise ExhibitionError('请求内容须为对象。')
+            if suffix == '/maintainers':
+                if current['role'] != 'admin':
+                    return self._error(403, '只有管理员可以指定维护人员。')
+                ids = raw.get('ids')
+                if not isinstance(ids, list) or any(not isinstance(i, str) for i in ids):
+                    raise ExhibitionError('维护人员无效。')
+                if not set(ids) <= {p['id'] for p in people}:
+                    raise ExhibitionError('请选择已启用且有企划权限的普通用户。')
+                return self._json(200, store.set_maintainers(ids))
+            if suffix == '/topics':
+                return self._json(200, store.topic(raw, current))
+            if suffix == '/records':
+                return self._json(201, store.save(raw, current))
+            matched = re.fullmatch(r'/records/([a-f0-9]{32})(/archive)?', suffix)
+            if matched:
+                if matched[2]:
+                    return self._json(200, store.archive(matched[1], raw.get('revision'), raw.get('archived'), current))
+                return self._json(200, store.save(raw, current, matched[1], raw.get('revision')))
+            return self._error(404, '展会操作不存在。')
+        except ExhibitionError as error:
+            return self._error(error.status, str(error))
+        except (ValueError, TypeError):
+            return self._error(400, '展会请求格式无效或内容过大。')
+        except (OSError, sqlite3.Error):
+            return self._error(503, '展会存储暂不可用，请重试。')
 
     def _templates(self, parsed, account, cookie):
             server = self.server
@@ -386,6 +457,19 @@ class Handler(BaseHTTPRequestHandler):
             return self._accounts(path,account,cookie)
         if path == V2_TEMPLATE_PREFIX or path.startswith(V2_TEMPLATE_PREFIX+'/'):
             return self._templates(parsed,account,cookie)
+        if path == EXHIBITION_PREFIX or path.startswith(EXHIBITION_PREFIX + '/'):
+            return self._exhibitions(parsed, account, cookie)
+        if path == '/platform/v2/planning-dashboard':
+            if not account: return self._error(401, '请登录平台。')
+            if account['must_change_password'] or 'bg' not in account['modules']:
+                return self._error(403, '当前账号没有企划模块访问权限。')
+            if not read: return self._error(405, '历史统计仅支持读取。')
+            try:
+                return self._json(200, snapshot_dashboard(self.server.settings.data, account['id'], parsed.query))
+            except LedgerError as error:
+                return self._error(error.status, str(error))
+            except (OSError, sqlite3.Error, ValueError, KeyError):
+                return self._error(503, '统计结果不可用，请核查已迁入的历史数据。')
         if path.startswith('/ai/'):
             if not account: return self._error(401,'请登录平台。')
             if account['must_change_password'] or 'ai' not in account['modules']: return self._error(403,'当前账号无调度权限。')

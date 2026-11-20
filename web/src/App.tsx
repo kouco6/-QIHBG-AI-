@@ -14,10 +14,12 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { TemplatesPage, type LeaveGuard } from "@/components/templates-page"
 import { AiPage, type AiPage as AiPageId } from "@/components/ai-page"
 import { platformApi, PlatformApiError, type PlatformAccount } from "@/lib/platform-api"
+import { ExhibitionsPage } from "@/components/exhibitions-page"
+import { DashboardPage } from "@/components/dashboard-page"
 import { PersonnelPage } from "@/components/personnel-page"
 
 type ModuleId = "planning" | "capabilities" | "ai"
-type PageId = "overview" | "table" | "interaction" | "type" | "templates" | "people" | `ai-${AiPageId}`
+type PageId = "overview" | "table" | "interaction" | "type" | "templates" | "people" | "exhibitions" | "dashboard" | `ai-${AiPageId}`
 
 const modules: { id: ModuleId; label: string }[] = [
   { id: "planning", label: "产品企划中心" },
@@ -30,7 +32,7 @@ export default function App() {
   const [account, setAccount] = useState<PlatformAccount | null>(null)
   const [signedIn, setSignedIn] = useState(false)
   const [moduleId, setModuleId] = useState<ModuleId>(location.hash.startsWith("#ai/") ? "ai" : "planning")
-  const [pageId, setPageId] = useState<PageId>(location.hash.startsWith("#ai/") && ["worksite","collab","artifacts","templates","runner","stats","settings"].includes(location.hash.slice(4)) ? `ai-${location.hash.slice(4) as AiPageId}` : location.hash.startsWith("#ai/") ? "ai-worksite" : "overview")
+  const [pageId, setPageId] = useState<PageId>(location.hash.startsWith("#ai/") && ["worksite","collab","artifacts","templates","runner","stats","settings"].includes(location.hash.slice(4)) ? `ai-${location.hash.slice(4) as AiPageId}` : location.hash.startsWith("#ai/") ? "ai-worksite" : location.hash === "#planning/exhibitions" ? "exhibitions" : location.hash === "#planning/dashboard" ? "dashboard" : "overview")
   const [sessionError, setSessionError] = useState("")
   const leaveGuard = useRef<LeaveGuard | null>(null)
   const registerGuard = useCallback((guard: LeaveGuard | null) => { leaveGuard.current = guard }, [])
@@ -57,6 +59,18 @@ export default function App() {
     return () => window.removeEventListener('platform-logout-request', logout)
   }, [])
 
+  useEffect(() => {
+    const followHash = async () => {
+      const next = location.hash === "#planning/exhibitions" ? "exhibitions" : location.hash === "#planning/dashboard" ? "dashboard" : null
+      if (!next || next === pageId) return
+      if (leaveGuard.current && !await leaveGuard.current()) { history.replaceState(null, "", "#planning/" + pageId); return }
+      setModuleId("planning")
+      setPageId(next)
+    }
+    window.addEventListener("hashchange", followHash)
+    return () => window.removeEventListener("hashchange", followHash)
+  }, [pageId])
+
   const selectAiPage = useCallback((page: AiPageId) => {
     setPageId(`ai-${page}`)
     history.replaceState(null, "", `#ai/${page}`)
@@ -82,6 +96,8 @@ export default function App() {
     if (leaveGuard.current && !await leaveGuard.current()) return
     setPageId(id as PageId)
     if (id.startsWith("ai-")) history.replaceState(null, "", "#ai/" + id.slice(3))
+    else if (id === "exhibitions" || id === "dashboard") history.replaceState(null, "", "#planning/" + id)
+    else if (location.hash.startsWith("#planning/")) history.replaceState(null, "", "#planning")
   }
 
   return (
@@ -116,6 +132,8 @@ export default function App() {
             {pageId === "table" ? <TablePage /> : null}
             {pageId === "interaction" ? <InteractionPage /> : null}
             {pageId === "type" ? <TypePage /> : null}
+            {pageId === "exhibitions" ? <ExhibitionsPage registerGuard={registerGuard} /> : null}
+            {pageId === "dashboard" ? <DashboardPage /> : null}
             {pageId === "templates" ? <TemplatesPage registerGuard={registerGuard} /> : null}
             {pageId === "people" && account?.role === "admin" ? <PersonnelPage account={account} refreshAccount={refreshAccount} registerGuard={registerGuard} /> : null}
           </main>

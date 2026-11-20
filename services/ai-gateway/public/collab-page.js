@@ -61,28 +61,14 @@ const canManageProject = (p) =>
    卡片墙
    ========================================================================= */
 
-function statCard(label, value, hint, tone) {
-  return `<div class="cp-stat${tone ? ` tone-${tone}` : ""}">
-    <b>${esc(value)}</b><span>${esc(label)}</span>${hint ? `<small>${esc(hint)}</small>` : ""}
-  </div>`;
-}
-
 function projectCard(p) {
-  const card = document.createElement("article");
-  card.className = "pj-card";
+  const card = window.platformCreateRecordCard({
+    title: p.name, description: p.goal || "还没写项目目标",
+    tags: [{ label: p.adminAgent ? `管理 · ${agentName(p.adminAgent)}` : "未设 AI 管理员", variant: p.adminAgent ? "default" : "secondary" }],
+    meta: `${p.pushCount} 输出 · ${p.agentCount} AI 员工 · ${p.lastAt ? relTime(p.lastAt) : "暂无动态"}`,
+    onOpen: () => openProject(p.id),
+  });
   card.dataset.id = p.id;
-  const admin = p.adminAgent
-    ? `<span class="cb-agent ${agentClass(agentName(p.adminAgent))}">管理 · ${esc(agentName(p.adminAgent))}</span>`
-    : `<span class="pj-admin-empty">未设 AI 管理员</span>`;
-  card.innerHTML = `
-    <header><h3>${esc(p.name)}</h3>${admin}</header>
-    ${p.goal ? `<p class="pj-goal">${esc(p.goal)}</p>` : `<p class="pj-goal muted">还没写项目目标</p>`}
-    <div class="pj-meta">
-      <span><b>${p.pushCount}</b> 输出</span>
-      <span><b>${p.agentCount}</b> AI 员工</span>
-      <time>${p.lastAt ? esc(relTime(p.lastAt)) : "暂无动态"}</time>
-    </div>`;
-  card.addEventListener("click", () => openProject(p.id));
   return card;
 }
 
@@ -158,7 +144,7 @@ function pushCard(p, { projectMode = false } = {}) {
         <span class="cb-agent ${agentClass(p.agent)}">${esc(p.agent)}</span>
         <span class="cb-kind">${p.kind === "note" ? "动态" : "产物"}</span>
         <time>${esc(relTime(p.createdAt))}</time>
-        ${admin ? `<button class="cp-del" title="删除这条推送">删除</button>` : ""}
+        ${admin ? `<button class="cp-del danger" title="删除这条推送">删除</button>` : ""}
       </header>
       <h4>${esc(title)}</h4>
       ${body}
@@ -182,7 +168,7 @@ function pushCard(p, { projectMode = false } = {}) {
       repaint();
     } catch (err) { toastError(err.message); }
   };
-  return card;
+  return window.platformWrapCard(card);
 }
 
 function paintStream() {
@@ -211,16 +197,14 @@ function paintFilters() {
     .map((m) => `<option value="${esc(m.id)}"${state.filters.member === m.id ? " selected" : ""}>${esc(m.name)} · ${roleLabel(m.role)}</option>`)
     .join("");
   box.innerHTML = `
-    <div class="cp-seg" role="tablist">
-      ${[["", "全部"], ["artifact", "产物"], ["note", "动态"]].map(([v, t]) =>
-        `<button type="button" data-kind="${v}" class="${state.filters.kind === v ? "active" : ""}">${t}</button>`).join("")}
-    </div>
-    <select class="cp-select" data-role="member"><option value="">全部成员</option>${memberOpts}</select>
-    <select class="cp-select" data-role="agent"><option value="">全部 AI</option>${agentOpts}</select>
+    <div id="cpKind"></div>
+    <select class="cp-select" aria-label="筛选成员" data-role="member"><option value="">全部成员</option>${memberOpts}</select>
+    <select class="cp-select" aria-label="筛选 AI" data-role="agent"><option value="">全部 AI</option>${agentOpts}</select>
     <span class="cp-live" title="新推送会实时出现在这里"><i></i>实时</span>`;
 
-  box.querySelectorAll("[data-kind]").forEach((btn) => {
-    btn.onclick = () => { state.filters.kind = btn.dataset.kind; paintFilters(); loadOverview({ quiet: true }); };
+  window.platformRenderSegments(box.querySelector("#cpKind"), { label: "动态类型", value: state.filters.kind,
+    items: [["", "全部"], ["artifact", "产物"], ["note", "动态"]].map(([value, label]) => ({ value, label })),
+    onValueChange: value => { state.filters.kind = value; loadOverview({ quiet: true }); },
   });
   box.querySelector('[data-role="member"]').onchange = (e) => { state.filters.member = e.target.value; loadOverview({ quiet: true }); };
   box.querySelector('[data-role="agent"]').onchange = (e) => { state.filters.agent = e.target.value; loadOverview({ quiet: true }); };
@@ -269,26 +253,16 @@ function paintProjectTasks(box) {
       <p>在工作台派活时，把「归档到项目」选成这个项目，任务跑完的结论文和产物文件就会自动出现在这里。</p></div>`;
     return;
   }
-  const rows = tasks.map((t) => {
+  tasksBox.replaceChildren(...tasks.map(t => {
     const [statusText, statusClass] = taskStatusLabel(t);
-    const artifactCount = (t.artifacts || []).length;
-    const when = t.updatedAt || t.createdAt;
-    return `<article class="pj-task-row" data-task="${esc(t.id)}" title="打开任务详情">
-      <span class="pj-task-status ${statusClass}">${esc(statusText)}</span>
-      <div class="pj-task-main">
-        <b>${esc(t.label || t.summary?.slice(0, 60) || "未命名任务")}</b>
-        <span>${esc(agentName(t.agent))}${when ? ` · ${esc(relTime(when))}` : ""}${artifactCount ? ` · ${artifactCount} 个产物` : ""}${t.finalResponse ? ` · ${esc(String(t.finalResponse).slice(0, 80))}` : ""}</span>
-      </div>
-      <span class="pj-task-open">详情 ›</span>
-    </article>`;
-  }).join("");
-  tasksBox.innerHTML = rows;
-  tasksBox.querySelectorAll(".pj-task-row").forEach((row) => {
-    row.onclick = () => {
-      const id = row.dataset.task;
-      if (id) document.dispatchEvent(new CustomEvent("wb-open-task", { detail: { id } }));
-    };
-  });
+    return window.platformCreateRecordCard({
+      title: t.label || t.summary?.slice(0, 60) || "未命名任务",
+      description: t.finalResponse ? String(t.finalResponse).slice(0, 80) : undefined,
+      tags: [{ label: statusText, variant: statusClass === "st-failed" ? "destructive" : statusClass === "st-done" || statusClass === "st-running" ? "default" : "secondary" }],
+      meta: `${agentName(t.agent)} · ${relTime(t.updatedAt || t.createdAt)} · ${(t.artifacts || []).length} 个产物`,
+      onOpen: () => document.dispatchEvent(new CustomEvent("wb-open-task", { detail: { id: t.id } })),
+    });
+  }));
 }
 
 function paintProject() {
@@ -309,7 +283,7 @@ function paintProject() {
         ? `<div class="pj-head-actions">
             <label class="pj-admin-pick">
               <span>AI 管理员</span>
-              <select class="cp-select" data-act="admin">
+              <select class="cp-select" aria-label="项目 AI 管理员" data-act="admin">
                 <option value="">未指定</option>${agentPoolOptions(p.adminAgent)}
               </select>
             </label>
@@ -335,10 +309,7 @@ function paintProject() {
     </section>
     <section class="pj-stream">
       <header class="pj-agents-head">
-        <div class="cp-seg pj-stream-tabs" role="tablist">
-          <button type="button" data-pjtab="pushes" class="${state.projectTab === "pushes" ? "active" : ""}">项目输出 <small>${data.pushes.length}</small></button>
-          <button type="button" data-pjtab="tasks" class="${state.projectTab === "tasks" ? "active" : ""}">任务 <small>${state.projectTasks.length}</small></button>
-        </div>
+        <div id="pjStreamTabs"></div>
         <span class="pj-agents-hint">${state.projectTab === "tasks" ? "派活时「归档到本项目」的任务都会在这里。" : ""}</span>
       </header>
       <div class="cp-list" id="pjPushes" ${state.projectTab === "pushes" ? "" : "hidden"}></div>
@@ -353,7 +324,7 @@ function paintProject() {
     el.innerHTML = `
       <header><b>${esc(m.name)}</b></header>
       <span class="pj-agent-role">${esc(roleLabel(m.role))}</span>
-      ${canManage ? `<div class="pj-agent-actions"><button type="button" data-act="remove-member">移出</button></div>` : ""}`;
+      ${canManage ? `<div class="pj-agent-actions"><button type="button" class="danger" data-act="remove-member">移出</button></div>` : ""}`;
     if (canManage) {
       el.querySelector('[data-act="remove-member"]').onclick = async () => {
         const { confirmDialog } = await import("./dialog.js");
@@ -364,7 +335,7 @@ function paintProject() {
         } catch (err) { toastError(err.message); }
       };
     }
-    return el;
+    return window.platformWrapCard(el);
   });
   membersBox.replaceChildren(...(memberCards.length
     ? memberCards
@@ -386,7 +357,7 @@ function paintProject() {
       ${skills ? `<div class="pj-skills">${skills}</div>` : ""}
       ${canManage ? `<div class="pj-agent-actions">
         <button type="button" data-act="edit">编辑</button>
-        <button type="button" data-act="del">移除</button>
+        <button type="button" class="danger" data-act="del">移除</button>
       </div>` : ""}`;
     if (canManage) {
       el.querySelector('[data-act="edit"]').onclick = () => projectAgentDialog(a);
@@ -397,12 +368,13 @@ function paintProject() {
         loadProject(state.projectId, { quiet: true });
       };
     }
-    return el;
+    return window.platformWrapCard(el);
   });
   if (canManage) {
     const addCard = document.createElement("button");
     addCard.type = "button";
     addCard.className = "pj-agent-add";
+    addCard.dataset.nativeSize = "content";
     addCard.innerHTML = `<b>＋</b><span>添加 AI 员工</span>`;
     addCard.onclick = () => projectAgentDialog(null);
     agentsBox.replaceChildren(...cards, addCard);
@@ -420,11 +392,9 @@ function paintProject() {
   paintProjectTasks(box);
 
   // 页签切换
-  box.querySelectorAll("[data-pjtab]").forEach((btn) => {
-    btn.onclick = () => {
-      state.projectTab = btn.dataset.pjtab;
-      paintProject();
-    };
+  window.platformRenderSegments(box.querySelector("#pjStreamTabs"), { label: "项目内容", value: state.projectTab,
+    items: [{ value: "pushes", label: "项目输出", count: data.pushes.length }, { value: "tasks", label: "任务", count: state.projectTasks.length }],
+    onValueChange: value => { state.projectTab = value; paintProject(); },
   });
 
   // 头部动作
@@ -633,17 +603,21 @@ function repaint() {
   stream.hidden = state.page !== "stream";
   project.hidden = state.page !== "project";
 
+  window.platformRenderSegments(host.querySelector("#cpTabs"), { label: "协作视图", value: state.page === "project" ? "wall" : state.page,
+    items: [{ value: "wall", label: "项目" }, { value: "stream", label: "全部动态" }],
+    onValueChange: value => { state.page = value; repaint(); },
+  });
   // 统计条只在墙和全部动态显示
   const stats = host.querySelector("#cpStats");
   const data = state.overview;
   if (data) {
     const { totals, todayCount, members, projects } = data;
-    stats.innerHTML = [
-      statCard("进行中项目", (projects || []).length, projects?.[0]?.name || "还没有项目", "art"),
-      statCard("产物", totals.artifact, "可下载 / 可读", "art"),
-      statCard("动态", totals.note, "过程里的零散进展", "note"),
-      statCard("成员", members.length, members.slice(0, 3).map((m) => `${m.name}·${roleLabel(m.role)}`).join("、") || "还没有成员"),
-    ].join("");
+    window.platformRenderMetrics(stats, [
+      { label: "进行中项目", value: (projects || []).length, hint: projects?.[0]?.name || "还没有项目" },
+      { label: "产物", value: totals.artifact, hint: "可下载 / 可读" },
+      { label: "动态", value: totals.note, hint: "过程里的零散进展" },
+      { label: "成员", value: members.length, hint: members.slice(0, 3).map(m => `${m.name}·${roleLabel(m.role)}`).join("、") || "还没有成员" },
+    ]);
   }
   if (state.page === "wall") paintWall();
   if (state.page === "stream") { paintFilters(); paintStream(); }
@@ -659,10 +633,7 @@ function paintShell() {
     <div class="cp">
       <div class="cp-stats" id="cpStats"></div>
       <div class="cp-toolbar">
-        <div class="cp-tabs" id="cpTabs">
-          <button type="button" data-page="wall" class="active">项目</button>
-          <button type="button" data-page="stream">全部动态</button>
-        </div>
+        <div id="cpTabs"></div>
         <div class="cp-toolbar-actions">
           <button type="button" class="cp-ghost" data-act="new-project">＋ 新建项目</button>
         </div>
@@ -675,13 +646,6 @@ function paintShell() {
       <section id="cpProject" hidden></section>
     </div>`;
 
-  host.querySelector("#cpTabs").addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-page]");
-    if (!btn) return;
-    state.page = btn.dataset.page;
-    host.querySelectorAll("#cpTabs button").forEach((b) => b.classList.toggle("active", b === btn));
-    repaint();
-  });
   host.querySelector('[data-act="new-project"]').onclick = () => editProjectDialog(null);
   syncToolbarForViewer(host);
 }

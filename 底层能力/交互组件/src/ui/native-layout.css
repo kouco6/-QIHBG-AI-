@@ -1,0 +1,25 @@
+/* Shared readable density for retained native controllers. Theme stays with the host. */
+[data-native-layout="comfortable"] {
+  --native-caption-size: 13px;
+  --native-control-height: 40px;
+  font-size:14px;
+  line-height:1.6;
+}
+[data-native-layout="comfortable"] [data-slot="input"] { min-height:var(--native-control-height); padding:8px 12px; font-size:14px; }
+[data-native-layout="comfortable"] [data-slot="textarea"] { padding:12px; font-size:14px; line-height:1.7; resize:vertical; }
+[data-native-layout="comfortable"] [data-slot="select-trigger"] { height:var(--native-control-height); max-width:100%; font-size:14px; }
+[data-native-layout="comfortable"] [data-native-bridge="select"] { min-width:0; max-width:100%; }
+[data-native-layout="comfortable"] [data-slot="button"][data-size="default"] { height:var(--native-control-height); padding:0 16px; font-size:14px; }
+/* Retained stylesheets may contain unlayered `button { color: inherit }` rules.
+   Keep the shared single-select group's foreground paired with its Button variant. */
+[data-native-layout="comfortable"] [data-native-bridge="segments"] [data-slot="button"][data-variant="default"] { color:var(--primary-foreground); }
+[data-native-layout="comfortable"] [data-native-bridge="segments"] [data-slot="button"][data-variant="outline"] { color:var(--foreground); }
+[data-native-layout="comfortable"] [data-native-control="button"][data-size="content"] { height:auto; white-space:normal; }
+[data-native-layout="comfortable"] [data-slot="checkbox"] { width:20px; height:20px; color:var(--primary-foreground); border-color:var(--muted-foreground); }
+[data-native-layout="comfortable"] [data-slot="checkbox"][data-state="checked"] { color:var(--primary-foreground); background:var(--primary); border-color:var(--primary); }
+[data-native-layout="comfortable"] [data-slot="checkbox"] svg { color:inherit; }
+/* Bridge sources participate in validation/FormData without rendering a second control. */
+.native-control-source { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip-path:inset(50%)!important; white-space:nowrap!important; border:0!important; opacity:0; pointer-events:none; }
+/* Semantic state decoration for shared retained-controller cards. */
+[data-native-layout="comfortable"] [data-tone="success"] { color:var(--status-success,var(--foreground)); }
+[data-native-layout="comfortable"] [data-tone="danger"] { color:var(--destructive); }

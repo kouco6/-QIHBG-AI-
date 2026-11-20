@@ -1,0 +1,23 @@
+.planning-page { display:flex; flex-direction:column; gap:1.5rem; min-width:0; font-size:14px; }
+.planning-panel { border:1px solid var(--border); border-radius:var(--radius-lg); background:var(--card); padding:1rem; min-width:0; }
+.planning-page [data-slot="select-trigger"], .planning-page [data-slot="input"] { height:40px; }
+.planning-page [data-slot="select-trigger"] { max-width:100%; }
+.planning-error, .planning-notice { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.75rem; padding:.75rem 1rem; border:1px solid var(--border); border-radius:var(--radius-lg); background:var(--card); }
+.planning-error { color:var(--destructive); border-color:var(--destructive); }
+.planning-edit-dialog { display:flex; flex-direction:column; max-height:90svh; overflow:hidden; }
+.planning-form-scroll { min-height:0; flex:1; overflow-y:auto; padding:.5rem .25rem 1rem; }
+.planning-form-fields { display:flex; min-width:0; flex-direction:column; gap:1.25rem; }
+.planning-field { display:flex; flex-direction:column; gap:.5rem; min-width:0; font-size:14px; }
+.planning-form-footer { background:var(--popover); flex-shrink:0; padding-top:1rem; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:.75rem; }
+.planning-details { display:flex; flex-direction:column; gap:1rem; }
+.planning-details dt { font-size:13px; color:var(--muted-foreground); margin-bottom:.25rem; }
+.planning-details dd { white-space:pre-wrap; overflow-wrap:anywhere; }
+.exhibition-calendar { min-width:770px; }
+.calendar-week,.calendar-grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); }
+.calendar-week span { padding:.75rem; font-size:13px; color:var(--muted-foreground); }
+.calendar-day { min-height:135px; padding:.5rem; border-top:1px solid var(--border); border-right:1px solid var(--border); }
+.calendar-event { display:block; margin-top:.4rem; width:100%; border-radius:.375rem; background:var(--muted); padding:.375rem; text-align:left; font-size:12px; overflow-wrap:anywhere; }
+.calendar-event:hover { background:var(--accent); color:var(--accent-foreground); }
+@media(max-width:639px) { .planning-panel { padding:.75rem; } .planning-edit-dialog { width:calc(100% - 1rem); padding:1rem; } }
+
+.planning-form-footer [data-slot="dialog-footer"] { margin:0; padding:0; border-top:0; background:var(--popover); }

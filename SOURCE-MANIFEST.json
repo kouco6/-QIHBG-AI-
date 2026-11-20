@@ -10,13 +10,13 @@
     },
     {
       "path": "AGENTS.md",
-      "size": 1102,
-      "sha256": "a7578373b2c72000b31cb89c93bd65e952ebb4f5ef0b50a5f86ecbf978f11474"
+      "size": 1173,
+      "sha256": "f4f2f0a72fa27a11d19d4922e7bb4df01804b2aad4b55c55c93f94aa3ab2f357"
     },
     {
       "path": "README.md",
-      "size": 3377,
-      "sha256": "bd39e7b6477e5797dba805c9bd9e79b4b30ac56db4fc94f59ee812a93400ce31"
+      "size": 4090,
+      "sha256": "5fdbab2e18af679cb04b53ce2f7e293ce430342676e86c9fa0a45ccd3d713340"
     },
     {
       "path": "backend/ai_adapter.py",
@@ -24,9 +24,24 @@
       "sha256": "da74c012ae48022487da01217af6b806bb79391a2bd51d98e619f1d580a0be68"
     },
     {
+      "path": "backend/dashboard.py",
+      "size": 12568,
+      "sha256": "91516bff511e7f116fc8eed275bf135d7c5edaeff650b7df8c9ac7ea687f0d95"
+    },
+    {
+      "path": "backend/dashboard_snapshot.py",
+      "size": 2455,
+      "sha256": "e113fedd42664ba8ac9cdba4949a480140e60878d6d2b9c1343debb73f350e2f"
+    },
+    {
+      "path": "backend/exhibitions.py",
+      "size": 23328,
+      "sha256": "5a6d136dbdb2ed49f0dc9575effecde45b0d70350d0281236fd6a43dee81ae6d"
+    },
+    {
       "path": "backend/http_server.py",
-      "size": 25281,
-      "sha256": "1d61f5cf4cc0cd44359fb03cca4a91d5400e35eacb1d22e29857ffbec6962f78"
+      "size": 30561,
+      "sha256": "21b7f8081d9d818883ea164d4a3a19bf9c9ec4da9d727608e841543ab18df020"
     },
     {
       "path": "backend/identity.py",
@@ -359,19 +374,309 @@
       "sha256": "717c3e0a475e36a9223ba6a572a09255d733ce1b4d70b4039e658fbded25927c"
     },
     {
+      "path": "docs/任务执行样式合规检查-20261119.md",
+      "size": 10935,
+      "sha256": "3b03619219c3378d2c50885753a7d2e64a98d5613db42033dcf7777cb532920d"
+    },
+    {
+      "path": "docs/协作与资源库组件整改-20261120.md",
+      "size": 5568,
+      "sha256": "a0a01e56f8b21ff5121cd4473f010158e33d1bad33b29b7aa0fab13d23bd5ccf"
+    },
+    {
+      "path": "docs/展会与数据看板迁移-20261119.md",
+      "size": 6087,
+      "sha256": "402d36d4a10751f1660ea67c12753d0ac84e9ff672a4852090adbde106eaef74"
+    },
+    {
       "path": "docs/工程边界.md",
-      "size": 2005,
-      "sha256": "4909200d68cc29f47abb735576771be9f0cab076ed8a42a822e8508e33e6c74b"
+      "size": 2528,
+      "sha256": "d5acc617297c97557604c710daeed89a4d69aa694efb9acaec65416036129a4a"
+    },
+    {
+      "path": "docs/执行器统计设置组件整改-20261120.md",
+      "size": 6180,
+      "sha256": "ad99b34a96b2c554e4e16e1618e27e9f2669acd36927cf9d0fcd3c2a0d193814"
+    },
+    {
+      "path": "docs/验收截图/任务与员工布局-20261119/01-adhoc-light.png",
+      "size": 207711,
+      "sha256": "c4c822a1b90b843c751ca2971706d06b9ab9aeb935d4f59e2defb61757b5e727"
+    },
+    {
+      "path": "docs/验收截图/任务与员工布局-20261119/02-editor-light.png",
+      "size": 62689,
+      "sha256": "70d0e10c9add8ef5df2cfa40d876469262777cc56257053a21ec62f63932040f"
+    },
+    {
+      "path": "docs/验收截图/任务与员工布局-20261119/02-flows-light.png",
+      "size": 246953,
+      "sha256": "cb42f0acc9334cf13d3fef3982327a28a6628d228883684df292a0fc4ac5eb03"
+    },
+    {
+      "path": "docs/验收截图/任务与员工布局-20261119/03-flows-dark.png",
+      "size": 133724,
+      "sha256": "fa76e3915442d809712341d3f48b2192fc45f9f1e652dce5fceabe004aa884e0"
+    },
+    {
+      "path": "docs/验收截图/任务与员工布局-20261119/04-flows-mobile.png",
+      "size": 58292,
+      "sha256": "dff8613cf00033341527617f4a1142af60c6f9057409ce58e693b1ab246bccc5"
+    },
+    {
+      "path": "docs/验收截图/任务与员工布局-20261119/employee-390.png",
+      "size": 57468,
+      "sha256": "8b66c8e86b6d30f53ab3f12dd2146d79ea4b669e7a926f54f755578bb4222ace"
+    },
+    {
+      "path": "docs/验收截图/任务与员工布局-20261119/employee-727.png",
+      "size": 77920,
+      "sha256": "7f98261c64c5d87957249ad1483083da68366e2cf365c4f5db2fba3e9245883e"
+    },
+    {
+      "path": "docs/验收截图/任务执行-20261119/01-adhoc-light.png",
+      "size": 211233,
+      "sha256": "e02ca19d961e1db81bedb74d49b714bf9c002d07977585d77c6f252f80eee19f"
+    },
+    {
+      "path": "docs/验收截图/任务执行-20261119/02-editor-light.png",
+      "size": 289817,
+      "sha256": "eaa027524f79c3313cee8da354f363516e99c0b10849558a2a6972a4fe330c11"
+    },
+    {
+      "path": "docs/验收截图/任务执行-20261119/02-flows-light.png",
+      "size": 235491,
+      "sha256": "f8dc0e5f5d8ddadbcd984a0209ed69aadcea27244d5c6a92e3f264f68a5fb491"
+    },
+    {
+      "path": "docs/验收截图/任务执行-20261119/03-flows-dark.png",
+      "size": 122702,
+      "sha256": "972e03118fce37feb923d9a9d5ecac41728a990ce8085d2c029b88b4ec396bd1"
+    },
+    {
+      "path": "docs/验收截图/任务执行-20261119/04-flows-mobile.png",
+      "size": 68047,
+      "sha256": "75d9d7682bb9c1c9f4ef2b817560b0659eb50ea9d96fc16950eae2a860d39a52"
+    },
+    {
+      "path": "docs/验收截图/协作与资源库-20261120/hub-mobile.png",
+      "size": 64685,
+      "sha256": "b23eb02e75c14a8d7bf5f344e0bbeae08ffd6ef4eb863249ee5df5481f21f354"
+    },
+    {
+      "path": "docs/验收截图/协作与资源库-20261120/new-project-mobile.png",
+      "size": 50305,
+      "sha256": "782d3d13c7859ab601bf2ebf7ba9c9d633002339dd1af907a9067e4624853612"
+    },
+    {
+      "path": "docs/验收截图/协作与资源库-20261120/preview-390.png",
+      "size": 62301,
+      "sha256": "44b033e419a558ec714df61865bbfa8449b52941e4267e141cb93ba1c514d349"
+    },
+    {
+      "path": "docs/验收截图/协作与资源库-20261120/preview-727.png",
+      "size": 99485,
+      "sha256": "2b390be18708e3650d7ea17ea17c71bb203816ee18c1574c9c5a7f72553aba4a"
+    },
+    {
+      "path": "docs/验收截图/协作与资源库-20261120/project-390.png",
+      "size": 56759,
+      "sha256": "416760d13c1c7d88bae807e917c6f349dc36cf596ec5df7ced535fade2646ef5"
+    },
+    {
+      "path": "docs/验收截图/协作与资源库-20261120/project-727.png",
+      "size": 73444,
+      "sha256": "dd1d47015acf2ae1b71daafdd20690b4ee53cfc17024cb788297c8db01ad831a"
+    },
+    {
+      "path": "docs/验收截图/协作与资源库-20261120/project-employee-mobile.png",
+      "size": 45000,
+      "sha256": "b14d6ef0314aa7c84c33007b28b457b5e8ac05e63dc0f75f9f0db57db3789eb0"
+    },
+    {
+      "path": "docs/验收截图/协作与资源库-20261120/skill-editor-390.png",
+      "size": 46647,
+      "sha256": "6908ed6c1b034c78923f0006c8fef88b2b777914ad92d359aa292ce8e0f2ca31"
+    },
+    {
+      "path": "docs/验收截图/协作与资源库-20261120/skill-editor-727.png",
+      "size": 69793,
+      "sha256": "74ddbd4c21811012c8327c79fe58ca5750151cce6178c4115cd6756105e7818f"
+    },
+    {
+      "path": "docs/验收截图/协作与资源库-20261120/stream-390.png",
+      "size": 54693,
+      "sha256": "434ac82037d2ea42b4679ed5b97830149587c8a81db4f1487f33785ea1a1f8a7"
+    },
+    {
+      "path": "docs/验收截图/协作与资源库-20261120/stream-727.png",
+      "size": 83664,
+      "sha256": "528f8853615826febbcb6c923375d7d4e708c725958d37529df8b58ebdf15bea"
+    },
+    {
+      "path": "docs/验收截图/协作与资源库-20261120/产出库-1440-dark.png",
+      "size": 123152,
+      "sha256": "7d27c8298be9555f93e9cd3858398c41bc03abfcb4c6b2ce0d4457b9d057eb6f"
+    },
+    {
+      "path": "docs/验收截图/协作与资源库-20261120/产出库-390-light.png",
+      "size": 51919,
+      "sha256": "66aca07a715a84e1dc5b0564fb7fe9787bc73acad5c3dd816230780aced84d1a"
+    },
+    {
+      "path": "docs/验收截图/协作与资源库-20261120/协作-727-light.png",
+      "size": 77932,
+      "sha256": "8141e9163e7373517da12aa28d323ace86e67a298c96acedb5492c02ddc00dc0"
+    },
+    {
+      "path": "docs/验收截图/协作与资源库-20261120/工作方法-390-light.png",
+      "size": 58988,
+      "sha256": "983bfd607b07ef3ffcd1801a3cc9c95556d9d2fd0514ed6ebc83a56c5098ed01"
+    },
+    {
+      "path": "docs/验收截图/协作与资源库-20261120/工作方法-727-dark.png",
+      "size": 77056,
+      "sha256": "4b4260458c4a6434cccf687b9bee8056a6c61116ced48c50bd4aaa46f51e919c"
+    },
+    {
+      "path": "docs/验收截图/展会看板-20261119/dashboard-390.png",
+      "size": 128795,
+      "sha256": "fbbe3c39a59789533a2dafea17ea5e385b2e1ac32d831d53462735dd6564d11d"
+    },
+    {
+      "path": "docs/验收截图/展会看板-20261119/dashboard-dark.png",
+      "size": 182827,
+      "sha256": "e6393d009c06a73c9c8d0a101aa0d8c3910d0949109765d51eb4d2730d97dec1"
+    },
+    {
+      "path": "docs/验收截图/展会看板-20261119/dashboard-light.png",
+      "size": 294204,
+      "sha256": "d1da46a38385025b1b3e9f0da28766a3240095e499cbbc4265ed743630f6f50f"
+    },
+    {
+      "path": "docs/验收截图/展会看板-20261119/exhibition-edit-390.png",
+      "size": 77984,
+      "sha256": "1eccee26b0831e8a006ec4e52fa8c273a5857ff80c4d513d0736718bc41f132b"
+    },
+    {
+      "path": "docs/验收截图/展会看板-20261119/exhibitions-390.png",
+      "size": 93969,
+      "sha256": "b8d5e85baba310d101844f284a8b15e96037858e2011795caa23ad60c3ae5143"
+    },
+    {
+      "path": "docs/验收截图/展会看板-20261119/exhibitions-calendar.png",
+      "size": 272691,
+      "sha256": "dbb6bcf0024c84f4a63e10694d52adec5f2eacf8c5841c0fc0017223c512ae6e"
+    },
+    {
+      "path": "docs/验收截图/展会看板-20261119/exhibitions-dark.png",
+      "size": 172712,
+      "sha256": "d678d4c5e36bfd3e8b85ba563a5cc9a3312431855bf4cddc3cc892e72ceae10c"
+    },
+    {
+      "path": "docs/验收截图/展会看板-20261119/exhibitions-light.png",
+      "size": 285361,
+      "sha256": "4bec59665adefef6c21bdbf2b7ad5270b17ae79159a7aaf76b3698bc3caf3e2a"
+    },
+    {
+      "path": "docs/验收截图/执行器统计设置-20261120/employee-390.png",
+      "size": 76086,
+      "sha256": "2c46e58003225dd22057397865e1edc196d8a2ef3160126da16b4a98e9a8b5a7"
+    },
+    {
+      "path": "docs/验收截图/执行器统计设置-20261120/model-390.png",
+      "size": 52540,
+      "sha256": "887e0f73abed9102d450e6e31839f1111b0e868c4c30cd4f5ea2a83cc1570a18"
+    },
+    {
+      "path": "docs/验收截图/执行器统计设置-20261120/new-cloud-employee-mobile.png",
+      "size": 64288,
+      "sha256": "f81d6e1d8a325d3962623165e1d5f41cce4535114f719bfa8615f5a9b6aebfbe"
+    },
+    {
+      "path": "docs/验收截图/执行器统计设置-20261120/runner-1440-light.png",
+      "size": 256744,
+      "sha256": "ecb41a3195ea34fb25dc192f0ee0b97d4aa446e375dd4a934f93bfcd716187ee"
+    },
+    {
+      "path": "docs/验收截图/执行器统计设置-20261120/runner-390-dark.png",
+      "size": 75318,
+      "sha256": "cb0d92afb684ed80c1a1e98e89e9cfa7c5ed9d958fd9eef9a6542e75ee650e21"
+    },
+    {
+      "path": "docs/验收截图/执行器统计设置-20261120/runner-727-light.png",
+      "size": 78361,
+      "sha256": "fb482ad9096ab4f11ac010c927828059d2b8d6142c321e339dc4f93cbc79106d"
+    },
+    {
+      "path": "docs/验收截图/执行器统计设置-20261120/settings-1440-light.png",
+      "size": 246266,
+      "sha256": "4ccfa500b87d9758b9ab7a96a64b094bde740bed6ec7db9b9d7115dba58d2da7"
+    },
+    {
+      "path": "docs/验收截图/执行器统计设置-20261120/settings-390-dark.png",
+      "size": 45694,
+      "sha256": "d63ed4acd41639ff3638997315cadab9defd840aecb65aabe46c14f06ec1c940"
+    },
+    {
+      "path": "docs/验收截图/执行器统计设置-20261120/settings-727-light.png",
+      "size": 73473,
+      "sha256": "1461880e18afaa223de2ff47f93f43ef2fee826d7bdb06ea03bdd0cda3782d07"
+    },
+    {
+      "path": "docs/验收截图/执行器统计设置-20261120/stats-1440-light.png",
+      "size": 221470,
+      "sha256": "50eee6fd6965062a50f73f0f5f2a5d3349f5c67db979aa2fdec5cce9046056ae"
+    },
+    {
+      "path": "docs/验收截图/执行器统计设置-20261120/stats-390-dark.png",
+      "size": 51784,
+      "sha256": "108857395b7ba576a903497e1f523a0cd7ae60887f45361bf5661a9cb9a71d07"
+    },
+    {
+      "path": "docs/验收截图/执行器统计设置-20261120/stats-727-light.png",
+      "size": 93088,
+      "sha256": "5057d98e3d098a4109191d93a2bcd083a1c71359817d70e5010b78fd3fb53672"
+    },
+    {
+      "path": "docs/验收截图/执行器统计设置-20261120/stats-empty-mobile.png",
+      "size": 38279,
+      "sha256": "1ed7c49da09c4942f29debc2b2c110a6f47c2641139e19bf078fb1cb2563c3b7"
+    },
+    {
+      "path": "docs/验收截图/执行器统计设置-20261120/stats-error-mobile.png",
+      "size": 39800,
+      "sha256": "bc4b292703f301aba37b03d913749a180ee0d1a2177269058500402772cfafc9"
+    },
+    {
+      "path": "docs/验收截图/流程组件卡片-20261119/palette-dark.png",
+      "size": 80648,
+      "sha256": "6b5e2ba955c08e8fe2b2ee30b1d9c795cb732bd22ac04e9e7bad707c27746fd4"
+    },
+    {
+      "path": "docs/验收截图/流程组件卡片-20261119/palette-light.png",
+      "size": 78911,
+      "sha256": "c60f7c9e8fef7f52447bb5862e508f5728a285f2ca5a455b9c90fd73ae91a4df"
     },
     {
       "path": "docs/验收记录.md",
-      "size": 1997,
-      "sha256": "c1e17be5ca3270e0fcebd39701b79dc9e9dc29e945ad699ebf004220eba094db"
+      "size": 7089,
+      "sha256": "015906fd885a42e9c848879941e5174df688cbb3c75b9e5199992138732b740b"
     },
     {
       "path": "scripts/build.py",
       "size": 528,
       "sha256": "6fef5337f4edfd39a4730d902b6584818c52a22d5a0424123868bc019263bc24"
+    },
+    {
+      "path": "scripts/launch.py",
+      "size": 3451,
+      "sha256": "91f1cd20ea544f2aac918ada366c2f00b5349d3c99b9dbf24dedd245ef10fd19"
+    },
+    {
+      "path": "scripts/migrate_planning.py",
+      "size": 11109,
+      "sha256": "b093ab8468f8f95111562b130a29d42630521d331be4c59e27ef3b07a20ae290"
     },
     {
       "path": "scripts/package_source.py",
@@ -400,8 +705,8 @@
     },
     {
       "path": "services/ai-gateway/public/app.js",
-      "size": 341226,
-      "sha256": "639280d92b79fefa4dd3d7ccd54149ea5f85452e7eac477534b98f88d69cebc6"
+      "size": 336791,
+      "sha256": "50690436204c4c7f22c3b77271cead7dc599a8f72337e5c6ef2bf04bd84d12ce"
     },
     {
       "path": "services/ai-gateway/public/assets/avatars/amber.svg",
@@ -470,8 +775,8 @@
     },
     {
       "path": "services/ai-gateway/public/collab-page.js",
-      "size": 35026,
-      "sha256": "f354294bcb7c61de17707883e71814127d3617e5ad8933afe16137f38cb9d0bd"
+      "size": 34012,
+      "sha256": "73056bda3ca35ab86f5c657eec2c51b44db4febc1a9e29859be86907c8243441"
     },
     {
       "path": "services/ai-gateway/public/collab.js",
@@ -485,8 +790,8 @@
     },
     {
       "path": "services/ai-gateway/public/layout.css",
-      "size": 289160,
-      "sha256": "c7cfa324cfa1ec84f671d0839e47aecc27b04cfe92bd9dfded00fd9b9e112fd2"
+      "size": 310968,
+      "sha256": "e20e5ef5cdc9b23ee821d760ecb6c319eb00b25de785f148b86020f6f59e7423"
     },
     {
       "path": "services/ai-gateway/public/people.js",
@@ -495,8 +800,8 @@
     },
     {
       "path": "services/ai-gateway/public/scaffold.html",
-      "size": 20354,
-      "sha256": "c48a0962dd9945a1badaa0124ba4fd38465c659c9478a9bb53ad31169c1a799d"
+      "size": 19664,
+      "sha256": "f1a963f1877d6cee5f4de76e5c18d9180b6327ee24636e32a7175525db2891fe"
     },
     {
       "path": "services/ai-gateway/push-agent.mjs",
@@ -894,14 +1199,49 @@
       "sha256": "684ea9f5a3d7754b4d8ae895e71f7f5a53f91fea35bcf9c18b1d4ec6346eb890"
     },
     {
+      "path": "tests/admin-ui.browser.cjs",
+      "size": 12370,
+      "sha256": "69471698cdca90d4687e468b36a09551153d9d601ebbd3f62c9dc31ec45dd0a5"
+    },
+    {
       "path": "tests/ai.browser.cjs",
       "size": 8768,
       "sha256": "23e25340cfe61007ad9da51c3e79b841d5eff0482b84eb78ff5950e548962389"
     },
     {
+      "path": "tests/library-ui.browser.cjs",
+      "size": 13902,
+      "sha256": "e29a33ebfb3bc00ccf6d1a2dac934c223be977a8a9cb9150b6c666b11c6bc7c1"
+    },
+    {
+      "path": "tests/planning-visual.browser.cjs",
+      "size": 3189,
+      "sha256": "68765a13ff450aed7616fba2d6b9f012866aa4abad0941f4bd80742caada0ca6"
+    },
+    {
+      "path": "tests/planning.browser.cjs",
+      "size": 8689,
+      "sha256": "823ad25e7f492914f850b7def06d473b606b0bc74bab188a8cd7a0b4142500d0"
+    },
+    {
+      "path": "tests/seed_planning.py",
+      "size": 1847,
+      "sha256": "76ec351458d7b32bdff866a62a4b9ceaf45b67184e90dc3304c15efb58b86283"
+    },
+    {
+      "path": "tests/segments-ui.browser.cjs",
+      "size": 4024,
+      "sha256": "7b4213baacd59467a81aceb80df11d21b79e93ec9a19674c74a50f5deb8ba3f4"
+    },
+    {
       "path": "tests/serve.py",
       "size": 1987,
       "sha256": "f09922afedea2b2178f26db640d9792ff6fe9bce7991bdf0128b214d6ba8f7fc"
+    },
+    {
+      "path": "tests/task-ui.browser.cjs",
+      "size": 13302,
+      "sha256": "d15df745d5e92ddd0ddbfd6114ca06c751db279b1e8e95cd0e6dedbd1a75939d"
     },
     {
       "path": "tests/templates.browser.cjs",
@@ -912,6 +1252,21 @@
       "path": "tests/test_backend.py",
       "size": 4908,
       "sha256": "6d545c10ac860c9a8fc1d1427501b8e7cf488332d4b24c6a7107f8837f48c7fa"
+    },
+    {
+      "path": "tests/test_exhibitions.py",
+      "size": 7412,
+      "sha256": "6361e5451fb6a22d2e4dfaf18f705f8721d3d8fb4cc4ec1c61ee695639823520"
+    },
+    {
+      "path": "tests/test_launcher.py",
+      "size": 3585,
+      "sha256": "71117576870557b4136b2a91f655a63cd31c41f1379d506fceca8ca57d7a7bec"
+    },
+    {
+      "path": "tests/test_planning_migration.py",
+      "size": 9902,
+      "sha256": "78b431db86e4ddf3288161c6aa3e50c1a891259412e8313302e33f596f4d36e5"
     },
     {
       "path": "tests/test_startup.py",
@@ -985,8 +1340,8 @@
     },
     {
       "path": "web/src/App.tsx",
-      "size": 7006,
-      "sha256": "fa5d0b44afe37a1fffb89669f7854fd8d925a65710bdf0c36924e5145c7e26ba"
+      "size": 8207,
+      "sha256": "51af62a89ac53e9c20d9140ab5f807b454259256ceccae6f1c7cd05d22f6197b"
     },
     {
       "path": "web/src/assets/hero.png",
@@ -1015,13 +1370,23 @@
     },
     {
       "path": "web/src/components/app-sidebar.tsx",
-      "size": 4792,
-      "sha256": "65f516730fc443189e4f888bf6dfd400a0240f78f202e932a0346e05cbfb4f3f"
+      "size": 4848,
+      "sha256": "ac4903e2c3e0c186446320aa281a5c2a0d4445e40c47ce5c16d70cb79bc32082"
     },
     {
       "path": "web/src/components/capability-pages.tsx",
       "size": 9588,
       "sha256": "44871a95e5d628c5f1e43739f771ca121f65f822b60e7f44075073698a325700"
+    },
+    {
+      "path": "web/src/components/dashboard-page.tsx",
+      "size": 11278,
+      "sha256": "2c69a325cdeee46e851fb159fb8b5f2d79552ce2b47afd09c174c0e0799b1912"
+    },
+    {
+      "path": "web/src/components/exhibitions-page.tsx",
+      "size": 28532,
+      "sha256": "4d901becb77508a06b659234ef957d99ccfae8ef038c0de43c7dfbdbd00c15a9"
     },
     {
       "path": "web/src/components/login-page.tsx",
@@ -1042,6 +1407,11 @@
       "path": "web/src/components/personnel-page.tsx",
       "size": 22142,
       "sha256": "1fa1817b29319ad84083b1477418405cd2089a6048e9aa26bcf3382b8cdec54d"
+    },
+    {
+      "path": "web/src/components/planning-pages.css",
+      "size": 2359,
+      "sha256": "8234fed18598b2e04e64e7bf823103f1a9bbcdc71aef9f0e39629c5924ec254e"
     },
     {
       "path": "web/src/components/search-command.tsx",
@@ -1180,13 +1550,13 @@
     },
     {
       "path": "web/src/scheduler-frame.ts",
-      "size": 2924,
-      "sha256": "55a0dc6febed2c0a67bfb56ad35163351d5eab7e04e38215e4b824bb0641b28a"
+      "size": 5451,
+      "sha256": "87a93c84036c592af75f4b14e35c33523398cc2dc1f1c3ca43d1c6e9eb292b50"
     },
     {
       "path": "web/src/scheduler.css",
-      "size": 6956,
-      "sha256": "93e68029010d159f66b4b0fd2ed2946b5f5c30701d44b735f885ea4019300d12"
+      "size": 30944,
+      "sha256": "63e52af328ef8eccb52f926a768090bfa98d139486543db5bdc3f7a88eb6f731"
     },
     {
       "path": "web/tsconfig.app.json",
@@ -1209,14 +1579,144 @@
       "sha256": "8c6f90c8b268328ae6b198be58ce84eecb6d387c8818b96e4709967dfc2ea3b1"
     },
     {
+      "path": "产品企划中心/00-总目录.md",
+      "size": 2724,
+      "sha256": "6592ef8d5fb104b16e4416c3f2c745cecd45a356e044c1a9a3d85971f49f0d87"
+    },
+    {
+      "path": "产品企划中心/01-公共外壳.md",
+      "size": 3280,
+      "sha256": "74ebf24de64ae408090b461264394625687ebe8032b1595ca5e0114e532bcf3b"
+    },
+    {
+      "path": "产品企划中心/02-调研项目.md",
+      "size": 16799,
+      "sha256": "2863c228b85e56a420c7b1abc59c436080f8ecc8c057cb8f2a07c0b7c5a3296b"
+    },
+    {
+      "path": "产品企划中心/03-企划项目.md",
+      "size": 2410,
+      "sha256": "543fc630a2031bce99ef4dbe8b8b280d2629db1e7e492e64f0a74d428d7a0437"
+    },
+    {
+      "path": "产品企划中心/04-新建项目.md",
+      "size": 2022,
+      "sha256": "ec4b8c07e139d2fb9c766b0dd5a1751414c41c180a578b82eb14ca30eb3408cd"
+    },
+    {
+      "path": "产品企划中心/05-项目概览.md",
+      "size": 5221,
+      "sha256": "12609cf6956e1cd15e7416a92e0baa2b74e96c98e8a906ba7f3b4d6290bb04b7"
+    },
+    {
+      "path": "产品企划中心/06-评审项目.md",
+      "size": 417,
+      "sha256": "74fb278a2316f1bcdc02cc9f3339881e6b1e202f747f8f3537a52a9c68c1b8f2"
+    },
+    {
+      "path": "产品企划中心/07-企划进度.md",
+      "size": 411,
+      "sha256": "7b913a25d41657350b968cdd99fa2636e9572ebf29edb0d02f6160d240691e97"
+    },
+    {
+      "path": "产品企划中心/08-展会情况.md",
+      "size": 4467,
+      "sha256": "b4e17788f6e119da8d5f38587afb023e072195f333d188b484e2aa0edeeb60ef"
+    },
+    {
+      "path": "产品企划中心/09-模版管理.md",
+      "size": 3098,
+      "sha256": "27ba5a577fa63ac72a9dd4e43ee9a437d495c017b694a25282c3137229456058"
+    },
+    {
+      "path": "产品企划中心/10-数据看板.md",
+      "size": 1435,
+      "sha256": "26348ae95aa934ba1eaa5fda7b4a1bba3668454e4f3e7be63a9d3d5974a5e6b5"
+    },
+    {
+      "path": "产品企划中心/11-产出管理.md",
+      "size": 1359,
+      "sha256": "00e4b0176aebdf803a0428024091ae74dc2efd8977c9e21ef382c2b756747b72"
+    },
+    {
+      "path": "产品企划中心/12-企划报告.md",
+      "size": 1008,
+      "sha256": "fba446ea7014e15aa86c1c5ef606432cc29c685df199b4c21166e2ef3a05fe0c"
+    },
+    {
+      "path": "产品企划中心/13-维度工作区外壳.md",
+      "size": 7469,
+      "sha256": "b97258e116f55beac75b428c2a2c2061e30ee94134b7c020ac49e49f52213982"
+    },
+    {
+      "path": "产品企划中心/14-DIM-01-产品线齐全.md",
+      "size": 2714,
+      "sha256": "a14f5bf1ff291ec85df3e14fcbc93cd2d17061b215568d953a3fc97e2bb278c8"
+    },
+    {
+      "path": "产品企划中心/15-DIM-02-行业应用场景.md",
+      "size": 2185,
+      "sha256": "9f1ee53d680ed75350c2271965f8d8c95122bd577a6cb2f2303e48c895535c16"
+    },
+    {
+      "path": "产品企划中心/16-DIM-03-证书资质全.md",
+      "size": 904,
+      "sha256": "be8c2feebc59485ae0b47ace33e186286a09c3fd386d1bd15d355607dff23f12"
+    },
+    {
+      "path": "产品企划中心/17-DIM-04-技术先进.md",
+      "size": 1553,
+      "sha256": "0f1161f2bed90d150862a2ab084954abbc304e94a083cf08b0db96c14c1946af"
+    },
+    {
+      "path": "产品企划中心/18-DIM-05-功能强.md",
+      "size": 1409,
+      "sha256": "2dbcb1b7eb175bfface288cc00aa743256913dd2b3086f27f43a61660adb798e"
+    },
+    {
+      "path": "产品企划中心/19-DIM-06-性能稳.md",
+      "size": 2075,
+      "sha256": "eb7ecbf2ad9f7e4da2d630f942ea3c4576198ea6122165bbcea0f6b06706c627"
+    },
+    {
+      "path": "产品企划中心/20-DIM-07-AI智慧力.md",
+      "size": 768,
+      "sha256": "0b414e87fe669c47d5a2e93572dc5a3b4a1bdc09fb3f9703407e5057708200e6"
+    },
+    {
+      "path": "产品企划中心/21-DIM-08-成本优势.md",
+      "size": 1162,
+      "sha256": "01d9b27c21bef4cf51108a3e852dea6376dfa8dca333e5d4ba23bd53cd4f2ccf"
+    },
+    {
+      "path": "产品企划中心/22-DIM-09-控标能力强.md",
+      "size": 1397,
+      "sha256": "b2b4d6a990eb638ba85f2edf916ce70ea62375b68b688b2c6bb00ad5a9c18592"
+    },
+    {
+      "path": "产品企划中心/23-DIM-10-应标能力强.md",
+      "size": 2137,
+      "sha256": "72441a87204440f34d06e18975326adda3e65b4fe12ca030fbf8088ba0fb1280"
+    },
+    {
+      "path": "产品企划中心/24-DIM-11-外观高档大气.md",
+      "size": 2071,
+      "sha256": "9f009ace81aa2ee754ee6a185eaa229d659ff1afdb13233f017775c4987d56b6"
+    },
+    {
+      "path": "产品企划中心/25-DIM-12-体验感好.md",
+      "size": 2018,
+      "sha256": "606fa0463d60f48b9622d7b8cbd51b4d3a31c0af95cd3a25347879b7366be711"
+    },
+    {
       "path": "启动V2.0.bat",
       "size": 106,
       "sha256": "2ae249ef723e089ddc37ee441ddbc1c32be26ca57de37aed2cc86bac596c0fba"
     },
     {
       "path": "启动V2.0.command",
-      "size": 93,
-      "sha256": "791ca09cf6626d0bd78bdb9d5292401d14d2bda10304d59284bb1d8e64456618"
+      "size": 762,
+      "sha256": "1fc387a3309b26c7d4a0a147a0931dcb31d4cfbbec9bd3bdabf63d8e01a4aa0a"
     },
     {
       "path": "底层能力/中心页面/app.js",
@@ -1235,8 +1735,8 @@
     },
     {
       "path": "底层能力/交互组件/README.md",
-      "size": 2801,
-      "sha256": "07381844d20fdfe3406f7dd7e1790c67388b7eee298cdf6436cc41908bf6bedc"
+      "size": 6365,
+      "sha256": "716b36280dad5d8c6d1debd51c7e93996f9ed1cc1c6c226ee89accbda20936b3"
     },
     {
       "path": "底层能力/交互组件/package.json",
@@ -1384,6 +1884,11 @@
       "sha256": "ad0936f84f1df79d3697bfbff9c18f8ad58431c1cbaf2359c6a853b0fcc9f28b"
     },
     {
+      "path": "底层能力/交互组件/src/ui/action-card.tsx",
+      "size": 916,
+      "sha256": "dbbc329d50c6bb985c61dfd65ccc91eea63ac56027fa9f5393a6c055c3381725"
+    },
+    {
       "path": "底层能力/交互组件/src/ui/avatar.tsx",
       "size": 3088,
       "sha256": "036b8f39d9f42962a9eedd097103c90450d58a50ea55c693896c4cea4b5953a4"
@@ -1400,8 +1905,8 @@
     },
     {
       "path": "底层能力/交互组件/src/ui/button.tsx",
-      "size": 3375,
-      "sha256": "08e5f87833c5db8436e89337ebde0f776bcdbf649d3de69fb89be6441ca2e366"
+      "size": 3420,
+      "sha256": "605d6848b512b3fe19fc8fa88abec29e30312101000021530548fcb5ea7c2693"
     },
     {
       "path": "底层能力/交互组件/src/ui/card.tsx",
@@ -1410,8 +1915,8 @@
     },
     {
       "path": "底层能力/交互组件/src/ui/catalog.ts",
-      "size": 2183,
-      "sha256": "aa75a044906355c471408d45d9e95c8cd3dcd54642376c279629c07b27f78f4a"
+      "size": 2892,
+      "sha256": "5eadb6db1b5a7c419536b28c3db91f12d5c1d4d30ef49c7686a914df9c460cbf"
     },
     {
       "path": "底层能力/交互组件/src/ui/chart.tsx",
@@ -1420,8 +1925,8 @@
     },
     {
       "path": "底层能力/交互组件/src/ui/checkbox.tsx",
-      "size": 898,
-      "sha256": "2522c8178112d80c03d7a72e32e88630948021ab019253a4985909cc41f84ead"
+      "size": 970,
+      "sha256": "cc27874cda8a3b76549bab2e709fb5b7c7762836e67758c6b4b5f93265c6ed4c"
     },
     {
       "path": "底层能力/交互组件/src/ui/command.tsx",
@@ -1454,14 +1959,44 @@
       "sha256": "a61ae854b1530d4e397fde5f0a5875065597cc9fa10abec42fd69fd890b3a469"
     },
     {
+      "path": "底层能力/交互组件/src/ui/native-action-cards.tsx",
+      "size": 1315,
+      "sha256": "3d8ed8c4495bed653708a9617efdf09e2a3f8443db25bbbf0caadceaf8412813"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/native-collections.tsx",
+      "size": 5733,
+      "sha256": "56a14b52a1e522331385ab52453289d01dd186ea427841154669a8afde407552"
+    },
+    {
       "path": "底层能力/交互组件/src/ui/native-controls.ts",
-      "size": 1805,
-      "sha256": "c231455fced5bd80f428aac2b0f2f06054e01dc9b2eebdf6208f696cec816ee2"
+      "size": 2531,
+      "sha256": "2c51b1aecdf0ff64524655d44dc42ac4dd2d910140c2b053434da6636fdea01b"
     },
     {
       "path": "底层能力/交互组件/src/ui/native-dialog.tsx",
-      "size": 3145,
-      "sha256": "d1b988e7d48a356b9643c338331f2f859a621b438ab17a8e7686b60fca1f2fc2"
+      "size": 3888,
+      "sha256": "606ab434ab1cba3595342600344b8e9d5553ff6cb3ab167fe3ee81a573b4a7e2"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/native-forms.tsx",
+      "size": 4837,
+      "sha256": "77a7de4f68bf06a05792d7ce9f9bf807ecaacb5461193b1af2be04d936a87fbb"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/native-layout.css",
+      "size": 2509,
+      "sha256": "f96276a2f50772e1bf7ce8825672f17bc03e5882f00ce5d71a68a0eacaef6969"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/native-retained-dialog.tsx",
+      "size": 2425,
+      "sha256": "c7dba6bf5742fcc150a8adf3c20a24d3190ee9924e4a1d69fd824a5372b4256c"
+    },
+    {
+      "path": "底层能力/交互组件/src/ui/native-surfaces.tsx",
+      "size": 3054,
+      "sha256": "b7a2b0194d8066487b155851db4d4dcb4b02422e52719591d9696807f86e6bae"
     },
     {
       "path": "底层能力/交互组件/src/ui/popover.tsx",
@@ -1475,8 +2010,8 @@
     },
     {
       "path": "底层能力/交互组件/src/ui/select.tsx",
-      "size": 1989,
-      "sha256": "ebcd11be6aeaf6e99fce67dd2e4e25d7fe84494b54832b60040ae6a949033381"
+      "size": 2122,
+      "sha256": "e8033757fa13dab5fc50e5cd2fe91700040f9149adb29f9d45cf83669357b557"
     },
     {
       "path": "底层能力/交互组件/src/ui/separator.tsx",
@@ -2055,8 +2590,8 @@
     },
     {
       "path": "底层能力/表格组件/README.md",
-      "size": 1643,
-      "sha256": "41ecefa6219c77a1e5d5e3342777d3e0c2dd3b9820bcd8e1e6cc325463eb7ae7"
+      "size": 2360,
+      "sha256": "192864f3d94ac003606457f8777009837db632493de373be32c271b6561184ee"
     },
     {
       "path": "底层能力/表格组件/index.html",
@@ -2080,8 +2615,8 @@
     },
     {
       "path": "底层能力/表格组件/src/data-table.tsx",
-      "size": 8423,
-      "sha256": "d20ab14da96f40c22f09d2fee24b72471ecaf4c42f03281df732060c351ff6c0"
+      "size": 8543,
+      "sha256": "1c7309617f308b541ac74f6a42a58788b3405df9d649b17a7b481304c2aa4190"
     },
     {
       "path": "底层能力/表格组件/src/fixtures.js",
@@ -2097,6 +2632,11 @@
       "path": "底层能力/表格组件/src/kernel.js",
       "size": 18768,
       "sha256": "3f8e89669522cbcb53c0fb4164e3fbf0deb1fe83e523fbcf935f3bba7f5dc37a"
+    },
+    {
+      "path": "底层能力/表格组件/src/native-data-table.tsx",
+      "size": 1258,
+      "sha256": "787327a88b8812de6229d6d3e212794c43c84db5c7a2bea6905d0ad4d9cca95f"
     },
     {
       "path": "底层能力/表格组件/src/preview.js",
@@ -2125,8 +2665,8 @@
     },
     {
       "path": "进度&规则.md",
-      "size": 2991,
-      "sha256": "d729bff8499f0d5a3e895f42bafd6ac68643433dacf3cae45352928f8f1ba95f"
+      "size": 11772,
+      "sha256": "d1e0cd115185d8c1e03b464a0a25370f2516450005d86a6bc4f39580597540f8"
     }
   ]
 }
