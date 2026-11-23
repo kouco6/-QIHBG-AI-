@@ -17,9 +17,10 @@ import { platformApi, PlatformApiError, type PlatformAccount } from "@/lib/platf
 import { ExhibitionsPage } from "@/components/exhibitions-page"
 import { DashboardPage } from "@/components/dashboard-page"
 import { PersonnelPage } from "@/components/personnel-page"
+import { ApprovalCenter } from "@/components/approval-center"
 
 type ModuleId = "planning" | "capabilities" | "ai"
-type PageId = "overview" | "table" | "interaction" | "type" | "templates" | "people" | "exhibitions" | "dashboard" | `ai-${AiPageId}`
+type PageId = "overview" | "table" | "interaction" | "type" | "templates" | "people" | "exhibitions" | "dashboard" | "approval-center" | `ai-${AiPageId}`
 
 const modules: { id: ModuleId; label: string }[] = [
   { id: "planning", label: "产品企划中心" },
@@ -32,31 +33,31 @@ export default function App() {
   const [account, setAccount] = useState<PlatformAccount | null>(null)
   const [signedIn, setSignedIn] = useState(false)
   const [moduleId, setModuleId] = useState<ModuleId>(location.hash.startsWith("#ai/") ? "ai" : "planning")
-  const [pageId, setPageId] = useState<PageId>(location.hash.startsWith("#ai/") && ["worksite","collab","artifacts","templates","runner","stats","settings"].includes(location.hash.slice(4)) ? `ai-${location.hash.slice(4) as AiPageId}` : location.hash.startsWith("#ai/") ? "ai-worksite" : location.hash === "#planning/exhibitions" ? "exhibitions" : location.hash === "#planning/dashboard" ? "dashboard" : "overview")
+  const [pageId, setPageId] = useState<PageId>(location.hash.startsWith("#ai/") && ["worksite", "collab", "artifacts", "templates", "runner", "stats", "settings"].includes(location.hash.slice(4)) ? ("ai-" + location.hash.slice(4)) as PageId : location.hash.startsWith("#ai/") ? "ai-worksite" : location.hash === "#planning/exhibitions" ? "exhibitions" : location.hash === "#planning/dashboard" ? "dashboard" : "overview")
   const [sessionError, setSessionError] = useState("")
   const leaveGuard = useRef<LeaveGuard | null>(null)
   const registerGuard = useCallback((guard: LeaveGuard | null) => { leaveGuard.current = guard }, [])
   const refreshAccount = useCallback(async () => {
     try {
-      const next = await platformApi<PlatformAccount>('/platform/session')
+      const next = await platformApi<PlatformAccount>("/platform/session")
       setAccount(next)
       setSignedIn(!next.must_change_password)
-      if (next.role !== 'admin') setPageId(page => page === 'people' ? 'overview' : page)
-      setSessionError('')
+      if (next.role !== "admin") setPageId(page => page === "people" || page === "approval-center" ? "overview" : page)
+      setSessionError("")
     } catch (reason) {
       if (reason instanceof PlatformApiError && reason.status === 401) { setAccount(null); setSignedIn(false) }
-      else setSessionError('无法更新账号状态，请检查连接后重试。')
+      else setSessionError("无法更新账号状态，请检查连接后重试。")
     }
   }, [])
-  useEffect(() => { void platformApi<PlatformAccount>('/platform/session').then(account => { setAccount(account); setSignedIn(!account.must_change_password) }).catch(() => {}) }, [])
+  useEffect(() => { void platformApi<PlatformAccount>("/platform/session").then(account => { setAccount(account); setSignedIn(!account.must_change_password) }).catch(() => {}) }, [])
   useEffect(() => {
     const logout = async () => {
       if (leaveGuard.current && !await leaveGuard.current()) return
-      try { await platformApi('/platform/logout', { method: 'POST' }); setSignedIn(false); setAccount(null) }
-      catch { setSessionError('退出失败，请重试') }
+      try { await platformApi("/platform/logout", { method: "POST" }); setSignedIn(false); setAccount(null) }
+      catch { setSessionError("退出失败，请重试") }
     }
-    window.addEventListener('platform-logout-request', logout)
-    return () => window.removeEventListener('platform-logout-request', logout)
+    window.addEventListener("platform-logout-request", logout)
+    return () => window.removeEventListener("platform-logout-request", logout)
   }, [])
 
   useEffect(() => {
@@ -72,16 +73,16 @@ export default function App() {
   }, [pageId])
 
   const selectAiPage = useCallback((page: AiPageId) => {
-    setPageId(`ai-${page}`)
-    history.replaceState(null, "", `#ai/${page}`)
+    setPageId(("ai-" + page) as PageId)
+    history.replaceState(null, "", "#ai/" + page)
   }, [])
   const permittedModules = modules.filter(item => !account || account.modules.includes(item.id === "planning" ? "bg" : item.id))
   useEffect(() => {
-    if (signedIn) void platformApi<PlatformAccount>('/platform/session').then(setAccount).catch(() => setSignedIn(false))
+    if (signedIn) void platformApi<PlatformAccount>("/platform/session").then(setAccount).catch(() => setSignedIn(false))
   }, [signedIn])
 
   if (!signedIn) {
-    return <LoginPage onSuccess={next => { setAccount(next); setSignedIn(true); if (next.role !== 'admin' && pageId === 'people') setPageId('overview'); setSessionError('') }} />
+    return <LoginPage onSuccess={next => { setAccount(next); setSignedIn(true); if (next.role !== "admin" && (pageId === "people" || pageId === "approval-center")) setPageId("overview"); setSessionError("") }} />
   }
 
   async function openModule(next: ModuleId) {
@@ -91,7 +92,7 @@ export default function App() {
     history.replaceState(null, "", next === "ai" ? "#ai/worksite" : "#" + next)
   }
   async function openPage(id: string) {
-    if (id === 'people' && account?.role !== 'admin') return
+    if ((id === "people" || id === "approval-center") && account?.role !== "admin") return
     if (id === pageId) return
     if (leaveGuard.current && !await leaveGuard.current()) return
     setPageId(id as PageId)
@@ -136,6 +137,7 @@ export default function App() {
             {pageId === "dashboard" ? <DashboardPage /> : null}
             {pageId === "templates" ? <TemplatesPage registerGuard={registerGuard} /> : null}
             {pageId === "people" && account?.role === "admin" ? <PersonnelPage account={account} refreshAccount={refreshAccount} registerGuard={registerGuard} /> : null}
+            {pageId === "approval-center" && account?.role === "admin" ? <ApprovalCenter /> : null}
           </main>
         </SidebarInset>
       </SidebarProvider>
