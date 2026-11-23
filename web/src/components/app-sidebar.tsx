@@ -96,7 +96,7 @@ export function AppSidebar({
           activeId={activeId}
           onSelect={onSelect}
         />
-        {account?.role === "admin" && <SidebarMenuList label="工作空间管理" items={[{ id: "people", title: "人员管理", icon: Users }]} activeId={activeId} onSelect={onSelect} />}
+        {account?.role === "admin" && <SidebarMenuList label="工作空间管理" items={[{ id: "people", title: "人员管理", icon: Users }, { id: "approval-center", title: "审核中心", icon: ClipboardCheck }]} activeId={activeId} onSelect={onSelect} />}
       </SidebarContent>
       <SidebarFooter>
         <UserMenu compact account={account} />
@@ -128,7 +128,7 @@ function SidebarMenuList({
                 className="h-9"
                 isActive={item.id === activeId}
                 tooltip={item.title}
-                onClick={item.id.startsWith("ai-") || item.id === "overview" || item.id === "templates" || item.id === "exhibitions" || item.id === "dashboard" || item.id === "people" || label === "底层能力" ? () => onSelect(item.id) : undefined}
+                onClick={item.id.startsWith("ai-") || item.id === "overview" || item.id === "templates" || item.id === "exhibitions" || item.id === "dashboard" || item.id === "people" || item.id === "approval-center" || label === "底层能力" ? () => onSelect(item.id) : undefined}
               >
                 <item.icon />
                 <span>{item.title}</span>
