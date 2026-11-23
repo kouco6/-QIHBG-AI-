@@ -46,16 +46,26 @@ export function LoginPage({ onSuccess }: { onSuccess: (account: PlatformAccount)
           dpr={undefined}
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
         />
+        <img
+          src="/login-brand-logo-light.png"
+          alt="企划设计BG平台品牌标志"
+          className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-auto max-h-[68svh] w-[min(92%,38rem)] -translate-x-1/2 -translate-y-1/2 object-contain dark:hidden"
+        />
+        <img
+          src="/login-brand-logo-dark.png"
+          alt="企划设计BG平台品牌标志"
+          className="pointer-events-none absolute left-1/2 top-1/2 z-0 hidden h-auto max-h-[68svh] w-[min(92%,38rem)] -translate-x-1/2 -translate-y-1/2 object-contain dark:block"
+        />
         <div className="relative z-10 flex w-full flex-1 flex-col justify-between p-10">
           <div className="flex items-center gap-3">
             <span className="flex size-9 items-center justify-center rounded-lg bg-primary-foreground text-sm font-semibold text-primary">
               企
             </span>
-            <span className="text-sm font-medium">企划设计BG平台</span>
+            <span className="text-xl font-bold tracking-wide">企划设计BG平台</span>
           </div>
-          <blockquote className="max-w-md space-y-3">
-            <p className="text-lg leading-relaxed">研究、编辑和正式应用在这个项目里衔接。</p>
-            <footer className="text-sm text-primary-foreground/80">产品企划与方案管理</footer>
+          <blockquote className="max-w-md">
+            <p className="text-xl font-semibold leading-relaxed">挖掘、创造每一个产品的无穷可能性</p>
+            
           </blockquote>
         </div>
       </section>
